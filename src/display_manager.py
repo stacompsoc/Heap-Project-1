@@ -1,4 +1,6 @@
 import pygame
+
+from constants import *
 from physics_manager import *
 
 
@@ -75,7 +77,7 @@ class DisplayManager:
             pygame.draw.circle(new_image,
                                COLORS[color],
                                (int(p.x), int(p.y)),
-                               int(p.radius * 1e-3))
+                               int(p.radius / SCALE_FACTOR))
             color = (color + 1) % len(COLORS)
         self.screen.blit(new_image, (0, 0))
         # pygame.display.set_icon(surface)
