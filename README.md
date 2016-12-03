@@ -11,6 +11,7 @@ The current state of the project is to write a 2d physics engine for gravity and
 ## Built with
 
 * Python 3
+* PyGame
 
 ## Contributing
 
