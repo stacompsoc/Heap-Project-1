@@ -61,5 +61,13 @@ class PhysicsManager:
         """Recomputing the forces and ticking all its elements."""
         for p in self.phyobjs:
             p.forces['gravity'] = self.calc_gravity_vector(p)
+        new_speeds = {}
         for p in self.phyobjs:
             p.tick()
+            new_speeds[p] = p.speed
+            for pp in self.phyobjs:
+                coll_speed = p.collide(pp)
+                new_speeds[p][0] += coll_speed[0]
+                new_speeds[p][1] += coll_speed[1]
+        for p in self.phyobjs:
+            p.speed = new_speeds[p]
