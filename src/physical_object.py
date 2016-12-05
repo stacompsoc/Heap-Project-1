@@ -58,9 +58,7 @@ class PhysicalObject:
     def tick(self):
         """Tick the physical object: update its physical properties."""
         s = self
-        # print(str(self))
         force = s.get_forces_composition()
-        # print("force == " + str(force))
         s.x += s.speed[0]
         s.y += s.speed[1]
         s.speed[0] += s.accel[0]
