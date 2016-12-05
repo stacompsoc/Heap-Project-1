@@ -1,38 +1,107 @@
+import math
+import copy
+
 class Vector:
     def __init__(self, components):
-        self._components = components
+        s = self;
+        s._components = components
 
-    def getComponents(self):
-        return self._components
+    def __str__(s):
+        string = ""
+        for index in range(len(s._components)):
+            string += str(s._components[index])
+            string += " "
 
-    def addVector(self, secondVector):
-        for elements in secondVector:
-            self._components += elements
+        return string
 
-    def mutlipleByConstant(self, constant):
-        for index in range(len(self._components)):
-            self._components[index] *= constant
+    def getComponents(s):
+        return s._components
 
-    def substractVector(self, secondVector):
+    """
+        Adds a vector to the current vector
+        object
+    """
+    def addVector(s, vector):
+        compSecondVector = vector.getComponents()
+        for index in range(len(compSecondVector)):
+            s._components[index] += compSecondVector[index]
+
+    """
+        Multiples the current vector by a
+        given constant
+    """
+    def mutlipleByConstant(s, constant):
+        for index in range(len(s._components)):
+            s._components[index] *= constant
+
+    """
+        substracts antoher vector from the current
+        vector object
+    """
+    def substractVector(s, secondVector):
         secondVector.multipleByScalar(-1)
-        self.addVector(secondVector)
+        s.addVector(secondVector)
 
-    def divideByScalar(self, scalar):
+    """
+        Divides the current vector by a given scalar
+    """
+    def divideByScalar(s, scalar):
         scalar = 1/scalar
-        self.multipleByScalar(scalar)
+        s.multipleByScalar(scalar)
 
-    def multipleVectors(self, vector):
-        numOfIteration = len(vector) if len(vector) < len(self._components) else len(self._components)
+    """
+        Multiples the current vector object by another
+        vector
+    """
+    def multipleVectors(s, vector, returnNewVector = False):
+        numOfIteration = len(vector) if len(vector) < len(s._components) else len(s._components)
+        secondVectorComponents = vector.getComponents()
         for index in range(numOfIteration):
-            self._components[index] *= vector[index]
+            s._components[index] *= secondVectorComponents[index]
 
-    def workOutDotProduct(self, secondVector):
+    """
+        Works out the dot product of the current vector and another
+        vector.
+
+        Return: the dot product
+    """
+    def workOutDotProduct(s, secondVector):
         dotProduct = 0
-        for element1, element2 in zip(self._components, secondVector):
+        for element1, element2 in zip(s._components, secondVector):
             dotProduct += element1 * element2
-
         return dotProduct
 
-    def workOutVectorProduct(self, secondVector):
-        if(len(self._components) == len(secondVector)):
+
+
+
+    """
+        Works out the magnitude of the current vector object
+
+        Return: the magnitude of the vector
+    """
+    def workOutMagnitude(s):
+        magnitude = 0
+        for currentElement in s._components:
+            magnitude += currentElement^2
+
+        magnitude = math.sqrt(magnitude)
+
+        return magnitude
+
+
+    def workOutVectorProduct(s, secondVector):
+        if(len(s._components) == len(secondVector)):
             pass
+
+def main():
+    v1 = Vector([1,2,3,4])
+    print(v1)
+    v1.mutlipleByConstant(5)
+    print(v1)
+
+    v2 = Vector([5,6,7,8])
+    v1.addVector(v2)
+    print(v1)
+
+if __name__ == '__main__':
+    main()
