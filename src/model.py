@@ -39,4 +39,5 @@ class Model:
 
     def tick(self):
         """Run the idle function of the model."""
+        print("tick")
         return self.display.tick()

@@ -1,8 +1,8 @@
-from math import pi as PI
+from constants import *
 
 
 """
-This entity represents a physical object, i.e. an object, which has physical matter in the context of the model.
+This entity represents a physical object, i.e. which has physical matter.
 """
 
 
@@ -33,16 +33,39 @@ class PhysicalObject:
             force[1] += self.forces[f][1]
         return force
 
+    def collide(self, q):
+        """
+        Dirtily calculates collisions.
+
+        :q: other object
+
+        :returns: new speed
+        """
+        s = self
+        if s is q:
+            return [0., 0.]
+        d = sqrt((s.x - q.x)**2 + (s.y - q.y)**2) * SCALE_FACTOR
+        r1, r2 = s.radius, q.radius
+        if d >= r1 + r2:
+            return [0., 0.]
+        u1, m1, u2, m2 = s.speed, s.mass, q.speed, q.mass
+        ret = [
+            (u1[0] * (m1 - m2) + 2 * m2 * u2[0]) / (m1 + m2),
+            (u1[1] * (m1 - m2) + 2 * m2 * u2[1]) / (m1 + m2)
+        ]
+        return [ret[0] - s.speed[0], ret[1] - s.speed[1]]
+
     def tick(self):
         """Tick the physical object: update its physical properties."""
+        s = self
         # print(str(self))
-        force = self.get_forces_composition()
+        force = s.get_forces_composition()
         # print("force == " + str(force))
-        self.x += self.speed[0]
-        self.y += self.speed[1]
-        self.speed[0] += self.accel[0]
-        self.speed[1] += self.accel[1]
-        self.accel = [f / self.mass for f in force]
+        s.x += s.speed[0]
+        s.y += s.speed[1]
+        s.speed[0] += s.accel[0]
+        s.speed[1] += s.accel[1]
+        s.accel = [f / s.mass for f in force]
 
     def __str__(self):
         """
