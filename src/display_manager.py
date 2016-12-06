@@ -85,5 +85,5 @@ class DisplayManager:
         return True
 
     def stop(self):
-        """Terminaet graphics."""
+        """Terminate graphics."""
         pygame.quit()
