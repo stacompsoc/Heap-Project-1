@@ -17,7 +17,9 @@ class PhysicalObject:
         """
         s = self
         s.mass, s.x, s.y = mass, x, y
-        s.radius = (s.mass * (PI * 4./3)) ** (1./3)
+        s.density = 1./1.
+        s.volume = s.mass * s.density
+        s.radius = (s.volume * (PI * 4./3)) ** (1./3)
         # all tuples are to be replaced with vectors
         s.speed, s.accel, s.forces = [0., 0.], [0., 0.], {}
 
@@ -43,17 +45,17 @@ class PhysicalObject:
         """
         s = self
         if s is q:
-            return [0., 0.]
+            return s.speed
         d = sqrt((s.x - q.x)**2 + (s.y - q.y)**2) * SCALE_FACTOR
         r1, r2 = s.radius, q.radius
         if d >= r1 + r2:
-            return [0., 0.]
+            return s.speed
         u1, m1, u2, m2 = s.speed, s.mass, q.speed, q.mass
         ret = [
             (u1[0] * (m1 - m2) + 2 * m2 * u2[0]) / (m1 + m2),
             (u1[1] * (m1 - m2) + 2 * m2 * u2[1]) / (m1 + m2)
         ]
-        return [ret[0] - s.speed[0], ret[1] - s.speed[1]]
+        return [ret[0], ret[1]]
 
     def tick(self):
         """Tick the physical object: update its physical properties."""
