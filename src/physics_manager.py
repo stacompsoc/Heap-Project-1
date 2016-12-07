@@ -63,7 +63,6 @@ class PhysicsManager:
             p.forces['gravity'] = self.calc_gravity_vector(p)
         for p in self.phyobjs:
             p.tick()
-            for pp in self.phyobjs:
-                coll_speed = p.collide(pp)
-                p.speed[0] = coll_speed[0]
-                p.speed[1] = coll_speed[1]
+        for i in range(len(self.phyobjs)):
+            for j in range(i):
+                PhysicalObject.collide(self.phyobjs[i], self.phyobjs[j])

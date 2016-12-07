@@ -35,27 +35,29 @@ class PhysicalObject:
             force[1] += self.forces[f][1]
         return force
 
-    def collide(self, q):
+    @staticmethod
+    def collide(p, q):
         """
         Dirtily calculates collisions.
 
-        :q: other object
-
-        :returns: new speed
+        :p: first object
+        :q: second object
         """
-        s = self
-        if s is q:
-            return s.speed
-        d = sqrt((s.x - q.x)**2 + (s.y - q.y)**2) * SCALE_FACTOR
-        r1, r2 = s.radius, q.radius
+        if p is q:
+            return
+        d = sqrt((p.x - q.x)**2 + (p.y - q.y)**2) * SCALE_FACTOR
+        r1, r2 = p.radius, q.radius
         if d >= r1 + r2:
-            return s.speed
-        u1, m1, u2, m2 = s.speed, s.mass, q.speed, q.mass
-        ret = [
-            (u1[0] * (m1 - m2) + 2 * m2 * u2[0]) / (m1 + m2),
-            (u1[1] * (m1 - m2) + 2 * m2 * u2[1]) / (m1 + m2)
-        ]
-        return [ret[0], ret[1]]
+            return
+        u1, m1, u2, m2 = p.speed, p.mass, q.speed, q.mass
+
+        def _get_new_speed(u1, u2, m1, m2):
+            return [
+                (u1[0] * (m1 - m2) + 2 * m2 * u2[0]) / (m1 + m2),
+                (u1[1] * (m1 - m2) + 2 * m2 * u2[1]) / (m1 + m2)
+            ]
+        p.speed = _get_new_speed(u1, u2, m1, m2)
+        q.speed = _get_new_speed(u2, u1, m2, m1)
 
     def tick(self):
         """Tick the physical object: update its physical properties."""
