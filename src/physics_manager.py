@@ -58,6 +58,11 @@ class PhysicsManager:
         return force
 
     def remove_small_objects(self, startidx=0):
+        """
+        Remove undisplayable objects.
+
+        :startidx: starting index (constant optimization)
+        """
         ppp = self.phyobjs
         for i in range(startidx, len(ppp)):
             if ppp[i].mass < MIN_MASS:
