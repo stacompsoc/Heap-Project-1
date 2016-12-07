@@ -23,9 +23,9 @@ class Model:
         self.phy = PhysicsManager()
         for i in range(50):
             self.phy.push(PhysicalObject(
-                randint(1e9, 1e12),
-                randint(0, w),
-                randint(0, h)))
+                float(randint(1e9, 1e12)),
+                float(randint(0, w)),
+                float(randint(0, h))))
         self.display = DisplayManager(self.phy)
 
     def run(self):

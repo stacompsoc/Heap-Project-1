@@ -57,12 +57,24 @@ class PhysicsManager:
             force[1] += coeff * r[1]
         return force
 
+    def remove_small_objects(self, startidx=0):
+        ppp = self.phyobjs
+        for i in range(startidx, len(ppp)):
+            if ppp[i].mass < MIN_MASS:
+                del(ppp[i])
+                self.remove_small_objects(i)
+                return
+
     def tick(self):
         """Recomputing the forces and ticking all its elements."""
-        for p in self.phyobjs:
+        ppp = self.phyobjs
+        for p in ppp:
             p.forces['gravity'] = self.calc_gravity_vector(p)
-        for p in self.phyobjs:
+        self.remove_small_objects()
+        for p in ppp:
             p.tick()
-        for i in range(len(self.phyobjs)):
+        for i in range(len(ppp)):
             for j in range(i):
-                PhysicalObject.collide(self.phyobjs[i], self.phyobjs[j])
+                t = PhysicalObject.collide(self.phyobjs[i], self.phyobjs[j])
+                if t is not None:
+                    self.push(t)

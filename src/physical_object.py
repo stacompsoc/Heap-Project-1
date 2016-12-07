@@ -16,12 +16,22 @@ class PhysicalObject:
         :y: y coordinate
         """
         s = self
-        s.mass, s.x, s.y = mass, x, y
         s.density = 1./1.
-        s.volume = s.mass * s.density
-        s.radius = (s.volume * (PI * 4./3)) ** (1./3)
+        s.set_mass(mass)
+        s.x, s.y = x, y
         # all tuples are to be replaced with vectors
         s.speed, s.accel, s.forces = [0., 0.], [0., 0.], {}
+
+    def set_mass(self, new_mass):
+        """
+        Change attributes of the object when the mass changes.
+
+        :new_mass: new mass
+        """
+        s = self
+        s.mass = new_mass
+        s.volume = s.mass * s.density
+        s.radius = (s.volume * (PI * 4./3)) ** (1./3)
 
     def get_forces_composition(self):
         """
@@ -37,18 +47,44 @@ class PhysicalObject:
 
     @staticmethod
     def collide(p, q):
+        if p is q:
+            return None
+        d = sqrt((p.x - q.x)**2 + (p.y - q.y)**2) * SCALE_FACTOR
+        r1, r2 = p.radius, q.radius
+        if d >= r1 + r2:
+            return None
+        PhysicalObject.set_speeds_after_collision(p, q)
+        return PhysicalObject.set_masses_after_collision(p, q)
+
+    @staticmethod
+    def set_masses_after_collision(p, q):
         """
-        Dirtily calculates collisions.
+        Set masses after collision.
+
+        :p: first object
+        :q: second object
+
+        :returns: an object spawned after collision
+        """
+        m1, m2 = p.mass, q.mass
+        if m1 < m2:
+            return PhysicalObject.set_masses_after_collision(q, p)
+        m3 = m1 - m2
+        if m3 > m2:
+            m3 = m2
+        m3 *= COLLISION_TRANSFER
+        p.set_mass(m1 + m3)
+        q.set_mass(m2 - m3)
+        return None
+
+    @staticmethod
+    def set_speeds_after_collision(p, q):
+        """
+        Set speeds after collision.
 
         :p: first object
         :q: second object
         """
-        if p is q:
-            return
-        d = sqrt((p.x - q.x)**2 + (p.y - q.y)**2) * SCALE_FACTOR
-        r1, r2 = p.radius, q.radius
-        if d >= r1 + r2:
-            return
         u1, m1, u2, m2 = p.speed, p.mass, q.speed, q.mass
 
         def _get_new_speed(u1, u2, m1, m2):
