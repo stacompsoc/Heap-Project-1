@@ -6,9 +6,6 @@ from physical_object import *
 from display_manager import *
 
 
-w, h = 1280, 960
-
-
 class Model:
 
     """
@@ -19,18 +16,20 @@ class Model:
 
     def __init__(self):
         """Initialize a model."""
+        s = self
         print("initializing model")
-        self.phy = PhysicsManager()
-        for i in range(50):
-            self.phy.push(PhysicalObject(
-                float(randint(1e9, 1e12)),
-                float(randint(0, w)),
-                float(randint(0, h))))
-        self.display = DisplayManager(self.phy)
+        s.phy = PhysicsManager()
+        s.display = DisplayManager(self.phy)
 
     def run(self):
         """Run the model."""
-        self.display.start(w, h)
+        s = self
+        s.display.start()
+        for i in range(50):
+            self.phy.push(PhysicalObject(
+                float(randint(1e9, 1e12)),
+                float(randint(0, s.display.width)),
+                float(randint(0, s.display.height))))
         while True:
             if not self.tick():
                 break
