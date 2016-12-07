@@ -47,6 +47,14 @@ class PhysicalObject:
 
     @staticmethod
     def collide(p, q):
+        """
+        Collide two objects.
+
+        :p: first object
+        :q: second object
+
+        :returns: an asteroid or None
+        """
         if p is q:
             return None
         d = sqrt((p.x - q.x)**2 + (p.y - q.y)**2) * SCALE_FACTOR
@@ -64,7 +72,7 @@ class PhysicalObject:
         :p: first object
         :q: second object
 
-        :returns: an object spawned after collision
+        :returns: an object (asteroid) spawned after collision
         """
         m1, m2 = p.mass, q.mass
         if m1 < m2:
@@ -92,6 +100,7 @@ class PhysicalObject:
                 (u1[0] * (m1 - m2) + 2 * m2 * u2[0]) / (m1 + m2),
                 (u1[1] * (m1 - m2) + 2 * m2 * u2[1]) / (m1 + m2)
             ]
+
         p.speed = _get_new_speed(u1, u2, m1, m2)
         q.speed = _get_new_speed(u2, u1, m2, m1)
 
