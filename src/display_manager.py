@@ -97,10 +97,12 @@ class DisplayManager:
     def show_status(self):
         s = self
         color = (255, 255, 255)
-        self.put_text("scale_factor: " + "%.2E" % SCALE_FACTOR,
+        self.put_text("scale factor: %.2E" % SCALE_FACTOR,
                       color, s.x, s.y)
-        self.put_text("G: " + "%.7E" % G,
+        self.put_text("G: %.7E" % G,
                       color, s.x, s.y + 25)
+        self.put_text("number of objects: %d" % len(s.phy.phyobjs),
+                      color, s.x, s.y + 50)
         self.put_text("x: %d" % s.x,
                       color, s.width + s.x - 100, s.height + s.y - 50)
         self.put_text("y: %d" % s.y,

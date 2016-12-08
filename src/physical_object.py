@@ -7,7 +7,7 @@ This entity represents a physical object, i.e. which has physical matter.
 
 
 class PhysicalObject:
-    def __init__(self, mass, x, y):
+    def __init__(self, mass, density, x, y):
         """
         Initialize physical object.
 
@@ -16,7 +16,7 @@ class PhysicalObject:
         :y: y coordinate
         """
         s = self
-        s.density = 1./1.
+        s.density = density
         s.set_mass(mass)
         s.x, s.y = x, y
         # all tuples are to be replaced with vectors
@@ -30,8 +30,8 @@ class PhysicalObject:
         """
         s = self
         s.mass = new_mass
-        s.volume = s.mass * s.density
-        s.radius = (s.volume * (PI * 4./3)) ** (1./3)
+        s.volume = s.mass / s.density
+        s.radius = (s.volume / (PI * 4./3)) ** (1./3)
 
     def get_forces_composition(self):
         """
