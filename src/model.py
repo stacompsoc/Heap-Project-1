@@ -1,5 +1,5 @@
 from time import sleep
-from random import randint
+from random import random
 
 from physics_manager import *
 from physical_object import *
@@ -25,11 +25,15 @@ class Model:
         """Run the model."""
         s = self
         s.display.start()
-        for i in range(50):
+        w, h = s.display.width, s.display.height
+        for i in range(500):
             self.phy.push(PhysicalObject(
-                float(randint(1e9, 1e12)),
-                float(randint(0, s.display.width) * SCALE_FACTOR),
-                float(randint(0, s.display.height) * SCALE_FACTOR)))
+                1e23 * (random() * 1e7),
+                1. + random() * 10,
+                (random() * (w * 5) - 2 * w) * SCALE_FACTOR,
+                (random() * (h * 5) - 2 * h) * SCALE_FACTOR,
+            ))
+            print(self.phy.phyobjs[-1])
         while True:
             if not self.tick():
                 break
