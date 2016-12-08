@@ -36,7 +36,7 @@ class PhysicsManager:
             return 4./3*PI*(r**3)
 
         def _partial_radius(p1, p2):
-            range = sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2) * SCALE_FACTOR
+            range = sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
             if range >= p1.radius + p2.radius:
                 return [1., 1.]
             d, r1, r2 = range, p1.radius, p2.radius
