@@ -57,7 +57,7 @@ class PhysicalObject:
         """
         if p is q:
             return None
-        d = sqrt((p.x - q.x)**2 + (p.y - q.y)**2) * SCALE_FACTOR
+        d = sqrt((p.x - q.x)**2 + (p.y - q.y)**2)
         r1, r2 = p.radius, q.radius
         if d >= r1 + r2:
             return None

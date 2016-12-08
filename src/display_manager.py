@@ -39,6 +39,7 @@ class DisplayManager:
         s.screen = None
         s.pause = 0
         s.width, s.height = 0, 0
+        s.x, s.y = 0, 0
 
     def start(self):
         """Initialize graphics."""
@@ -58,8 +59,23 @@ class DisplayManager:
 
         :key: key pressed
         """
+        s = self
+        global SCALE_FACTOR, MIN_MASS
         if key == pygame.K_SPACE:
             self.pause = not self.pause
+        elif key == pygame.K_UP:
+            s.y -= int(s.height / 10)
+        elif key == pygame.K_DOWN:
+            s.y += int(s.height / 10)
+        elif key == pygame.K_LEFT:
+            s.x -= int(s.width / 10)
+        elif key == pygame.K_RIGHT:
+            s.x += int(s.width / 10)
+        elif key == pygame.K_EQUALS:
+            SCALE_FACTOR /= 1.05
+        elif key == pygame.K_MINUS:
+            SCALE_FACTOR *= 1.05
+        MIN_MASS = SCALE_FACTOR ** 3
 
     def put_text(self, text, color, x, y):
         """
@@ -70,9 +86,25 @@ class DisplayManager:
         :x: x-position
         :y: y-position
         """
+        s = self
         font = pygame.font.SysFont("monospace", 18, bold=True)
         label = font.render(text, 1, color)
-        self.screen.blit(label, (x, y))
+        self.screen.blit(label, (
+            x - s.x,
+            y - s.y
+        ))
+
+    def show_status(self):
+        s = self
+        color = (255, 255, 255)
+        self.put_text("scale_factor: " + "%.2E" % SCALE_FACTOR,
+                      color, s.x, s.y)
+        self.put_text("G: " + "%.7E" % G,
+                      color, s.x, s.y + 25)
+        self.put_text("x: %d" % s.x,
+                      color, s.width + s.x - 100, s.height + s.y - 50)
+        self.put_text("y: %d" % s.y,
+                      color, s.width + s.x - 100, s.height + s.y - 25)
 
     def put_object(self, surface, p, color):
         """
@@ -82,9 +114,13 @@ class DisplayManager:
         :p: physical object
         :color: color of the object
         """
+        s = self
         pygame.draw.circle(surface,
                            color,
-                           (int(p.x), int(p.y)),
+                           (
+                               int(p.x / SCALE_FACTOR) - s.x,
+                               int(p.y / SCALE_FACTOR) - s.y
+                           ),
                            int(p.radius / SCALE_FACTOR))
 
     def handle_events(self):
@@ -128,10 +164,11 @@ class DisplayManager:
             s.put_text(
                 text,
                 COLORS[color],
-                int(p.x) - len(text) * 5,
-                int(p.y + int(p.radius) / SCALE_FACTOR * 1.2)
+                int(p.x / SCALE_FACTOR) - len(text) * 5,
+                int(p.y / SCALE_FACTOR + int(p.radius) / SCALE_FACTOR * 1.2)
             )
             color = (color + 1) % len(COLORS)
+        self.show_status()
         # pygame.display.set_icon(surface)
         pygame.display.flip()
         return True

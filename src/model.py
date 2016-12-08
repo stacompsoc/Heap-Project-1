@@ -28,8 +28,8 @@ class Model:
         for i in range(50):
             self.phy.push(PhysicalObject(
                 float(randint(1e9, 1e12)),
-                float(randint(0, s.display.width)),
-                float(randint(0, s.display.height))))
+                float(randint(0, s.display.width) * SCALE_FACTOR),
+                float(randint(0, s.display.height) * SCALE_FACTOR)))
         while True:
             if not self.tick():
                 break
