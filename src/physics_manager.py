@@ -32,19 +32,26 @@ class PhysicsManager:
         """
         force = [0., 0.]
 
-        def _volume(r):
-            return 4./3*PI*(r**3)
-
         def _partial_radius(p1, p2):
-            range = sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
-            if range >= p1.radius + p2.radius:
+            """
+            Calculate the coefficients of the gravity force.
+
+            :p1: physical object 1
+            :p2: physical object 2
+
+            :returns: [x coeff, y coeff]
+            """
+            d = sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+            r1, r2 = p1.radius, p2.radius
+            if d >= r1 + r2:
                 return [1., 1.]
-            d, r1, r2 = range, p1.radius, p2.radius
             r = r1 + r2 - d
-            v = r*r*(PI/(12.*d))*(d*d + 2*d*(r1 + r2) - 3*((r1 - r2)**2))
-            first = 0. if range <= p1.radius else 1. - v/_volume(r1)
-            second = 0. if range <= p2.radius else 1. - v/_volume(r2)
-            return [first, second]
+            v = r*r*(PI/12.)*(d*d + 2*d*(r1+r2) - 3*((r1-r2)**2))/d
+            v1, v2 = p1.volume, p2.volume
+            return [
+                0. if d <= r1 else 1. - v / v1,
+                0. if d <= r2 else 1. - v / v2
+            ]
 
         for p in self.phyobjs:
             if p == pp:
@@ -56,6 +63,15 @@ class PhysicsManager:
             force[0] += coeff * r[0]
             force[1] += coeff * r[1]
         return force
+
+    def set_gravity_forces(self):
+        """
+        Set gravity forces for the objects.
+
+        Separated for more distinct profiling.
+        """
+        for p in self.phyobjs:
+            p.forces['gravity'] = self.calc_gravity_vector(p)
 
     def remove_small_objects(self, startidx=0):
         """
@@ -73,13 +89,12 @@ class PhysicsManager:
     def tick(self):
         """Recomputing the forces and ticking all its elements."""
         ppp = self.phyobjs
-        for p in ppp:
-            p.forces['gravity'] = self.calc_gravity_vector(p)
+        self.set_gravity_forces()
         self.remove_small_objects()
         for p in ppp:
             p.tick()
         for i in range(len(ppp)):
             for j in range(i):
-                t = PhysicalObject.collide(self.phyobjs[i], self.phyobjs[j])
+                t = PhysicalObject.collide(ppp[i], ppp[j])
                 if t is not None:
                     self.push(t)

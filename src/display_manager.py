@@ -53,6 +53,33 @@ class DisplayManager:
             pygame.RESIZABLE
         )
 
+    def transform_coordinates(self, p):
+        """
+        Transform the coordinates of a physical object.
+
+        :p: physical object
+
+        :returns: (x, y)
+        """
+        return (
+            int(p.x / SCALE_FACTOR) - self.x,
+            int(p.y / SCALE_FACTOR) - self.y
+        )
+
+    def in_display(self, point):
+        """
+        Determine whether the point can be seen.
+
+        :point: (x, y) coordinates
+
+        :returns: True or False
+        """
+        x, y = point
+        if x < 0 or x > self.width or \
+                y < 0 or y > self.height:
+            return False
+        return True
+
     def keyboard(self, key):
         """
         Handle keyboard events.
@@ -87,6 +114,8 @@ class DisplayManager:
         :y: y-position
         """
         s = self
+        if not s.in_display((x - s.x, y - s.y)):
+            return
         font = pygame.font.SysFont("monospace", 18, bold=True)
         label = font.render(text, 1, color)
         self.screen.blit(label, (
@@ -95,6 +124,7 @@ class DisplayManager:
         ))
 
     def show_status(self):
+        """Put status text on the screen."""
         s = self
         color = (255, 255, 255)
         self.put_text("scale factor: %.2E" % SCALE_FACTOR,
@@ -117,12 +147,12 @@ class DisplayManager:
         :color: color of the object
         """
         s = self
+        coords = s.transform_coordinates(p)
+        if not s.in_display(coords):
+            return
         pygame.draw.circle(surface,
                            color,
-                           (
-                               int(p.x / SCALE_FACTOR) - s.x,
-                               int(p.y / SCALE_FACTOR) - s.y
-                           ),
+                           coords,
                            int(p.radius / SCALE_FACTOR))
 
     def handle_events(self):
