@@ -33,7 +33,6 @@ class Model:
                 (random() * (w * 5) - 2 * w) * SCALE_FACTOR,
                 (random() * (h * 5) - 2 * h) * SCALE_FACTOR,
             ))
-            print(self.phy.phyobjs[-1])
         while True:
             if not self.tick():
                 break
