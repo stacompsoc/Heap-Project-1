@@ -98,12 +98,10 @@ class PhysicsManager:
     def tick(self):
         """Recomputing the forces and ticking all its elements."""
         self.counter += 1
-        if self.counter == 5:
+        if self.counter % 25 == 0:
             self.set_gravity_forces()
-            self.counter = 0
         self.remove_small_objects()
         for p in self.phyobjs:
             p.tick()
-        if self.counter == 3:
+        if self.counter % 15 == 3:
             self.deal_with_collisions()
-            self.counter = 0
