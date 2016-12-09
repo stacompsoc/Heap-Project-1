@@ -13,6 +13,7 @@ class PhysicsManager:
     def __init__(self):
         """Initialize physics manager."""
         self.phyobjs = []
+        self.counter = 0
 
     def push(self, p):
         """
@@ -86,15 +87,23 @@ class PhysicsManager:
                 self.remove_small_objects(i)
                 return
 
-    def tick(self):
-        """Recomputing the forces and ticking all its elements."""
+    def deal_with_collisions(self):
         ppp = self.phyobjs
-        self.set_gravity_forces()
-        self.remove_small_objects()
-        for p in ppp:
-            p.tick()
         for i in range(len(ppp)):
             for j in range(i):
                 t = PhysicalObject.collide(ppp[i], ppp[j])
                 if t is not None:
                     self.push(t)
+
+    def tick(self):
+        """Recomputing the forces and ticking all its elements."""
+        self.counter += 1
+        if self.counter == 5:
+            self.set_gravity_forces()
+            self.counter = 0
+        self.remove_small_objects()
+        for p in self.phyobjs:
+            p.tick()
+        if self.counter == 3:
+            self.deal_with_collisions()
+            self.counter = 0
