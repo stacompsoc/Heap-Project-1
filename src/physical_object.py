@@ -1,5 +1,5 @@
 from math import pi as PI
-
+from vector import Vector
 
 """
 This entity represents a physical object, i.e. an object, which has physical matter in the context of the model.
@@ -15,11 +15,21 @@ class PhysicalObject:
         :x: x coordinate
         :y: y coordinate
         """
-        s = self
-        s.mass, s.x, s.y = mass, x, y
-        s.radius = (s.mass * (PI * 4./3)) ** (1./3)
-        # all tuples are to be replaced with vectors
-        s.speed, s.accel, s.forces = [0., 0.], [0., 0.], {}
+
+
+        self.mass = mass
+        self.position = vector([x,y])
+
+
+        self.radius = (s.mass * (PI * 4./3)) ** (1./3)
+
+        # creates zero vectors
+        self.speed = vectors([0, 0])
+        self.accel = vectors([0, 0])
+
+        # empty list, to be filled with force vectors
+        self.forces = []
+
 
     def get_forces_composition(self):
         """
@@ -27,10 +37,10 @@ class PhysicalObject:
 
         :returns: force vector
         """
-        force = [0., 0.]
+        force = vector([0, 0])
         for f in self.forces:
-            force[0] += self.forces[f][0]
-            force[1] += self.forces[f][1]
+            force.add(f)
+
         return force
 
     def tick(self):
@@ -38,11 +48,11 @@ class PhysicalObject:
         # print(str(self))
         force = self.get_forces_composition()
         # print("force == " + str(force))
-        self.x += self.speed[0]
-        self.y += self.speed[1]
-        self.speed[0] += self.accel[0]
-        self.speed[1] += self.accel[1]
-        self.accel = [f / self.mass for f in force]
+
+        self.position.add(self.speed)
+        self.speed.add(self.accel)
+
+        self.accel.add(force.divideByConstant(self.mass))
 
     def __str__(self):
         """
@@ -51,9 +61,6 @@ class PhysicalObject:
         :returns: str(PhysicalObject)
         """
         return "point: mass=" + str(self.mass) \
-            + ", coordinates=(" + str(self.x) \
-            + ", " + str(self.y) + ")" \
-            + ", velocity = (" + str(self.speed[0]) \
-            + ", " + str(self.speed[1]) + ")" \
-            + " acceleration = (" + str(self.accel[0]) \
-            + ", " + str(self.accel[1]) + ")"
+            + ", coordinates=" + str(self.position) \
+            + ", velocity = " + str(self.speed) \
+            + ", acceleration = " + str(self.accel)
