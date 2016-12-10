@@ -1,12 +1,9 @@
 from time import sleep
-from random import randint
+from random import random
 
 from physics_manager import *
 from physical_object import *
 from display_manager import *
-
-
-w, h = 1280, 960
 
 
 class Model:
@@ -19,18 +16,23 @@ class Model:
 
     def __init__(self):
         """Initialize a model."""
+        s = self
         print("initializing model")
-        self.phy = PhysicsManager()
-        for i in range(50):
-            self.phy.push(PhysicalObject(
-                randint(1e9, 1e12),
-                randint(0, w),
-                randint(0, h)))
-        self.display = DisplayManager(self.phy)
+        s.phy = PhysicsManager()
+        s.display = DisplayManager(self.phy)
 
     def run(self):
         """Run the model."""
-        self.display.start(w, h)
+        s = self
+        s.display.start()
+        w, h = s.display.width, s.display.height
+        for i in range(500):
+            self.phy.push(PhysicalObject(
+                1e23 * (random() * 1e7),
+                1. + random() * 10,
+                (random() * (w * 5) - 2 * w) * SCALE_FACTOR,
+                (random() * (h * 5) - 2 * h) * SCALE_FACTOR,
+            ))
         while True:
             if not self.tick():
                 break
@@ -39,6 +41,7 @@ class Model:
 
     def tick(self):
         """Run the idle function of the model."""
+        print("tick")
         return self.display.tick()
 
     print("Hello world!")

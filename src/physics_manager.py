@@ -12,6 +12,7 @@ class PhysicsManager:
     def __init__(self):
         """Initialize physics manager."""
         self.phyobjs = []
+        self.counter = 0
 
     def push(self, p):
         """
@@ -31,29 +32,26 @@ class PhysicsManager:
         """
         force = Vector([0,0])
 
-        def _volume(r):
-            return 4./3*PI*(r**3)
-
         def _partial_radius(p1, p2):
-            # Works out the distance between points
-            range = sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2) * SCALE_FACTOR
+            """
+            Calculate the coefficients of the gravity force.
 
-            #Checks whether the objects are touching one another surface or not
-            if range >= p1.radius + p2.radius:
-                return Vector([1., 1.])
+            :p1: physical object 1
+            :p2: physical object 2
 
-
-            d, r1, r2 = range, p1.radius, p2.radius
-
-            # Gets the distance between the two objects
+            :returns: [x coeff, y coeff]
+            """
+            d = sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+            r1, r2 = p1.radius, p2.radius
+            if d >= r1 + r2:
+                return [1., 1.]
             r = r1 + r2 - d
-
-            v = r*r*(PI/(12.*d))*(d*d + 2*d*(r1 + r2) - 3*((r1 - r2)**2))
-
-            first = 0. if range <= p1.radius else 1. - v/_volume(r1)
-            second = 0. if range <= p2.radius else 1. - v/_volume(r2)
-
-            return [first, second]
+            v = r*r*(PI/12.)*(d*d + 2*d*(r1+r2) - 3*((r1-r2)**2))/d
+            v1, v2 = p1.volume, p2.volume
+            return [
+                0. if d <= r1 else 1. - v / v1,
+                0. if d <= r2 else 1. - v / v2
+            ]
 
         for p in self.phyobjs:
             # Skips over itself
@@ -70,9 +68,43 @@ class PhysicsManager:
             force.add([coeff * r[0], coeff * r[1]])
         return force
 
-    def tick(self):
-        """Recomputing the forces and ticking all its elements."""
+    def set_gravity_forces(self):
+        """
+        Set gravity forces for the objects.
+
+        Separated for more distinct profiling.
+        """
         for p in self.phyobjs:
             p.forces['gravity'] = self.calc_gravity_vector(p)
+
+    def remove_small_objects(self, startidx=0):
+        """
+        Remove undisplayable objects.
+
+        :startidx: starting index (constant optimization)
+        """
+        ppp = self.phyobjs
+        for i in range(startidx, len(ppp)):
+            if ppp[i].mass < MIN_MASS:
+                del(ppp[i])
+                self.remove_small_objects(i)
+                return
+
+    def deal_with_collisions(self):
+        ppp = self.phyobjs
+        for i in range(len(ppp)):
+            for j in range(i):
+                t = PhysicalObject.collide(ppp[i], ppp[j])
+                if t is not None:
+                    self.push(t)
+
+    def tick(self):
+        """Recomputing the forces and ticking all its elements."""
+        self.counter += 1
+        if self.counter % 25 == 0:
+            self.set_gravity_forces()
+        self.remove_small_objects()
         for p in self.phyobjs:
             p.tick()
+        if self.counter % 15 == 3:
+            self.deal_with_collisions()
