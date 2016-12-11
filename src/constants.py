@@ -6,4 +6,5 @@ COLLISION_TRANSFER = 1./4
 MIN_MASS = SCALE_FACTOR**3
 
 G = gravitational_constant * 1e7
+LY = light_year
 PI = pi
