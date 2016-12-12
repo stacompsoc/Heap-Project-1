@@ -1,5 +1,5 @@
 import math
-import copy
+from copy import deepcopy
 
 class Vector:
     """
@@ -46,6 +46,12 @@ class Vector:
             value = self._components[self._index]
             self._index += 1
             return value
+    """
+        Returns a copy of the vector
+    """
+    def clone(self):
+        clone = deepcopy(self)
+        return clone
 
     """
         Checks whether the vectors have the same number of components.
@@ -91,7 +97,7 @@ class Vector:
     """
     def divideByConstant(self, constant):
         constant = 1/constant
-        self.multipleByScalar(constant)
+        self.mutlipleByConstant(constant)
 
     """
         Works out the dot product for the current vector
@@ -132,3 +138,13 @@ class Vector:
         print(mag2)
         dotProduct = self.dotProduct(vector)
         return math.acos(dotProduct/(mag1*mag2))
+
+    """
+        Returns the unit vector of the current
+        vector
+    """
+    def getUnitVector(self):
+        vector = self.clone()
+        magnitude = vector.magnitude()
+        vector.divideByConstant(magnitude)
+        return magnitude

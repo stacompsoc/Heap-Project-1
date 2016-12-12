@@ -1,10 +1,6 @@
-<<<<<<< HEAD
 from math import pi as PI
 from vector import Vector
-=======
 from constants import *
-
->>>>>>> origin/master
 
 """
 This entity represents a physical object, i.e. which has physical matter.
@@ -26,8 +22,9 @@ class PhysicalObject:
         s.set_mass(mass)
 
         # creates zero vectors
-        s.speed = vectors([0, 0])
-        s.accel = vectors([0, 0])
+        s.speed = Vector([0, 0])
+        s.accel = Vector([0, 0])
+        s.position =Vector([0,0])
 
         # empty list, to be filled with force vectors
         s.forces = []
@@ -50,7 +47,7 @@ class PhysicalObject:
 
         :returns: force vector
         """
-        force = vector([0, 0])
+        force = Vector([0, 0])
         for f in self.forces:
             force.add(f)
 
@@ -68,7 +65,7 @@ class PhysicalObject:
         """
         if p is q:
             return None
-        d = sqrt((p.x - q.x)**2 + (p.y - q.y)**2)
+        d = sqrt((p.position[0] - q.position[0])**2 + (p.position[1] - q.position[1])**2)
         r1, r2 = p.radius, q.radius
         if d >= r1 + r2:
             return None
@@ -104,6 +101,7 @@ class PhysicalObject:
         :p: first object
         :q: second object
         """
+
         u1, m1, u2, m2 = p.speed, p.mass, q.speed, q.mass
 
         def _get_new_speed(u1, u2, m1, m2):
@@ -112,8 +110,8 @@ class PhysicalObject:
                 (u1[1] * (m1 - m2) + 2 * m2 * u2[1]) / (m1 + m2)
             ]
 
-        p.speed = _get_new_speed(u1, u2, m1, m2)
-        q.speed = _get_new_speed(u2, u1, m2, m1)
+        p.speed = Vector(_get_new_speed(u1, u2, m1, m2))
+        q.speed = Vector(_get_new_speed(u2, u1, m2, m1))
 
     def tick(self):
         """Tick the physical object: update its physical properties."""
@@ -123,7 +121,8 @@ class PhysicalObject:
         s.position.add(s.speed)
         s.speed.add(s.accel)
 
-        s.accel.add(force.divideByConstant(s.mass))
+        force.divideByConstant(s.mass)
+        s.accel.add(force)
 
 
     def __str__(self):

@@ -61,9 +61,11 @@ class DisplayManager:
 
         :returns: (x, y)
         """
+        x = p.position[0]
+        y = p.position[1]
         return (
-            int(p.x / SCALE_FACTOR) - self.x,
-            int(p.y / SCALE_FACTOR) - self.y
+            int(x / SCALE_FACTOR) - self.x,
+            int(y / SCALE_FACTOR) - self.y
         )
 
     def in_display(self, point):
@@ -193,11 +195,13 @@ class DisplayManager:
         color = 0
         for p in s.phy.phyobjs:
             text = "%.2E" % (int(p.mass))
+            x = p.position[0]
+            y = p.position[1]
             s.put_text(
                 text,
                 COLORS[color],
-                int(p.x / SCALE_FACTOR) - len(text) * 5,
-                int(p.y / SCALE_FACTOR + int(p.radius) / SCALE_FACTOR * 1.2)
+                int(x / SCALE_FACTOR) - len(text) * 5,
+                int(y / SCALE_FACTOR + int(p.radius) / SCALE_FACTOR * 1.2)
             )
             color = (color + 1) % len(COLORS)
         self.show_status()
