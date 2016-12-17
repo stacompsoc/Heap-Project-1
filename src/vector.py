@@ -1,150 +1,92 @@
-import math
-from copy import deepcopy
+from math import sqrt
 
 class Vector:
-    """
-        Parameters: Takes in a list of numeric components
-    """
     def __init__(self, components):
         self._components = components
-        self._index = 0
         self._max = len(components)
+        self._index = 0;
 
-    # Returns string representation to print
     def __str__(self):
-        string = "("
-        for i, part in enumerate(self):
-            if i != self._max - 1:
-                string += str(part) + ", "
-            else:
-                string += str(part)
-        string += ")"
+        string = ""
+        for element in self:
+            string += " " + str(element)
         return string
 
-    # Returns the length of the object
-    def __len__(self):
-        return (self._max - 1)
-
-    # Makes the object an iterable (like a list or string)
     def __iter__(self):
-        return self
+        return self;
 
-    # Allows the object to be indexed into and changed
-    def __setitem__(self, index, value):
-        self._components[index] = value
+    def __len__(self):
+        return self._max
 
-    # Allows user to get a value at a certain index in the object
+    def __next__(self):
+        if self._index < self._max:
+            value = self._index
+            self._index += 1
+            return self._components[value]
+        else:
+            raise StopIteration
+
     def __getitem__(self, index):
         return self._components[index]
 
-    # Allows the object to be iterated over
-    def __next__(self):
-        if self._index == self._max:
-            self._index = 0
-            raise StopIteration
+    def __setitem__(self, index, value):
+        self._components[index] = value
+
+    def _checkDimension(self, v2):
+        if not(self._max == len(v2)):
+            raise Exception("Error vectors don't have matching dimensions")
+
+    def _createEmptyVector(self, size):
+        components = [0] * size
+        test = Vector(components)
+        return test
+
+
+    def __add__(self, v2):
+        self._checkDimension(v2)
+        v3 = self._createEmptyVector(self._max)
+        for element in range(self._max):
+            v3[element] = self[element] + v2[element]
+        return v3
+
+    def __sub__(self, v2):
+        self._checkDimension(v2)
+        v3 = self._createEmptyVector(self._max)
+        for element in range(self._max):
+            v3[element] = self[element] - v2[element]
+        return v3
+
+    def __mul__(self, v2):
+        if(isinstance(v2, Vector)):
+            self._checkDimension(v2)
+            dotProduct = 0
+            for index in range(self._max):
+                dotProduct += self[index] * v2[index]
+            return dotProduct
         else:
-            value = self._components[self._index]
-            self._index += 1
-            return value
-    """
-        Returns a copy of the vector
-    """
-    def clone(self):
-        clone = deepcopy(self)
-        return clone
+            v3 = self._createEmptyVector(self._max)
+            for element in range(self._max):
+                v3[element] = self[element] * v2
+            return v3
 
-    """
-        Checks whether the vectors have the same number of components.
-        For internal use only
-    """
-    def _checkMistmatchingVector(self, vector):
-        if self._max - 1 != len(vector):
-            raise Exception("Mismatching number of components")
+    def __truediv__(self, num):
+        v2 = self._createEmptyVector(self._max)
+        for index in range(self._max):
+            v2[index] = float(self[index]/num)
+        return v2
 
-    """
-        Adds the vector passed to the current object (vector)
-    """
-    def add(self, vector):
-        self._checkMistmatchingVector(vector)
-        for i, element in enumerate(vector):
-            self[i] += element
-
-    """
-        Substracts the vector passed from the current object (vector)
-    """
-    def substract(self, vector):
-        self._checkMistmatchingVector(vector)
-        for i, element in enumerate(vector):
-            self[i] -= element
-
-    """
-        Mutliples the current object (vector) by the vector passed
-    """
-    def mutliple(self, vector):
-        self._checkMistmatchingVector(vector)
-        for i, component in enumerate(vector):
-            self[i] *= component
-
-    """
-        Mutliples the current object (vector) by a constant
-    """
-    def mutlipleByConstant(self, constant):
-        for i in range(self._max):
-            self[i] *= 5
-
-    """
-        Divides the current object (vector) by a constant
-    """
-    def divideByConstant(self, constant):
-        constant = 1/constant
-        self.mutlipleByConstant(constant)
-
-    """
-        Works out the dot product for the current vector
-        and the vector passed
-
-        Returns: the dot product
-    """
-    def dotProduct(self, vector):
-        dotProduct = 0
-        self._checkMistmatchingVector(vector)
-
-        for index, element1 in enumerate(self):
-            dotProduct += element1 * vector[index]
-        return dotProduct
-
-    """
-        Calculates the magnitude of the current vector
-
-        Returns: the magnitude
-    """
-    def magnitude(self):
-      magnitude = 0
-      for currentElement in self:
-          magnitude += currentElement**2
-
-      magnitude = math.sqrt(magnitude)
-      return magnitude
-
-    """
-        Calculates the angle between two vector
-
-        Returns: the angle in radians
-    """
-    def angleBetween(self, vector):
-        mag1 = self.magnitude()
-        print(mag1)
-        mag2 = vector.magnitude()
-        print(mag2)
-        dotProduct = self.dotProduct(vector)
-        return math.acos(dotProduct/(mag1*mag2))
-
-    """
-        Returns the unit vector of the current
-        vector
-    """
-    def getUnitVector(self):
-        vector = self.clone()
-        magnitude = vector.magnitude()
-        vector.divideByConstant(magnitude)
+    def calMagnitude(self):
+        magnitude = 0.0
+        for element in self:
+            magnitude += element**2
+        magnitude = sqrt(magnitude)
         return magnitude
+
+def main():
+    v1 = Vector([1,2,3])
+    v2 = v1/4
+    print(v2)
+    mag = v2.calMagnitude()
+    print(mag)
+if __name__ == '__main__':
+    main()
