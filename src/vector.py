@@ -1,15 +1,13 @@
 from math import sqrt
 
 class Vector:
-    def __init__(self, components):
-        self._components = components
-        self._max = len(components)
+    def __init__(self, *args):
+        self._components = list(args)
+        self._max = len(self._components)
         self._index = 0;
 
     def __str__(self):
-        string = ""
-        for element in self:
-            string += " " + str(element)
+        string = '(' + ','.join(str(e) for e in self._components) + ')'
         return string
 
     def __iter__(self):
@@ -37,9 +35,8 @@ class Vector:
             raise Exception("Error vectors don't have matching dimensions")
 
     def _createEmptyVector(self, size):
-        components = [0] * size
-        test = Vector(components)
-        return test
+        emptyVector = Vector(0,0,0)
+        return emptyVector
 
 
     def __add__(self, v2):
@@ -83,7 +80,9 @@ class Vector:
         return magnitude
 
 def main():
-    v1 = Vector([1,2,3])
+    v1 = Vector(1,2,3)
+    v2 = v1*4
+    print(v2)
     v2 = v1/4
     print(v2)
     mag = v2.calMagnitude()
