@@ -45,24 +45,80 @@ class PhysicalObject:
             force[1] += self.forces[f][1]
         return force
 
+    def reset_forces(self):
+        for f in self.forces:
+            self.forces[f] = [0., 0.]
+
+    def add_force(self, label, force):
+        if label not in self.forces:
+            self.forces[label] = [0., 0.]
+        f = self.forces[label]
+        f[0] += force[0]
+        f[1] += force[1]
+
     @staticmethod
-    def collide(p, q):
+    def distance(p1, p2):
+        """
+        Calculate the distance between two objects.
+
+        :p1: first object
+        :p2: second object
+
+        :returns: distance
+        """
+        return sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+
+    @staticmethod
+    def calc_gravity(p1, p2):
+        """
+        Calculate the gravity force vector between two objects.
+
+        :p1: first object
+        :p2: second object
+        """
+        static = PhysicalObject
+        d = static.distance(p1, p2)
+        m1, m2 = p1.mass, p2.mass
+        r1, r2 = p1.radius, p2.radius
+
+        def _intersection_coefficient():
+            if d >= r1 + r2:
+                return [1., 1.]
+            r = r1 + r2 - d
+            v = r*r*(PI/12.)*(d*d + 2*d*(r1+r2) - 3*((r1-r2)**2))/d
+            v1, v2 = p1.volume, p2.volume
+            return [
+                0. if d <= r1 else 1. - v / v1,
+                0. if d <= r2 else 1. - v / v2
+            ]
+        decr = _intersection_coefficient()
+        coeff = G * decr[0]*m1 * decr[1]*m2 / (d ** 3)
+        force = [
+            coeff * (p2.x - p1.x),
+            coeff * (p2.y - p1.y)
+        ]
+        p1.add_force('gravity', force)
+        p2.add_force('gravity', [-force[0], -force[1]])
+
+    @staticmethod
+    def collide(p1, p2):
         """
         Collide two objects.
 
-        :p: first object
-        :q: second object
+        :p1: first object
+        :p2: second object
 
         :returns: an asteroid or None
         """
-        if p is q:
+        static = PhysicalObject
+        if p1 is p2:
             return None
-        d = sqrt((p.x - q.x)**2 + (p.y - q.y)**2)
-        r1, r2 = p.radius, q.radius
+        d = static.distance(p1, p2)
+        r1, r2 = p1.radius, p2.radius
         if d >= r1 + r2:
             return None
-        PhysicalObject.set_speeds_after_collision(p, q)
-        return PhysicalObject.set_masses_after_collision(p, q)
+        static.set_speeds_after_collision(p1, p2)
+        return static.set_masses_after_collision(p1, p2)
 
     @staticmethod
     def set_masses_after_collision(p, q):
@@ -74,9 +130,10 @@ class PhysicalObject:
 
         :returns: an object (asteroid) spawned after collision
         """
+        static = PhysicalObject
         m1, m2 = p.mass, q.mass
         if m1 < m2:
-            return PhysicalObject.set_masses_after_collision(q, p)
+            return static.set_masses_after_collision(q, p)
         m3 = m1 - m2
         if m3 > m2:
             m3 = m2

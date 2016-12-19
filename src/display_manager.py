@@ -57,14 +57,20 @@ class DisplayManager:
         """
         Transform the coordinates of a physical object.
 
-        :p: physical object
+        :p: physical object / point
 
         :returns: (x, y)
         """
-        return (
-            int(p.x / SCALE_FACTOR) - self.x,
-            int(p.y / SCALE_FACTOR) - self.y
-        )
+        if type(p) == PhysicalObject:
+            return (
+                int(p.x / SCALE_FACTOR) - self.x,
+                int(p.y / SCALE_FACTOR) - self.y
+            )
+        else:
+            return (
+                int(p[0] / SCALE_FACTOR) - self.x,
+                int(p[1] / SCALE_FACTOR) - self.y
+            )
 
     def in_display(self, point):
         """
@@ -137,6 +143,30 @@ class DisplayManager:
                       color, s.width + s.x - 100, s.height + s.y - 50)
         self.put_text("y: %d" % s.y,
                       color, s.width + s.x - 100, s.height + s.y - 25)
+
+    def put_vector(self, surface, init, vector, color):
+        """
+        Put a vector onto the screen.
+
+        :sorface: surface to put the object on
+        :init: initial coordinates
+        :vector: vector to put
+        :color: color of the vector
+
+        TODO: fix
+        """
+        s = self
+        init = s.transform_coordinates(init)
+        if not s.in_display(init):
+            return
+        vector = s.transform_coordinates(vector)
+        print(init)
+        print(vector)
+        pygame.draw.line(
+            surface, color, init,
+            [init[0] + vector[0] * 10, init[1] + vector[1] * 10],
+            4
+        )
 
     def put_object(self, surface, p, color):
         """
