@@ -39,7 +39,7 @@ class DisplayManager:
         s.screen = None
         s.pause = 0
         s.width, s.height = 0, 0
-        s.x, s.y = 0, 0
+        s.position = Vector(0,0)
 
     def start(self):
         """Initialize graphics."""
@@ -63,10 +63,7 @@ class DisplayManager:
         """
 
         if type(p) == PhysicalObject:
-            return (
-                int(p.x / SCALE_FACTOR) - self.x,
-                int(p.y / SCALE_FACTOR) - self.y
-            )
+            return (p.position//SCALE_FACTOR) - self.position
         else:
             return (
                 int(p[0] / SCALE_FACTOR) - self.x,

@@ -24,10 +24,10 @@ class PhysicalObject:
         # creates zero vectors
         s.speed = Vector(0, 0)
         s.accel = Vector(0, 0)
-        s.position =Vector(0, 0)
+        s.position =Vector(x, y)
 
         # empty list, to be filled with force vectors
-        s.forces = []
+        s.forces = dict()
 
 
     def set_mass(self, new_mass):
@@ -47,23 +47,22 @@ class PhysicalObject:
 
         :returns: force vector
         """
-        force = Vector([0, 0])
+        force = Vector(0, 0)
         for f in self.forces:
-            force.add(f)
-
+            force += f
         return force
 
     def reset_forces(self):
         for f in self.forces:
-            self.forces[f] = [0., 0.]
+            self.forces[f] = Vector(0,0)
 
     def add_force(self, label, force):
         if label not in self.forces:
-            self.forces[label] = [0., 0.]
+            self.forces[label] = Vector(0,0)
         f = self.forces[label]
-        f[0] += force[0]
-        f[1] += force[1]
-
+        print(force)
+        f += force
+        
     @staticmethod
     def distance(p1, p2):
         """
@@ -74,7 +73,8 @@ class PhysicalObject:
 
         :returns: distance
         """
-        return sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
+        r = p1.position - p2.position;
+        return r.calMagnitude()
 
     @staticmethod
     def calc_gravity(p1, p2):
@@ -88,7 +88,8 @@ class PhysicalObject:
         d = static.distance(p1, p2)
         m1, m2 = p1.mass, p2.mass
         r1, r2 = p1.radius, p2.radius
-
+        print(r1)
+        print(r2)
         def _intersection_coefficient():
             if d >= r1 + r2:
                 return [1., 1.]
@@ -101,12 +102,10 @@ class PhysicalObject:
             ]
         decr = _intersection_coefficient()
         coeff = G * decr[0]*m1 * decr[1]*m2 / (d ** 3)
-        force = [
-            coeff * (p2.x - p1.x),
-            coeff * (p2.y - p1.y)
-        ]
+        force = (p2.position - p1.position) * coeff
+
         p1.add_force('gravity', force)
-        p2.add_force('gravity', [-force[0], -force[1]])
+        p2.add_force('gravity', force*-1)
 
     @staticmethod
     def collide(p1, p2):
@@ -193,4 +192,5 @@ class PhysicalObject:
         return "point: mass=" + str(self.mass) \
             + ", coordinates=" + str(self.position) \
             + ", velocity = " + str(self.speed) \
-            + ", acceleration = " + str(self.accel)
+            + ", acceleration = " + str(self.accel) \
+            + ", radius = " + str(self.radius)
