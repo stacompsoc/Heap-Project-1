@@ -1,8 +1,8 @@
 from math import sqrt
 
 class Vector:
-    def __init__(self, *args):
-        self._components = list(args)
+    def __init__(self, *components):
+        self._components = list(components)
         self._max = len(self._components)
         self._index = 0;
 
