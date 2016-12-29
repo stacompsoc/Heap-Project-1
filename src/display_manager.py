@@ -31,7 +31,6 @@ class DisplayManager:
     def __init__(self, phy):
         """
         Initialize display manager.
-
         :phy: physics manager
         """
         s = self
@@ -39,7 +38,7 @@ class DisplayManager:
         s.screen = None
         s.pause = 0
         s.width, s.height = 0, 0
-        s.position = Vector(0,0)
+        s.x, s.y = 0, 0
 
     def start(self):
         """Initialize graphics."""
@@ -56,27 +55,24 @@ class DisplayManager:
     def transform_coordinates(self, p):
         """
         Transform the coordinates of a physical object.
-
         :p: physical object / point
-
         :returns: (x, y)
         """
-
         if type(p) == PhysicalObject:
-            return (p.position//SCALE_FACTOR) - self.position
+            return (
+                int(p.x / SCALE_FACTOR) - self.x,
+                int(p.y / SCALE_FACTOR) - self.y
+            )
         else:
             return (
                 int(p[0] / SCALE_FACTOR) - self.x,
                 int(p[1] / SCALE_FACTOR) - self.y
             )
 
-
     def in_display(self, point):
         """
         Determine whether the point can be seen.
-
         :point: (x, y) coordinates
-
         :returns: True or False
         """
         x, y = point
@@ -88,7 +84,6 @@ class DisplayManager:
     def keyboard(self, key):
         """
         Handle keyboard events.
-
         :key: key pressed
         """
         s = self
@@ -112,7 +107,6 @@ class DisplayManager:
     def put_text(self, text, color, x, y):
         """
         Put the text on the screen.
-
         :text: message to display
         :color: color of the text
         :x: x-position
@@ -146,12 +140,10 @@ class DisplayManager:
     def put_vector(self, surface, init, vector, color):
         """
         Put a vector onto the screen.
-
         :sorface: surface to put the object on
         :init: initial coordinates
         :vector: vector to put
         :color: color of the vector
-
         TODO: fix
         """
         s = self
@@ -170,7 +162,6 @@ class DisplayManager:
     def put_object(self, surface, p, color):
         """
         Put an object on the screen.
-
         :surface: surface to put the object on
         :p: physical object
         :color: color of the object
@@ -187,7 +178,6 @@ class DisplayManager:
     def handle_events(self):
         """
         Handle different events.
-
         :returns: true or false (termination)
         """
         s = self
@@ -201,7 +191,6 @@ class DisplayManager:
     def tick(self):
         """
         Idle function for displaying the model.
-
         :returns: boolean (whether continue or not)
         """
         # detect pressed keys
@@ -222,13 +211,11 @@ class DisplayManager:
         color = 0
         for p in s.phy.phyobjs:
             text = "%.2E" % (int(p.mass))
-            x = p.position[0]
-            y = p.position[1]
             s.put_text(
                 text,
                 COLORS[color],
-                int(x / SCALE_FACTOR) - len(text) * 5,
-                int(y / SCALE_FACTOR + int(p.radius) / SCALE_FACTOR * 1.2)
+                int(p.x / SCALE_FACTOR) - len(text) * 5,
+                int(p.y / SCALE_FACTOR + int(p.radius) / SCALE_FACTOR * 1.2)
             )
             color = (color + 1) % len(COLORS)
         self.show_status()

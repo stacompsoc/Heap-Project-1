@@ -3,7 +3,7 @@ from math import sqrt
 class Vector:
     def __init__(self, *components):
         self._components = list(components)
-        self._max = len(self._components)
+        self._max = len(self._components) - 1
         self._index = 0;
 
     def __str__(self):
@@ -14,7 +14,7 @@ class Vector:
         return self;
 
     def __len__(self):
-        return self._max
+        return self._max + 1
 
     def __next__(self):
         if self._index < self._max:
@@ -31,7 +31,7 @@ class Vector:
         self._components[index] = value
 
     def _checkDimension(self, v2):
-        if not(self._max == len(v2)):
+        if not((self._max + 1) == len(v2)):
             raise Exception("Error vectors don't have matching dimensions")
 
     def _createEmptyVector(self):
@@ -47,7 +47,6 @@ class Vector:
             have the same dimensions.
             Returns: the resultant vector of the operation
         """
-        print(v2)
         self._checkDimension(v2)
         v3 = self._createEmptyVector()
         for element in range(self._max):
@@ -92,7 +91,7 @@ class Vector:
             Allows vectors to be divided like normal numeric
             values (though not integer division) (a/b).
         """
-        v2 = self._createEmptyVector(self._max)
+        v2 = self._createEmptyVector()
         for index in range(self._max):
             v2[index] = float(self[index]/num)
         return v2
@@ -118,12 +117,12 @@ class Vector:
         magnitude = sqrt(magnitude)
         return magnitude
 
-
+    def convertIntoCoords(self):
+        return self._components
 def main():
     v1 = Vector(1,2,3)
     v2 = Vector(1,2,3)
-    v3 = v1 - v2
+    v3 = 4.2 * v1
     print(v3)
-
 if __name__ == '__main__':
     main()

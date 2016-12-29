@@ -10,7 +10,6 @@ class Model:
 
     """
     Model class.
-
     Binds display, physics and everything together.
     """
 
@@ -43,5 +42,3 @@ class Model:
         """Run the idle function of the model."""
         print("tick")
         return self.display.tick()
-
-    print("Hello world!")

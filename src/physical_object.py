@@ -1,7 +1,5 @@
-from math import pi as PI
-from vector import Vector
 from constants import *
-
+from vector import Vector
 """
 This entity represents a physical object, i.e. which has physical matter.
 """
@@ -11,29 +9,22 @@ class PhysicalObject:
     def __init__(self, mass, density, x, y):
         """
         Initialize physical object.
-
         :mass: mass
         :x: x coordinate
         :y: y coordinate
         """
-
         s = self
         s.density = density
         s.set_mass(mass)
-
-        # creates zero vectors
-        s.speed = Vector(0, 0)
-        s.accel = Vector(0, 0)
-        s.position =Vector(x, y)
-
-        # empty list, to be filled with force vectors
-        s.forces = dict()
-
+        s.x, s.y = x, y
+        # all tuples are to be replaced with vectors
+        s.speed = Vector(0,0)
+        s.accel = Vector(0,0)
+        s.forces = {}
 
     def set_mass(self, new_mass):
         """
         Change attributes of the object when the mass changes.
-
         :new_mass: new mass
         """
         s = self
@@ -44,11 +35,10 @@ class PhysicalObject:
     def get_forces_composition(self):
         """
         Calculate the sum of force vectors for the object.
-
         :returns: force vector
         """
-        force = Vector(0, 0)
-        for f in self.forces:
+        force = Vector(0,0)
+        for key, f in self.forces.items():
             force += f
         return force
 
@@ -60,27 +50,22 @@ class PhysicalObject:
         if label not in self.forces:
             self.forces[label] = Vector(0,0)
         f = self.forces[label]
-        print(force)
         f += force
-        
+
     @staticmethod
     def distance(p1, p2):
         """
         Calculate the distance between two objects.
-
         :p1: first object
         :p2: second object
-
         :returns: distance
         """
-        r = p1.position - p2.position;
-        return r.calMagnitude()
+        return sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
 
     @staticmethod
     def calc_gravity(p1, p2):
         """
         Calculate the gravity force vector between two objects.
-
         :p1: first object
         :p2: second object
         """
@@ -88,8 +73,7 @@ class PhysicalObject:
         d = static.distance(p1, p2)
         m1, m2 = p1.mass, p2.mass
         r1, r2 = p1.radius, p2.radius
-        print(r1)
-        print(r2)
+
         def _intersection_coefficient():
             if d >= r1 + r2:
                 return [1., 1.]
@@ -102,7 +86,7 @@ class PhysicalObject:
             ]
         decr = _intersection_coefficient()
         coeff = G * decr[0]*m1 * decr[1]*m2 / (d ** 3)
-        force = (p2.position - p1.position) * coeff
+        force = Vector(coeff * (p2.x - p1.x), coeff * (p2.y - p1.y))
 
         p1.add_force('gravity', force)
         p2.add_force('gravity', force*-1)
@@ -111,19 +95,15 @@ class PhysicalObject:
     def collide(p1, p2):
         """
         Collide two objects.
-
         :p1: first object
         :p2: second object
-
         :returns: an asteroid or None
         """
         static = PhysicalObject
         if p1 is p2:
             return None
-
         d = static.distance(p1, p2)
         r1, r2 = p1.radius, p2.radius
-
         if d >= r1 + r2:
             return None
         static.set_speeds_after_collision(p1, p2)
@@ -133,10 +113,8 @@ class PhysicalObject:
     def set_masses_after_collision(p, q):
         """
         Set masses after collision.
-
         :p: first object
         :q: second object
-
         :returns: an object (asteroid) spawned after collision
         """
         static = PhysicalObject
@@ -155,33 +133,23 @@ class PhysicalObject:
     def set_speeds_after_collision(p, q):
         """
         Set speeds after collision.
-
         :p: first object
         :q: second object
         """
-
         u1, m1, u2, m2 = p.speed, p.mass, q.speed, q.mass
 
-        def _get_new_speed(u1, u2, m1, m2):
-            return [
-                (u1[0] * (m1 - m2) + 2 * m2 * u2[0]) / (m1 + m2),
-                (u1[1] * (m1 - m2) + 2 * m2 * u2[1]) / (m1 + m2)
-            ]
+        p.speed = u1*(2*m2/(m1+m2)) - u2*((m1-m2)/(m1+m2))
+        q.speed = u1*((m1-m2)/(m1+m2)) + u2*((2*m2)/(m1+m2))
 
-        p.speed = Vector(_get_new_speed(u1, u2, m1, m2))
-        q.speed = Vector(_get_new_speed(u2, u1, m2, m1))
 
     def tick(self):
         """Tick the physical object: update its physical properties."""
         s = self
         force = s.get_forces_composition()
-
-        s.position.add(s.speed)
-        s.speed.add(s.accel)
-
-        force.divideByConstant(s.mass)
-        s.accel.add(force)
-
+        s.x += s.speed[0]
+        s.y += s.speed[1]
+        s.speed += s.accel
+        s.accel = force/s.mass
 
     def __str__(self):
         """
@@ -189,8 +157,9 @@ class PhysicalObject:
 
         :returns: str(PhysicalObject)
         """
+
         return "point: mass=" + str(self.mass) \
-            + ", coordinates=" + str(self.position) \
+            + ", coordinates=" + str(self.x) + "," + str(self.y ) \
             + ", velocity = " + str(self.speed) \
             + ", acceleration = " + str(self.accel) \
             + ", radius = " + str(self.radius)
