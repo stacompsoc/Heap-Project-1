@@ -3,7 +3,6 @@ from math import sqrt
 class Vector:
     def __init__(self, *components):
         self._components = list(components)
-        self._max = len(self._components) - 1
         self._index = 0;
 
     def __str__(self):
@@ -11,13 +10,14 @@ class Vector:
         return string
 
     def __iter__(self):
-        return self;
+        for i in self._components:
+            yield i
 
     def __len__(self):
-        return self._max + 1
+        return len(self._components)
 
     def __next__(self):
-        if self._index < self._max:
+        if self._index < len(self):
             value = self._index
             self._index += 1
             return self._components[value]
@@ -30,99 +30,70 @@ class Vector:
     def __setitem__(self, index, value):
         self._components[index] = value
 
-    def _checkDimension(self, v2):
-        if not((self._max + 1) == len(v2)):
+    def __pos__(self):
+        return self
+
+    def __neg__(self):
+        return self * -1
+
+    def _checkDim(self, v2):
+        if len(self) != len(v2):
             raise Exception("Error vectors don't have matching dimensions")
-
-    def _createEmptyVector(self):
-        emptyVector = Vector(0,0)
-        return emptyVector
-
 
     def __add__(self, v2):
         """
-            Method allows vectors to be added
-            like normal numeric value (i.e. a + b).
-            Well throw an excption if the vectors don't
-            have the same dimensions.
+            Allows two vectors to be added using the '+' operator (i.e. v1 + v2)
             Returns: the resultant vector of the operation
         """
-        self._checkDimension(v2)
-        v3 = self._createEmptyVector()
-        for element in range(self._max):
-            v3[element] = self[element] + v2[element]
-        return v3
+        self._checkDim(v2)
+        components = [i+j for i,j in zip(self,v2)]
+        return Vector(*components)
 
     def __sub__(self, v2):
         """
-            Methods allows vector to be substracted
-            like normal numeric values (i.e. a - b).
-            Again throw an exception if dimensions and
-            will return resultant vector
+            Allows two vectors to be substracted using the '-' operator (i.e. v1 - v2)
+            Returns: the resultant vector of the operation
         """
-        self._checkDimension(v2)
-        v3 = self._createEmptyVector()
-        for element in range(self._max):
-            v3[element] = self[element] - v2[element]
-        return v3
+        self._checkDim(v2)
+        v2 = -v2
+        return self + v2
 
 
     def __mul__(self, v2):
         """
-            Allows the vector to be multiplied like
-            a normal numeric value (a*b). Will return
-            the dot-product of two vectors or the vector
-            multiplied by the constant
+            Will return the scalar product if two vectors are multiplied.
+            If passed constant will return the vector multiplied
+            by constant
         """
-        if(isinstance(v2, Vector)):
-            self._checkDimension(v2)
-            dotProduct = 0
-            for index in range(self._max):
-                dotProduct += self[index] * v2[index]
-            return dotProduct
+        if isinstance(v2, Vector):
+            self._checkDim(v2)
+            return sum([i*j for i, j in zip(self, v2)])
         else:
-            v3 = self._createEmptyVector()
-            for element in range(self._max):
-                v3[element] = self[element] * v2
-            return v3
+            components = [i*v2 for i in self]
+            return Vector(*components)
 
     def __truediv__(self, num):
         """
-            Allows vectors to be divided like normal numeric
-            values (though not integer division) (a/b).
+            Allows a vector to be divided by a constant using '/' (i.e. v/c)
         """
-        v2 = self._createEmptyVector()
-        for index in range(self._max):
-            v2[index] = float(self[index]/num)
-        return v2
+        if isinstance(num, Vector):
+            raise Exception("Error cannot divide two vectors")
+        components = [i/num for i in self]
+        return Vector(*components)
+
 
     def __floordiv__(self, num):
         """
-            Carries out integer division
+            Allows a vector to be divided by a constant using '//' operator (i.e. v//cp)
         """
-        v2 = self._createEmptyVector()
-        for index in range(self._max):
-            v2[index] = self[index]//num
+        if isinstance(num, Vector):
+            raise Exception("Error cannot divide two vectors")
+        components = [int(i/num) for i in self]
+        return Vector(*components)
 
-        return v2
-
-    def calMagnitude(self):
+    def __abs__(self):
         """
             Works out the magnitude of the
             current vector and returns it
         """
-        magnitude = 0.0
-        for element in self:
-            magnitude += element**2
-        magnitude = sqrt(magnitude)
-        return magnitude
-
-    def convertIntoCoords(self):
-        return self._components
-def main():
-    v1 = Vector(1,2,3)
-    v2 = Vector(1,2,3)
-    v3 = 4.2 * v1
-    print(v3)
-if __name__ == '__main__':
-    main()
+        return sqrt(sum(i*i for i in self))
