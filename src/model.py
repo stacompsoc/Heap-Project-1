@@ -10,7 +10,6 @@ class Model:
 
     """
     Model class.
-
     Binds display, physics and everything together.
     """
 
