@@ -54,8 +54,7 @@ class PhysicalObject:
         """Add the force associated with the label to all forces."""
         if label not in self.forces:
             self.forces[label] = Vector(0, 0)
-        f = self.forces[label]
-        f += force
+        self.forces[label] += force
 
     @staticmethod
     def distance(p1, p2):
@@ -158,7 +157,7 @@ class PhysicalObject:
         s.x += s.speed[0]
         s.y += s.speed[1]
         s.speed += s.accel
-        s.accel = force/s.mass
+        s.accel = force / s.mass
 
     def __str__(self):
         """

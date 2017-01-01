@@ -5,6 +5,7 @@ class Vector:
     def __init__(self, *components):
         self._components = list(components)
         self._index = 0
+        self.__div__ = self.__truediv__
 
     def __str__(self):
         string = '(' + ','.join(str(e) for e in self._components) + ')'
