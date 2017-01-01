@@ -9,6 +9,7 @@ class PhysicalObject:
     def __init__(self, mass, density, x, y):
         """
         Initialize physical object.
+
         :mass: mass
         :x: x coordinate
         :y: y coordinate
@@ -18,13 +19,14 @@ class PhysicalObject:
         s.set_mass(mass)
         s.x, s.y = x, y
         # all tuples are to be replaced with vectors
-        s.speed = Vector(0,0)
-        s.accel = Vector(0,0)
+        s.speed = Vector(0, 0)
+        s.accel = Vector(0, 0)
         s.forces = {}
 
     def set_mass(self, new_mass):
         """
         Change attributes of the object when the mass changes.
+
         :new_mass: new mass
         """
         s = self
@@ -35,20 +37,23 @@ class PhysicalObject:
     def get_forces_composition(self):
         """
         Calculate the sum of force vectors for the object.
+
         :returns: force vector
         """
-        force = Vector(0,0)
+        force = Vector(0, 0)
         for key, f in self.forces.items():
             force += f
         return force
 
     def reset_forces(self):
+        """Reset all forces affecting the object's dynamics."""
         for f in self.forces:
-            self.forces[f] = Vector(0,0)
+            self.forces[f] = Vector(0, 0)
 
     def add_force(self, label, force):
+        """Add the force associated with the label to all forces."""
         if label not in self.forces:
-            self.forces[label] = Vector(0,0)
+            self.forces[label] = Vector(0, 0)
         f = self.forces[label]
         f += force
 
@@ -56,6 +61,7 @@ class PhysicalObject:
     def distance(p1, p2):
         """
         Calculate the distance between two objects.
+
         :p1: first object
         :p2: second object
         :returns: distance
@@ -66,6 +72,7 @@ class PhysicalObject:
     def calc_gravity(p1, p2):
         """
         Calculate the gravity force vector between two objects.
+
         :p1: first object
         :p2: second object
         """
@@ -95,6 +102,7 @@ class PhysicalObject:
     def collide(p1, p2):
         """
         Collide two objects.
+
         :p1: first object
         :p2: second object
         :returns: an asteroid or None
@@ -113,6 +121,7 @@ class PhysicalObject:
     def set_masses_after_collision(p, q):
         """
         Set masses after collision.
+
         :p: first object
         :q: second object
         :returns: an object (asteroid) spawned after collision
@@ -133,6 +142,7 @@ class PhysicalObject:
     def set_speeds_after_collision(p, q):
         """
         Set speeds after collision.
+
         :p: first object
         :q: second object
         """
@@ -140,7 +150,6 @@ class PhysicalObject:
 
         p.speed = u1*(2*m2/(m1+m2)) - u2*((m1-m2)/(m1+m2))
         q.speed = u1*((m1-m2)/(m1+m2)) + u2*((2*m2)/(m1+m2))
-
 
     def tick(self):
         """Tick the physical object: update its physical properties."""
@@ -157,9 +166,8 @@ class PhysicalObject:
 
         :returns: str(PhysicalObject)
         """
-
         return "point: mass=" + str(self.mass) \
-            + ", coordinates=" + str(self.x) + "," + str(self.y ) \
+            + ", coordinates=" + str(self.x) + "," + str(self.y) \
             + ", velocity = " + str(self.speed) \
             + ", acceleration = " + str(self.accel) \
             + ", radius = " + str(self.radius)

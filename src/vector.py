@@ -1,9 +1,10 @@
 from math import sqrt
 
+
 class Vector:
     def __init__(self, *components):
         self._components = list(components)
-        self._index = 0;
+        self._index = 0
 
     def __str__(self):
         string = '(' + ','.join(str(e) for e in self._components) + ')'
@@ -42,28 +43,30 @@ class Vector:
 
     def __add__(self, v2):
         """
-            Allows two vectors to be added using the '+' operator (i.e. v1 + v2)
-            Returns: the resultant vector of the operation
+        Overload '+' operator for vectors.
+
+        Returns: the resultant vector of the operation
         """
         self._checkDim(v2)
-        components = [i+j for i,j in zip(self,v2)]
+        components = [i+j for i, j in zip(self, v2)]
         return Vector(*components)
 
     def __sub__(self, v2):
         """
-            Allows two vectors to be substracted using the '-' operator (i.e. v1 - v2)
-            Returns: the resultant vector of the operation
+        Overload '-' operator for vectors.
+
+        Returns: the resultant vector of the operation
         """
         self._checkDim(v2)
         v2 = -v2
         return self + v2
 
-
     def __mul__(self, v2):
         """
-            Will return the scalar product if two vectors are multiplied.
-            If passed constant will return the vector multiplied
-            by constant
+        Overload '*' operator for vector on the lhs.
+
+        :v2: rhs
+        :returns: self + v2
         """
         if isinstance(v2, Vector):
             self._checkDim(v2)
@@ -74,17 +77,22 @@ class Vector:
 
     def __truediv__(self, num):
         """
-            Allows a vector to be divided by a constant using '/' (i.e. v/c)
+        Overload '/' operator for vector.
+
+        :num: rhs
+        :returns: vector divided by num
         """
         if isinstance(num, Vector):
             raise Exception("Error cannot divide two vectors")
         components = [i/num for i in self]
         return Vector(*components)
 
-
     def __floordiv__(self, num):
         """
-            Allows a vector to be divided by a constant using '//' operator (i.e. v//cp)
+        Overload '//' operator (floor division).
+
+        :num: rhs
+        :returns: vector divided by num
         """
         if isinstance(num, Vector):
             raise Exception("Error cannot divide two vectors")
@@ -93,7 +101,8 @@ class Vector:
 
     def __abs__(self):
         """
-            Works out the magnitude of the
-            current vector and returns it
+        Calculate vectors magnitude.
+
+        :returns: length of vector
         """
         return sqrt(sum(i*i for i in self))

@@ -31,6 +31,7 @@ class DisplayManager:
     def __init__(self, phy):
         """
         Initialize display manager.
+
         :phy: physics manager
         """
         s = self
@@ -55,6 +56,7 @@ class DisplayManager:
     def transform_coordinates(self, p):
         """
         Transform the coordinates of a physical object.
+
         :p: physical object / point
         :returns: (x, y)
         """
@@ -72,6 +74,7 @@ class DisplayManager:
     def in_display(self, point):
         """
         Determine whether the point can be seen.
+
         :point: (x, y) coordinates
         :returns: True or False
         """
@@ -84,6 +87,7 @@ class DisplayManager:
     def keyboard(self, key):
         """
         Handle keyboard events.
+
         :key: key pressed
         """
         s = self
@@ -107,6 +111,7 @@ class DisplayManager:
     def put_text(self, text, color, x, y):
         """
         Put the text on the screen.
+
         :text: message to display
         :color: color of the text
         :x: x-position
@@ -140,6 +145,7 @@ class DisplayManager:
     def put_vector(self, surface, init, vector, color):
         """
         Put a vector onto the screen.
+
         :sorface: surface to put the object on
         :init: initial coordinates
         :vector: vector to put
@@ -162,6 +168,7 @@ class DisplayManager:
     def put_object(self, surface, p, color):
         """
         Put an object on the screen.
+
         :surface: surface to put the object on
         :p: physical object
         :color: color of the object
@@ -178,6 +185,7 @@ class DisplayManager:
     def handle_events(self):
         """
         Handle different events.
+
         :returns: true or false (termination)
         """
         s = self
@@ -191,6 +199,7 @@ class DisplayManager:
     def tick(self):
         """
         Idle function for displaying the model.
+
         :returns: boolean (whether continue or not)
         """
         # detect pressed keys

@@ -18,6 +18,7 @@ class PhysicsManager:
     def push(self, p):
         """
         Add a physical object to the model.
+
         :p: physical object
         """
         self.phyobjs.append(p)
@@ -28,10 +29,7 @@ class PhysicsManager:
             p.reset_forces()
 
     def set_forces(self):
-        """
-        Set gravity forces for the objects.
-        Separated for more distinct profiling.
-        """
+        """Set gravity forces for the objects."""
         ppp = self.phyobjs
         for i in range(len(ppp)):
             for j in range(i):
@@ -40,6 +38,7 @@ class PhysicsManager:
     def remove(self, p):
         """
         Find and remove object.
+
         :p: physical object
         """
         for i in range(len(self.phyobjs)):
@@ -51,6 +50,7 @@ class PhysicsManager:
     def remove_small_objects(self, startidx=0):
         """
         Remove undisplayable objects.
+
         :startidx: starting index (constant optimization)
         """
         ppp = self.phyobjs
