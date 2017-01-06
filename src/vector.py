@@ -3,22 +3,45 @@ from math import sqrt
 
 class Vector:
     def __init__(self, *components):
+        """
+        Initialize a vector.
+
+        :compoents: values
+        """
         self._components = list(components)
         self._index = 0
         self.__div__ = self.__truediv__
 
     def __str__(self):
+        """ 
+        Get string representation.
+
+        :returns: str(self)
+        """
         string = '(' + ','.join(str(e) for e in self._components) + ')'
         return string
 
     def __iter__(self):
+        """
+        Iterate itself.
+        """
         for i in self._components:
             yield i
 
     def __len__(self):
+        """
+        Compute length.
+
+        :returns: len(self)
+        """
         return len(self._components)
 
     def __next__(self):
+        """
+        Get next element.
+
+        :returns: next value in iteration
+        """
         if self._index < len(self):
             value = self._index
             self._index += 1
@@ -27,18 +50,45 @@ class Vector:
             raise StopIteration
 
     def __getitem__(self, index):
+        """
+        Get value by index.
+
+        :index: index
+        :returns: self[index]
+        """
         return self._components[index]
 
     def __setitem__(self, index, value):
+        """
+        Set value by index.
+
+        :index: index
+        :value: value
+        """
         self._components[index] = value
 
     def __pos__(self):
+        """
+        Compute + unary operator of self.
+
+        :returns: +self
+        """
         return self
 
     def __neg__(self):
+        """
+        Compute - unary operator of self.
+
+        :returns: -self
+        """
         return self * -1
 
     def _checkDim(self, v2):
+        """
+        Check that two vectors are of the same dimension.
+
+        :v2: other object
+        """
         if len(self) != len(v2):
             raise Exception("Error vectors don't have matching dimensions")
 
