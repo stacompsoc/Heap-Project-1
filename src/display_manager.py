@@ -26,6 +26,8 @@ COLORS = [
     (125, 125, 255),
 ]
 
+ICONPATH = "../resources/solar.png"
+
 
 class DisplayManager:
     def __init__(self, phy):
@@ -38,8 +40,8 @@ class DisplayManager:
         s.phy = phy
         s.screen = None
         s.pause = 0
-        s.width, s.height = 0, 0
-        s.x, s.y = 0, 0
+        s.width, s.height = Vector(0, 0)
+        s.x, s.y = Vector(0, 0)
 
     def start(self):
         """Initialize graphics."""
@@ -52,6 +54,7 @@ class DisplayManager:
             (s.width, s.height),
             pygame.RESIZABLE
         )
+        self.surficon = pygame.image.load(ICONPATH).convert_alpha()
 
     def transform_coordinates(self, p):
         """
@@ -65,7 +68,7 @@ class DisplayManager:
                 int(p.x / SCALE_FACTOR) - self.x,
                 int(p.y / SCALE_FACTOR) - self.y
             )
-        else:
+        elif type(p) == Vector:
             return (
                 int(p[0] / SCALE_FACTOR) - self.x,
                 int(p[1] / SCALE_FACTOR) - self.y
@@ -228,7 +231,7 @@ class DisplayManager:
             )
             color = (color + 1) % len(COLORS)
         self.show_status()
-        # pygame.display.set_icon(surface)
+        pygame.display.set_icon(self.surficon)
         pygame.display.flip()
         return True
 
