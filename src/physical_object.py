@@ -40,21 +40,24 @@ class PhysicalObject:
 
         :returns: force vector
         """
+        s = self
         force = Vector(0, 0)
-        for key, f in self.forces.items():
+        for key, f in s.forces.items():
             force += f
         return force
 
     def reset_forces(self):
         """Reset all forces affecting the object's dynamics."""
-        for f in self.forces:
+        s = self
+        for f in s.forces:
             self.forces[f] = Vector(0, 0)
 
     def add_force(self, label, force):
         """Add the force associated with the label to all forces."""
-        if label not in self.forces:
-            self.forces[label] = Vector(0, 0)
-        self.forces[label] += force
+        s = self
+        if label not in s.forces:
+            s.forces[label] = Vector(0, 0)
+        s.forces[label] += force
 
     @staticmethod
     def distance(p1, p2):
