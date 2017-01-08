@@ -1,4 +1,5 @@
 from math import sqrt
+from operator import __neg__
 
 
 class Vector:
@@ -8,9 +9,9 @@ class Vector:
 
         :compoents: values
         """
+        self.__div__ = self.__truediv__
         self._components = list(components)
         self._index = 0
-        self.__div__ = self.__truediv__
 
     def __str__(self):
         """ 
@@ -18,13 +19,10 @@ class Vector:
 
         :returns: str(self)
         """
-        string = '(' + ','.join(str(e) for e in self._components) + ')'
-        return string
+        return '(' + ','.join(str(e) for e in self._components) + ')'
 
     def __iter__(self):
-        """
-        Iterate itself.
-        """
+        """Iterate itself."""
         for i in self._components:
             yield i
 
@@ -73,7 +71,7 @@ class Vector:
 
         :returns: +self
         """
-        return self
+        return Vector(*map(__pos__, self))
 
     def __neg__(self):
         """
@@ -81,74 +79,69 @@ class Vector:
 
         :returns: -self
         """
-        return self * -1
+        return Vector(*map(__neg__, self))
 
-    def _checkDim(self, v2):
+    def _checkDim(self, other):
         """
         Check that two vectors are of the same dimension.
 
-        :v2: other object
+        :other: other object
         """
-        if len(self) != len(v2):
+        if len(self) != len(other):
             raise Exception("Error vectors don't have matching dimensions")
 
-    def __add__(self, v2):
+    def __add__(self, other):
         """
         Overload '+' operator for vectors.
 
-        Returns: the resultant vector of the operation
+        :returns: the resultant vector of the operation
         """
-        self._checkDim(v2)
-        components = [i+j for i, j in zip(self, v2)]
-        return Vector(*components)
+        self._checkDim(other)
+        return Vector(*[i + j for i, j in zip(self, other)])
 
-    def __sub__(self, v2):
+    def __sub__(self, other):
         """
         Overload '-' operator for vectors.
 
-        Returns: the resultant vector of the operation
+        :returns: the resultant vector of the operation
         """
-        self._checkDim(v2)
-        v2 = -v2
-        return self + v2
+        self._checkDim(other)
+        return self + (-other)
 
-    def __mul__(self, v2):
+    def __mul__(self, other):
         """
         Overload '*' operator for vector on the lhs.
 
-        :v2: rhs
-        :returns: self + v2
+        :other: rhs
+        :returns: self + other
         """
-        if isinstance(v2, Vector):
-            self._checkDim(v2)
-            return sum([i*j for i, j in zip(self, v2)])
+        if type(other) == Vector:
+            self._checkDim(other)
+            return sum(i*j for i, j in zip(self, other))
         else:
-            components = [i*v2 for i in self]
-            return Vector(*components)
+            return Vector(*map(lambda x: x * other, self))
 
-    def __truediv__(self, num):
+    def __truediv__(self, other):
         """
         Overload '/' operator for vector.
 
-        :num: rhs
-        :returns: vector divided by num
+        :other: rhs
+        :returns: vector divided by other
         """
-        if isinstance(num, Vector):
+        if type(other) == Vector:
             raise Exception("Error cannot divide two vectors")
-        components = [i/num for i in self]
-        return Vector(*components)
+        return Vector(*map(lambda x : x / other, self._components))
 
-    def __floordiv__(self, num):
+    def __floordiv__(self, other):
         """
         Overload '//' operator (floor division).
 
-        :num: rhs
-        :returns: vector divided by num
+        :other: rhs
+        :returns: vector divided by other
         """
-        if isinstance(num, Vector):
+        if isinstance(other, Vector):
             raise Exception("Error cannot divide two vectors")
-        components = [int(i/num) for i in self]
-        return Vector(*components)
+        return Vector(*map(lambda x: int(x / other), self))
 
     def __abs__(self):
         """
@@ -156,4 +149,4 @@ class Vector:
 
         :returns: length of vector
         """
-        return sqrt(sum(i*i for i in self))
+        return sqrt(sum(i * i for i in self))

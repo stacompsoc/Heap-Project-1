@@ -28,8 +28,8 @@ class Model:
         w, h = s.display.width, s.display.height
         for i in range(500):
             self.phy.push(PhysicalObject(
-                1e23 * (random() * 1e7),
-                1. + random() * 10,
+                MIN_MASS * (random() * SCALE_FACTOR) / 1e3,
+                MIN_DENSITY + random() * (MAX_DENSITY - MAX_DENSITY),
                 (random() * (w * 5) - 2 * w) * SCALE_FACTOR,
                 (random() * (h * 5) - 2 * h) * SCALE_FACTOR,
             ))

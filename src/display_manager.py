@@ -64,10 +64,7 @@ class DisplayManager:
         :returns: (x, y)
         """
         if type(p) == PhysicalObject:
-            return (
-                int(p.x / SCALE_FACTOR) - self.x,
-                int(p.y / SCALE_FACTOR) - self.y
-            )
+            return self.transform_coordinates(p.position)
         elif type(p) == Vector:
             return (
                 int(p[0] / SCALE_FACTOR) - self.x,
@@ -138,7 +135,7 @@ class DisplayManager:
                       color, s.x, s.y)
         self.put_text("G: %.7E" % G,
                       color, s.x, s.y + 25)
-        self.put_text("number of objects: %d" % len(s.phy.phyobjs),
+        self.put_text("number of objects: %d" % len(s.phy.objects),
                       color, s.x, s.y + 50)
         self.put_text("x: %d" % s.x,
                       color, s.width + s.x - 100, s.height + s.y - 50)
@@ -216,18 +213,18 @@ class DisplayManager:
         color = 0
         s.screen.fill((0, 0, 0))
         new_image = pygame.Surface(s.screen.get_size()).convert()
-        for p in s.phy.phyobjs:
+        for p in s.phy.objects:
             s.put_object(new_image, p, COLORS[color])
             color = (color + 1) % len(COLORS)
         s.screen.blit(new_image, (0, 0))
         color = 0
-        for p in s.phy.phyobjs:
+        for p in s.phy.objects:
             text = "%.2E" % (int(p.mass))
             s.put_text(
                 text,
                 COLORS[color],
-                int(p.x / SCALE_FACTOR) - len(text) * 5,
-                int(p.y / SCALE_FACTOR + int(p.radius) / SCALE_FACTOR * 1.2)
+                int(p.position[0] / SCALE_FACTOR) - len(text) * 5,
+                int(p.position[1] / SCALE_FACTOR + int(p.radius) / SCALE_FACTOR * 1.2)
             )
             color = (color + 1) % len(COLORS)
         self.show_status()

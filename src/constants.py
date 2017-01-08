@@ -1,12 +1,14 @@
-from math import *
+from math import pi, sqrt
 
 
-G = 6.67408e-11 * 1e7
+G = 6.67408e-11 * 1e9
 LY = 9.4607e15
 
 
 SCALE_FACTOR = 1e8
 COLLISION_TRANSFER = 1./4
-MIN_MASS = SCALE_FACTOR**3
+MIN_MASS = SCALE_FACTOR ** 3
+MIN_DENSITY = 1.
+MAX_DENSITY = 10.
 
 PI = pi

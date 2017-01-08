@@ -1,5 +1,6 @@
 from constants import *
 from vector import Vector
+from operator import __mul__
 """
 This entity represents a physical object, i.e. which has physical matter.
 """
@@ -17,7 +18,7 @@ class PhysicalObject:
         s = self
         s.density = density
         s.set_mass(mass)
-        s.x, s.y = x, y
+        s.position = Vector(x, y)
         # all tuples are to be replaced with vectors
         s.speed = Vector(0, 0)
         s.accel = Vector(0, 0)
@@ -60,17 +61,6 @@ class PhysicalObject:
         s.forces[label] += force
 
     @staticmethod
-    def distance(p1, p2):
-        """
-        Calculate the distance between two objects.
-
-        :p1: first object
-        :p2: second object
-        :returns: distance
-        """
-        return sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
-
-    @staticmethod
     def calc_gravity(p1, p2):
         """
         Calculate the gravity force vector between two objects.
@@ -79,7 +69,7 @@ class PhysicalObject:
         :p2: second object
         """
         static = PhysicalObject
-        d = static.distance(p1, p2)
+        d = abs(p1.position - p2.position)
         m1, m2 = p1.mass, p2.mass
         r1, r2 = p1.radius, p2.radius
 
@@ -89,16 +79,15 @@ class PhysicalObject:
             r = r1 + r2 - d
             v = r*r*(PI/12.)*(d*d + 2*d*(r1+r2) - 3*((r1-r2)**2))/d
             v1, v2 = p1.volume, p2.volume
-            return [
+            return Vector(
                 0. if d <= r1 else 1. - v / v1,
                 0. if d <= r2 else 1. - v / v2
-            ]
+            )
         decr = _intersection_coefficient()
         coeff = G * decr[0]*m1 * decr[1]*m2 / (d ** 3)
-        force = Vector(coeff * (p2.x - p1.x), coeff * (p2.y - p1.y))
-
+        force = (p2.position - p1.position) * coeff
         p1.add_force('gravity', force)
-        p2.add_force('gravity', force*-1)
+        p2.add_force('gravity', -force)
 
     @staticmethod
     def collide(p1, p2):
@@ -112,12 +101,23 @@ class PhysicalObject:
         static = PhysicalObject
         if p1 is p2:
             return None
-        d = static.distance(p1, p2)
-        r1, r2 = p1.radius, p2.radius
-        if d >= r1 + r2:
+        if abs(p1.position - p2.position) >= p1.radius + p2.radius:
             return None
         static.set_speeds_after_collision(p1, p2)
-        return static.set_masses_after_collision(p1, p2)
+        static.set_masses_after_collision(p1, p2)
+        return None
+
+    @staticmethod
+    def set_speeds_after_collision(p1, p2):
+        """
+        Set speeds after collision.
+
+        :p1: first object
+        :p2: second object
+        """
+        u1, m1, u2, m2 = p1.speed, p1.mass, p2.speed, p2.mass
+        p1.speed = (u1*(m1-m2) + u2*2.*m2) / (m1 + m2)
+        p2.speed = (u1*2.*m1 - u2*(m1-m2)) / (m1 + m2)
 
     @staticmethod
     def set_masses_after_collision(p, q):
@@ -140,25 +140,11 @@ class PhysicalObject:
         q.set_mass(m2 - m3)
         return None
 
-    @staticmethod
-    def set_speeds_after_collision(p, q):
-        """
-        Set speeds after collision.
-
-        :p: first object
-        :q: second object
-        """
-        u1, m1, u2, m2 = p.speed, p.mass, q.speed, q.mass
-
-        p.speed = u1*(2*m2/(m1+m2)) - u2*((m1-m2)/(m1+m2))
-        q.speed = u1*((m1-m2)/(m1+m2)) + u2*((2*m2)/(m1+m2))
-
     def tick(self):
         """Tick the physical object: update its physical properties."""
         s = self
         force = s.get_forces_composition()
-        s.x += s.speed[0]
-        s.y += s.speed[1]
+        s.position += s.speed
         s.speed += s.accel
         s.accel = force / s.mass
 
@@ -169,7 +155,7 @@ class PhysicalObject:
         :returns: str(PhysicalObject)
         """
         return "point: mass=" + str(self.mass) \
-            + ", coordinates=" + str(self.x) + "," + str(self.y) \
+            + ", coordinates=" + str(self.position) \
             + ", velocity = " + str(self.speed) \
             + ", acceleration = " + str(self.accel) \
             + ", radius = " + str(self.radius)

@@ -12,7 +12,7 @@ This entity contains and manages physical objects.
 class PhysicsManager:
     def __init__(self):
         """Initialize physics manager."""
-        self.phyobjs = []
+        self.objects = []
         self.counter = 0
 
     def push(self, p):
@@ -21,16 +21,17 @@ class PhysicsManager:
 
         :p: physical object
         """
-        self.phyobjs.append(p)
+        self.objects.append(p)
 
     def reset_forces(self):
         """Reset all forces."""
-        for p in self.phyobjs:
+        for p in self.objects:
             p.reset_forces()
 
     def set_forces(self):
         """Set gravity forces for the objects."""
-        ppp = self.phyobjs
+        s = self
+        ppp = s.objects
         for i in range(len(ppp)):
             for j in range(i):
                 PhysicalObject.calc_gravity(ppp[i], ppp[j])
@@ -41,10 +42,11 @@ class PhysicsManager:
 
         :p: physical object
         """
-        for i in range(len(self.phyobjs)):
-            if p is self.phyobjs[i]:
+        s = self
+        for i in range(len(s.objects)):
+            if p is s.objects[i]:
                 print("removed object")
-                del(self.phyobjs[i])
+                del(s.objects[i])
                 return
 
     def remove_small_objects(self, startidx=0):
@@ -53,30 +55,33 @@ class PhysicsManager:
 
         :startidx: starting index (constant optimization)
         """
-        ppp = self.phyobjs
+        s = self
+        ppp = s.objects
         for i in range(startidx, len(ppp)):
             if ppp[i].mass < MIN_MASS:
                 del(ppp[i])
-                self.remove_small_objects(i)
+                s.remove_small_objects(i)
                 return
 
     def deal_with_collisions(self):
         """Perform all collisions."""
-        ppp = self.phyobjs
+        s = self
+        ppp = s.objects
         for i in range(len(ppp)):
             for j in range(i):
                 t = PhysicalObject.collide(ppp[i], ppp[j])
                 if t is not None:
-                    self.push(t)
+                    s.push(t)
 
     def tick(self):
         """Recomputing the forces and ticking all its elements."""
-        self.counter += 1
-        if self.counter % 5 == 0:
-            self.reset_forces()
-        self.set_forces()
-        self.remove_small_objects()
-        for p in self.phyobjs:
+        s = self
+        s.counter += 1
+        s.reset_forces()
+        if s.counter % 9 == 0:
+            s.set_forces()
+        s.remove_small_objects()
+        for p in s.objects:
             p.tick()
-        if self.counter % 3 == 0:
-            self.deal_with_collisions()
+        if s.counter % 15 == 0:
+            s.deal_with_collisions()
