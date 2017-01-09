@@ -1,5 +1,6 @@
 from math import sqrt
-from operator import __neg__
+from operator import __neg__, __pos__, __and__
+from functools import reduce
 
 
 class Vector:
@@ -64,6 +65,29 @@ class Vector:
         :value: value
         """
         self._components[index] = value
+
+    def __eq__(self, other):
+        """
+        Determine whether two objects are equal.
+
+        :other: other object
+        :returns: boolean
+        """
+        if type(self) != type(other):
+            return False
+        elif len(self) != len(other):
+            return False
+        return reduce(__and__,
+                      map(lambda z: z[0] == z[1], zip(self, other)), True)
+    
+    def __ne__(self, other):
+        """
+        Determine whether two objects are not equal.
+
+        :other: other object
+        :returns: boolean
+        """
+        return not (self == other)
 
     def __pos__(self):
         """
