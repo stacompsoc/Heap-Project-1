@@ -1,9 +1,54 @@
 #!/usr/bin/env python3
-
 from vector import *
+import unittest
+import types
 
 empty, ints = None, None
 
+def create_vector():
+    return Vector(1,2,3)
+
+def iterable(v):
+    try:
+        for i in v:
+            pass
+        return True
+    except Exception:
+        return False
+
+class testVector(unittest.TestCase):
+    def test_creation(self):
+        with self.assertRaises(NoComponents):
+            Vector()
+        self.assertIsInstance(create_vector(), Vector)
+        components = [1,2,3,4,5]
+        self.assertIsInstance(Vector(*components), Vector)
+
+    def test_to_string(self):
+        v1 = create_vector()
+        self.assertEqual(str(v1), "(1,2,3)")
+
+    def test_get_length(self):
+        v1 = create_vector()
+        self.assertEqual(len(v1), 3)
+
+    def test_iterable(self):
+        v1 = create_vector()
+        iterable = v1.__iter__()
+        self.assertIsInstance(iterable, types.GeneratorType)
+
+    def test_get_item(self):
+        v1 = create_vector()
+        self.assertEqual(v1[0], 1)
+        self.assertEqual(v1[1], 2)
+        self.assertEqual(v1[2], 3)
+
+    def test_set_item(self):
+        v1 = create_vector()
+        v1[0] = 13
+        self.assertEqual(v1[0], 13)
+        v1[2] = -1
+        self.assertEqual(v1[2], -1)
 
 def clear():
     global empty, ints
@@ -44,3 +89,6 @@ def test_len():
 def test_pos():
     assert +empty == empty
     assert +ints == ints
+
+if __name__ == '__main__':
+    unittest.main()
