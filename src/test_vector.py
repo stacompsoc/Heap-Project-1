@@ -8,13 +8,6 @@ empty, ints = None, None
 def create_vector():
     return Vector(1,2,3)
 
-def iterable(v):
-    try:
-        for i in v:
-            pass
-        return True
-    except Exception:
-        return False
 
 class testVector(unittest.TestCase):
     def test_creation(self):
