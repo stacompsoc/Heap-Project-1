@@ -38,9 +38,27 @@ def test_setitem():
     assert ints[4] == 1e9
 
 def test_len():
+    clear()
     assert len(empty) == 0
     assert len(ints) == 5
 
+def test_eq():
+    clear()
+    assert empty == Vector()
+    assert ints == ints
+    assert ints == Vector(1, 3, 5, 6, 7)
+
+def test_ne():
+    clear()
+    assert empty != ints
+    assert ints != [1, 3, 5, 6, 7]
+
 def test_pos():
+    clear()
     assert +empty == empty
     assert +ints == ints
+
+def test_neg():
+    clear()
+    assert -empty == empty
+    assert -ints == Vector(-1, -3, -5, -6, -7)

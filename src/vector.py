@@ -73,12 +73,8 @@ class Vector:
         :other: other object
         :returns: boolean
         """
-        if type(self) != type(other):
-            return False
-        elif len(self) != len(other):
-            return False
-        return reduce(__and__,
-                      map(lambda z: z[0] == z[1], zip(self, other)), True)
+        return type(self) == type(other) and len(self) == len(other) and \
+            reduce(__and__, map(lambda z: z[0] == z[1], zip(self, other)), True)
     
     def __ne__(self, other):
         """
