@@ -2,6 +2,7 @@
 from vector import *
 import unittest
 import types
+from math import sqrt
 
 empty, ints = None, None
 
@@ -62,13 +63,6 @@ class testVector(unittest.TestCase):
         v1 = create_vector()
         self.assertEqual(-v1, Vector(-1,-2,-3))
 
-    def test_sub(self):
-        v1 = create_vector()
-        v2 = Vector(2,3,4)
-        v3 = v1 - v2
-        self.assertEqual(v3, Vector(-1, -1, -1))
-
-
     def test_check_dim(self):
         v1 = create_vector()
         v2 = Vector(1,2,3,4)
@@ -82,67 +76,30 @@ class testVector(unittest.TestCase):
         v3 = v1 + v2
         self.assertEqual(v3, Vector(6,8,10))
 
+    def test_sub(self):
+        v1 = create_vector()
+        v2 = Vector(2,3,4)
+        v3 = v1 - v2
+        self.assertEqual(v3, Vector(-1, -1, -1))
+
     def test_pos(self):
         v1 = create_vector()
         self.assertEqual(+v1, create_vector())
 
-    
-def clear():
-    global empty, ints
-    empty = Vector()
-    ints = Vector(1, 3, 5, 6, 7)
+    def test_mul(self):
+        v1 = create_vector()
+        v2 = Vector(4,5,6)
+        self.assertEqual(v1*v2, 32)
+        self.assertEqual(v1*5, Vector(5,10,15))
 
-def test_str():
-    clear()
-    assert str(empty) == "()"
-    print(str(ints))
-    assert str(ints) == "(1,3,5,6,7)"
+    def test_div(self):
+        v1 = create_vector()
+        self.assertEqual(v1/2, Vector(0.5, 1.0, 1.5))
+        self.assertEqual(v1//2, Vector(0,1,1))
 
-def test_getitem():
-    clear()
-    try: empty[0]
-    except IndexError: pass
-    try: ints[5]
-    except IndexError: pass
-    assert ints[0] == 1
-    assert ints[0] == 1
-    assert ints[4] == 7
-
-def test_setitem():
-    clear()
-    try: empty[0] = 1
-    except IndexError: pass
-    try: ints[5] = 1
-    except IndexError: pass
-    ints[0] = -13
-    assert ints[0] == -13
-    ints[4] = 1e9
-    assert ints[4] == 1e9
-
-def test_len():
-    clear()
-    assert len(empty) == 0
-    assert len(ints) == 5
-
-def test_eq():
-    clear()
-    assert empty == Vector()
-    assert ints == ints
-    assert ints == Vector(1, 3, 5, 6, 7)
-
-def test_ne():
-    clear()
-    assert empty != ints
-    assert ints != [1, 3, 5, 6, 7]
-
-def test_pos():
-    clear()
-    assert +empty == empty
-    assert +ints == ints
+    def test_abs(self):
+        v1 = create_vector()
+        self.assertEqual(abs(v1), sqrt(14))
 
 if __name__ == '__main__':
     unittest.main()
-def test_neg():
-    clear()
-    assert -empty == empty
-    assert -ints == Vector(-1, -3, -5, -6, -7)
