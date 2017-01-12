@@ -1,10 +1,7 @@
-#!/usr/bin/env python3
 from vector import *
 import unittest
 import types
 from math import sqrt
-
-empty, ints = None, None
 
 def create_vector():
     return Vector(1,2,3)
@@ -50,7 +47,7 @@ class testVector(unittest.TestCase):
     def test_eqaulity(self):
         v1 = create_vector()
         self.assertEqual(v1, v1)
-        v2 = Vector(5,6,7, 8)
+        v2 = Vector(5,6,7,8)
         self.assertFalse(v1 == v2)
 
     def test_ne(self):
@@ -94,12 +91,9 @@ class testVector(unittest.TestCase):
 
     def test_div(self):
         v1 = create_vector()
-        self.assertEqual(v1/2, Vector(0.5, 1.0, 1.5))
-        self.assertEqual(v1//2, Vector(0,1,1))
+        self.assertAlmostEqual(v1/2, Vector(0.5, 1.0, 1.5))
+        self.assertAlmostEqual(v1//2, Vector(0,1,1))
 
     def test_abs(self):
         v1 = create_vector()
-        self.assertEqual(abs(v1), sqrt(14))
-
-if __name__ == '__main__':
-    unittest.main()
+        self.assertAlmostEqual(abs(v1), sqrt(14))
