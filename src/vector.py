@@ -1,6 +1,9 @@
 from math import sqrt
-from operator import __neg__
+from operator import __neg__, __pos__, __and__
+from functools import reduce
 
+class NoComponents(Exception):
+    pass
 
 class Vector:
     def __init__(self, *components):
@@ -10,11 +13,14 @@ class Vector:
         :compoents: values
         """
         self.__div__ = self.__truediv__
-        self._components = list(components)
+        if not components:
+            raise NoComponents("Error vector must components!")
+        else:
+            self._components = list(components)
         self._index = 0
 
     def __str__(self):
-        """ 
+        """
         Get string representation.
 
         :returns: str(self)
@@ -64,6 +70,25 @@ class Vector:
         :value: value
         """
         self._components[index] = value
+
+    def __eq__(self, other):
+        """
+        Determine whether two objects are equal.
+
+        :other: other object
+        :returns: boolean
+        """
+        return type(self) == type(other) and len(self) == len(other) and \
+            reduce(__and__, map(lambda z: z[0] == z[1], zip(self, other)), True)
+
+    def __ne__(self, other):
+        """
+        Determine whether two objects are not equal.
+
+        :other: other object
+        :returns: boolean
+        """
+        return not (self == other)
 
     def __pos__(self):
         """
