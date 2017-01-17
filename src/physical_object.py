@@ -15,14 +15,13 @@ class PhysicalObject:
         :x: x coordinate
         :y: y coordinate
         """
-        s = self
-        s.density = density
-        s.set_mass(mass)
-        s.position = Vector(x, y)
+        self.density = density
+        self.set_mass(mass)
+        self.position = Vector(x, y)
         # all tuples are to be replaced with vectors
-        s.speed = Vector(0, 0)
-        s.accel = Vector(0, 0)
-        s.forces = {}
+        self.speed = Vector(0, 0)
+        self.accel = Vector(0, 0)
+        self.forces = {}
 
     def set_mass(self, new_mass):
         """
@@ -30,10 +29,9 @@ class PhysicalObject:
 
         :new_mass: new mass
         """
-        s = self
-        s.mass = new_mass
-        s.volume = s.mass / s.density
-        s.radius = (s.volume / (PI * 4./3)) ** (1./3)
+        self.mass = new_mass
+        self.volume = self.mass / self.density
+        self.radius = (self.volume / (PI * 4./3)) ** (1./3)
 
     def get_forces_composition(self):
         """
@@ -41,24 +39,21 @@ class PhysicalObject:
 
         :returns: force vector
         """
-        s = self
         force = Vector(0, 0)
-        for key, f in s.forces.items():
+        for key, f in self.forces.items():
             force += f
         return force
 
     def reset_forces(self):
         """Reset all forces affecting the object's dynamics."""
-        s = self
-        for f in s.forces:
+        for f in self.forces:
             self.forces[f] = Vector(0, 0)
 
     def add_force(self, label, force):
         """Add the force associated with the label to all forces."""
-        s = self
-        if label not in s.forces:
-            s.forces[label] = Vector(0, 0)
-        s.forces[label] += force
+        if label not in self.forces:
+            self.forces[label] = Vector(0, 0)
+        self.forces[label] += force
 
     @staticmethod
     def calc_gravity(p1, p2):
@@ -142,11 +137,10 @@ class PhysicalObject:
 
     def tick(self):
         """Tick the physical object: update its physical properties."""
-        s = self
-        force = s.get_forces_composition()
-        s.position += s.speed
-        s.speed += s.accel
-        s.accel = force / s.mass
+        force = self.get_forces_composition()
+        self.position += self.speed
+        self.speed += self.accel
+        self.accel = force / self.mass
 
     def __str__(self):
         """

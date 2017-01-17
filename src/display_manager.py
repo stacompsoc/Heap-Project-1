@@ -36,22 +36,20 @@ class DisplayManager:
 
         :phy: physics manager
         """
-        s = self
-        s.phy = phy
-        s.screen = None
-        s.pause = 0
-        s.width, s.height = Vector(0, 0)
-        s.x, s.y = Vector(0, 0)
+        self.phy = phy
+        self.screen = None
+        self.pause = False
+        self.width, self.height = Vector(0, 0)
+        self.x, self.y = Vector(0, 0)
 
     def start(self):
         """Initialize graphics."""
-        s = self
         pygame.init()
         pygame.mixer.quit()
         info = pygame.display.Info()
-        s.width, s.height = info.current_w, info.current_h - 60
-        s.screen = pygame.display.set_mode(
-            (s.width, s.height),
+        self.width, self.height = info.current_w, info.current_h - 60
+        self.screen = pygame.display.set_mode(
+            (self.width, self.height),
             pygame.RESIZABLE
         )
         self.surficon = pygame.image.load(ICONPATH).convert_alpha()
@@ -90,25 +88,24 @@ class DisplayManager:
 
         :key: key pressed
         """
-        s = self
         global SCALE_FACTOR, MIN_MASS
         if key == pygame.K_SPACE:
             self.pause = not self.pause
         elif key == pygame.K_UP:
-            s.y -= int(s.height / 10)
+            self.y -= int(self.height / 10)
         elif key == pygame.K_DOWN:
-            s.y += int(s.height / 10)
+            self.y += int(self.height / 10)
         elif key == pygame.K_LEFT:
-            s.x -= int(s.width / 10)
+            self.x -= int(self.width / 10)
         elif key == pygame.K_RIGHT:
-            s.x += int(s.width / 10)
+            self.x += int(self.width / 10)
         elif key == pygame.K_EQUALS:
             SCALE_FACTOR /= 1.05
         elif key == pygame.K_MINUS:
             SCALE_FACTOR *= 1.05
         MIN_MASS = SCALE_FACTOR ** 3
 
-    def put_text(self, text, color, x, y):
+    def put_text(self, text, color, point):
         """
         Put the text on the screen.
 
@@ -117,30 +114,32 @@ class DisplayManager:
         :x: x-position
         :y: y-position
         """
-        s = self
-        if not s.in_display((x - s.x, y - s.y)):
+        x1, y1 = self.x, self.y
+        x2, y2 = point
+        if not self.in_display((x2 - x1, y2 - y1)):
             return
         font = pygame.font.SysFont("monospace", 18, bold=True)
         label = font.render(text, 1, color)
         self.screen.blit(label, (
-            x - s.x,
-            y - s.y
+            x2 - x1,
+            y2 - y1
         ))
 
     def show_status(self):
         """Put status text on the screen."""
-        s = self
         color = (255, 255, 255)
+        w, h = self.width, self.height
+        x, y = self.x, self.y
         self.put_text("scale factor: %.2E" % SCALE_FACTOR,
-                      color, s.x, s.y)
+                      color, (x, y))
         self.put_text("G: %.7E" % G,
-                      color, s.x, s.y + 25)
-        self.put_text("number of objects: %d" % len(s.phy.objects),
-                      color, s.x, s.y + 50)
-        self.put_text("x: %d" % s.x,
-                      color, s.width + s.x - 100, s.height + s.y - 50)
-        self.put_text("y: %d" % s.y,
-                      color, s.width + s.x - 100, s.height + s.y - 25)
+                      color, (x, y + 25))
+        self.put_text("number of objects: %d" % len(self.phy.objects),
+                      color, (x, y + 50))
+        self.put_text("x: %d" % x,
+                      color, (w + x - 100, h + y - 50))
+        self.put_text("y: %d" % y,
+                      color, (w + x - 100, h + y - 25))
 
     def put_vector(self, surface, init, vector, color):
         """
@@ -152,11 +151,10 @@ class DisplayManager:
         :color: color of the vector
         TODO: fix
         """
-        s = self
-        init = s.transform_coordinates(init)
-        if not s.in_display(init):
+        init = self.transform_coordinates(init)
+        if not self.in_display(init):
             return
-        vector = s.transform_coordinates(vector)
+        vector = self.transform_coordinates(vector)
         print(init)
         print(vector)
         pygame.draw.line(
@@ -173,9 +171,8 @@ class DisplayManager:
         :p: physical object
         :color: color of the object
         """
-        s = self
-        coords = s.transform_coordinates(p)
-        if not s.in_display(coords):
+        coords = self.transform_coordinates(p)
+        if not self.in_display(coords):
             return
         pygame.draw.circle(surface,
                            color,
@@ -188,12 +185,11 @@ class DisplayManager:
 
         :returns: true or false (termination)
         """
-        s = self
         for e in pygame.event.get():
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
                     return False
-                s.keyboard(e.key)
+                self.keyboard(e.key)
         return True
 
     def tick(self):
@@ -203,28 +199,28 @@ class DisplayManager:
         :returns: boolean (whether continue or not)
         """
         # detect pressed keys
-        s = self
-        if not s.handle_events():
+        if not self.handle_events():
             return False
         # redraw
-        if s.pause == 1:
+        if self.pause:
             return True
-        s.phy.tick()
+        self.phy.tick()
         color = 0
-        s.screen.fill((0, 0, 0))
-        new_image = pygame.Surface(s.screen.get_size()).convert()
-        for p in s.phy.objects:
-            s.put_object(new_image, p, COLORS[color])
+        self.screen.fill((0, 0, 0))
+        new_image = pygame.Surface(self.screen.get_size()).convert()
+        for p in self.phy.objects:
+            self.put_object(new_image, p, COLORS[color])
             color = (color + 1) % len(COLORS)
-        s.screen.blit(new_image, (0, 0))
+        self.screen.blit(new_image, (0, 0))
         color = 0
-        for p in s.phy.objects:
+        for p in self.phy.objects:
             text = "%.2E" % (int(p.mass))
-            s.put_text(
+            self.put_text(
                 text,
-                COLORS[color],
+                COLORS[color], (
                 int(p.position[0] / SCALE_FACTOR) - len(text) * 5,
                 int(p.position[1] / SCALE_FACTOR + int(p.radius) / SCALE_FACTOR * 1.2)
+                )
             )
             color = (color + 1) % len(COLORS)
         self.show_status()

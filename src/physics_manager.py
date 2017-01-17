@@ -30,11 +30,9 @@ class PhysicsManager:
 
     def set_forces(self):
         """Set gravity forces for the objects."""
-        s = self
-        ppp = s.objects
-        for i in range(len(ppp)):
+        for i in range(len(self.objects)):
             for j in range(i):
-                PhysicalObject.calc_gravity(ppp[i], ppp[j])
+                PhysicalObject.calc_gravity(self.objects[i], self.objects[j])
 
     def remove(self, p):
         """
@@ -42,11 +40,10 @@ class PhysicsManager:
 
         :p: physical object
         """
-        s = self
-        for i in range(len(s.objects)):
-            if p is s.objects[i]:
+        for i in range(len(self.objects)):
+            if p is self.objects[i]:
                 print("removed object")
-                del(s.objects[i])
+                del(self.objects[i])
                 return
 
     def remove_small_objects(self, startidx=0):
@@ -55,33 +52,28 @@ class PhysicsManager:
 
         :startidx: starting index (constant optimization)
         """
-        s = self
-        ppp = s.objects
-        for i in range(startidx, len(ppp)):
-            if ppp[i].mass < MIN_MASS:
-                del(ppp[i])
-                s.remove_small_objects(i)
+        for i in range(startidx, len(self.objects)):
+            if self.objects[i].mass < MIN_MASS:
+                del(self.objects[i])
+                self.remove_small_objects(i)
                 return
 
     def deal_with_collisions(self):
         """Perform all collisions."""
-        s = self
-        ppp = s.objects
-        for i in range(len(ppp)):
+        for i in range(len(self.objects)):
             for j in range(i):
-                t = PhysicalObject.collide(ppp[i], ppp[j])
+                t = PhysicalObject.collide(self.objects[i], self.objects[j])
                 if t is not None:
-                    s.push(t)
+                    self.push(t)
 
     def tick(self):
         """Recomputing the forces and ticking all its elements."""
-        s = self
-        s.counter += 1
-        s.reset_forces()
-        if s.counter % 9 == 0:
-            s.set_forces()
-        s.remove_small_objects()
-        for p in s.objects:
+        self.counter += 1
+        self.reset_forces()
+        # if self.counter % 9 == 0:
+        self.set_forces()
+        self.remove_small_objects()
+        for p in self.objects:
             p.tick()
-        if s.counter % 15 == 0:
-            s.deal_with_collisions()
+        # if self.counter % 15 == 0:
+        self.deal_with_collisions()
