@@ -40,7 +40,7 @@ class DisplayManager:
         self.screen = None
         self.pause = False
         self.width, self.height = Vector(0, 0)
-        self.x, self.y = Vector(0, 0)
+        self.pos_shift = Vector(0, 0)
 
     def start(self):
         """Initialize graphics."""
@@ -59,14 +59,15 @@ class DisplayManager:
         Transform the coordinates of a physical object.
 
         :p: physical object / point
+
         :returns: (x, y)
         """
         if type(p) == PhysicalObject:
             return self.transform_coordinates(p.position)
         elif type(p) == Vector:
-            return (
-                int(p[0] / SCALE_FACTOR) - self.x,
-                int(p[1] / SCALE_FACTOR) - self.y
+            return tuple(map(
+                lambda x: int(x),
+                (p / SCALE_FACTOR - self.pos_shift))
             )
 
     def in_display(self, point):
@@ -74,6 +75,7 @@ class DisplayManager:
         Determine whether the point can be seen.
 
         :point: (x, y) coordinates
+
         :returns: True or False
         """
         x, y = point
@@ -92,13 +94,13 @@ class DisplayManager:
         if key == pygame.K_SPACE:
             self.pause = not self.pause
         elif key == pygame.K_UP:
-            self.y -= int(self.height / 10)
+            self.pos_shift[1] -= int(self.height / 10)
         elif key == pygame.K_DOWN:
-            self.y += int(self.height / 10)
+            self.pos_shift[1] += int(self.height / 10)
         elif key == pygame.K_LEFT:
-            self.x -= int(self.width / 10)
+            self.pos_shift[0] -= int(self.width / 10)
         elif key == pygame.K_RIGHT:
-            self.x += int(self.width / 10)
+            self.pos_shift[0] += int(self.width / 10)
         elif key == pygame.K_EQUALS:
             SCALE_FACTOR /= 1.05
         elif key == pygame.K_MINUS:
@@ -111,10 +113,9 @@ class DisplayManager:
 
         :text: message to display
         :color: color of the text
-        :x: x-position
-        :y: y-position
+        :point: position of text
         """
-        x1, y1 = self.x, self.y
+        x1, y1 = self.pos_shift
         x2, y2 = point
         if not self.in_display((x2 - x1, y2 - y1)):
             return
@@ -129,7 +130,7 @@ class DisplayManager:
         """Put status text on the screen."""
         color = (255, 255, 255)
         w, h = self.width, self.height
-        x, y = self.x, self.y
+        x, y = self.pos_shift
         self.put_text("scale factor: %.2E" % SCALE_FACTOR,
                       color, (x, y))
         self.put_text("G: %.7E" % G,
@@ -149,6 +150,7 @@ class DisplayManager:
         :init: initial coordinates
         :vector: vector to put
         :color: color of the vector
+
         TODO: fix
         """
         init = self.transform_coordinates(init)

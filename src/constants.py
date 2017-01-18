@@ -1,7 +1,7 @@
 from math import pi, sqrt
 
 
-G = 6.67408e-11 * 1e8
+G = 6.67408e-11 * 1e7
 LY = 9.4607e15
 
 
