@@ -1,3 +1,4 @@
+import os
 import pygame
 
 from constants import *
@@ -26,7 +27,7 @@ COLORS = [
     (125, 125, 255),
 ]
 
-ICONPATH = "../resources/solar.png"
+ICONPATH = os.path.relpath(os.path.dirname(os.path.abspath(__file__)) + "/../resources/solar.png")
 
 
 class DisplayManager:
@@ -52,6 +53,7 @@ class DisplayManager:
             (self.width, self.height),
             pygame.RESIZABLE
         )
+        print(os.path.dirname(os.path.realpath(__file__)))
         self.surficon = pygame.image.load(ICONPATH).convert_alpha()
 
     def transform_coordinates(self, p):
