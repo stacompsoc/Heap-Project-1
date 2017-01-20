@@ -1,3 +1,4 @@
+import sys
 import os
 import pygame
 
@@ -27,7 +28,7 @@ COLORS = [
     (125, 125, 255),
 ]
 
-ICONPATH = os.path.relpath(os.path.dirname(os.path.abspath(__file__)) + "/../resources/solar.png")
+ICONPATH = os.path.relpath(sys.path[0] + "/../resources/solar.png")
 
 
 class DisplayManager:
