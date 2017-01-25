@@ -16,22 +16,20 @@ class Model:
 
     def __init__(self):
         """Initialize a model."""
-        s = self
         print("initializing model")
-        s.phy = PhysicsManager()
-        s.display = DisplayManager(self.phy)
+        self.phy = PhysicsManager()
+        self.display = DisplayManager(self.phy)
 
     def run(self):
         """Run the model."""
-        s = self
-        s.display.start()
-        w, h = s.display.width, s.display.height
-        for i in range(500):
+        self.display.start()
+        w, h = self.display.width, self.display.height
+        for i in range(50):
             self.phy.push(PhysicalObject(
-                1e23 * (random() * 1e7),
-                1. + random() * 10,
-                (random() * (w * 5) - 2 * w) * SCALE_FACTOR,
-                (random() * (h * 5) - 2 * h) * SCALE_FACTOR,
+                MIN_MASS * (random() * SCALE_FACTOR) / 1e3,
+                MIN_DENSITY + random() * (MAX_DENSITY - MAX_DENSITY),
+                (random() * (w * 1) - 0 * w) * SCALE_FACTOR,
+                (random() * (h * 1) - 0 * h) * SCALE_FACTOR,
             ))
         while True:
             if not self.tick():
