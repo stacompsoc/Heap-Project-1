@@ -91,3 +91,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+.cabal
+.cabal*
+dist/
