@@ -19,8 +19,8 @@ struct Triangle {
   void init_vertices();
   void init_array_object();
   void disable_vao_attribs();
-  void ChangeColor(size_t color_id);
   void ChangePosition();
+  void ChangeColor(size_t color_id);
   void Draw() const;
   void Clear();
 };

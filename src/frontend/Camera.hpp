@@ -6,15 +6,18 @@
 #include "Shader.hpp"
 
 class Camera {
-  GLuint u_rotation = 0;
-  Camera(glm::mat4 view);
+  GLuint u_view = 0, u_projection = 0;
+  Camera(glm::mat4 view_matrix, glm::mat4 projection_matrix);
   ~Camera();
   static Camera *instance;
+  glm::mat4 view_matrix;
+  glm::mat4 projection_matrix;
 public:
-  glm::vec3 cam_at = glm::vec3(0.0f, 0.0f, 1.0f);
-  glm::mat4 view;
-  void AttachToShader(ShaderProgram &program, const char *symbol);
+  double zx = M_PI/2., yx = M_PI/2.;
+  float dist = 1.0f;
+  static glm::vec3 point_on_sphere(double, double);
+  void AttachToShader(ShaderProgram &program);
   void Update();
   static Camera *inst();
-  static void setup();
+  static void Setup(size_t width, size_t height);
 };

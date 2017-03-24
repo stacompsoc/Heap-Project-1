@@ -49,19 +49,17 @@ void Triangle::disable_vao_attribs() {
   glDisableVertexAttribArray(1); GLERROR
 }
 
-void Triangle::ChangeColor(size_t color_id) {
-  cb_vbo = Sprite::inst()->colors()[color_id].vbo;
-  glBindVertexArray(vao);
-
-  glBindBuffer(GL_ARRAY_BUFFER, cb_vbo);
-  glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
+void Triangle::ChangePosition() {
+  glBindVertexArray(vao); GLERROR
+  glBindBuffer(GL_ARRAY_BUFFER, vb.vbo); GLERROR
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
 }
 
-void Triangle::ChangePosition() {
-  glBindVertexArray(vao);
-
-  glBindBuffer(GL_ARRAY_BUFFER, vb.vbo);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
+void Triangle::ChangeColor(size_t color_id) {
+  cb_vbo = Sprite::inst()->colors()[color_id].vbo;
+  glBindVertexArray(vao); GLERROR
+  glBindBuffer(GL_ARRAY_BUFFER, cb_vbo); GLERROR
+  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
 }
 
 void Triangle::Draw() const {

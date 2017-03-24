@@ -48,7 +48,7 @@ void Window::init_controls() {
 Window::Window(size_t width, size_t height):
   width(width), height(height),
   shader_program("shader.vert", "shader.frag"),
-  sph(glm::vec3(0,0,0),.1)
+  sph(glm::vec3(0,0,0),.5)
 {
   start();
 }
@@ -64,13 +64,13 @@ void Window::gl_version() {
 void Window::idle() {
   glEnable(GL_DEPTH_TEST); GLERROR
   glDepthFunc(GL_LESS); GLERROR
-  Sprite::setup();
-  Camera::setup();
-  GLfloat position[] = {
-    -0.5, -0.5, 0.0,
-    0.0, 0.5, 0.0,
-    0.5, -0.5, 0.0,
-  };
+  Sprite::Setup();
+  Camera::Setup(width, height);
+  /* GLfloat position[] = { */
+  /*   -0.5, -0.5, 0.0, */
+  /*   0.0, 0.5, 0.0, */
+  /*   0.5, -0.5, 0.0, */
+  /* }; */
   sph.Init();
   shader_program.Init({"vposition", "vcolor"});
   /* glEnable(GL_CULL_FACE); GLERROR // cull face */
@@ -84,7 +84,7 @@ void Window::idle() {
 
 void Window::display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); GLERROR
-  Camera::inst()->AttachToShader(shader_program, "rotation");
+  Camera::inst()->AttachToShader(shader_program);
   shader_program.Use(); GLERROR
   Camera::inst()->Update();
   sph.Draw();
@@ -97,29 +97,26 @@ void Window::keyboard() {
   if(glfwGetKey(win_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(win_, true);
   } else if(glfwGetKey(win_, GLFW_KEY_UP)) {
-    cam->cam_at.x += 1.;
-    cam->Update();
+    cam->yx -= M_PI / 10.;
   } else if(glfwGetKey(win_, GLFW_KEY_DOWN)) {
-    cam->cam_at.x -= 1.;
-    cam->Update();
+    cam->yx += M_PI / 10.;
   } else if(glfwGetKey(win_, GLFW_KEY_LEFT)) {
-    cam->cam_at.y += 1.;
-    cam->Update();
+    cam->zx -= M_PI/10.;
   } else if(glfwGetKey(win_, GLFW_KEY_RIGHT)) {
-    cam->cam_at.y -= 1.;
-    cam->Update();
+    cam->zx += M_PI/10.;
   } else if(glfwGetKey(win_, GLFW_KEY_EQUAL)) {
-    cam->cam_at.z += 1.;
-    cam->Update();
+    cam->dist *= 1.05;
   } else if(glfwGetKey(win_, GLFW_KEY_MINUS)) {
-    cam->cam_at.z -= 1.;
-    cam->Update();
+    cam->dist /= 1.05;
+  } else if(glfwGetKey(win_, '0')) {
   }
+  cam->Update();
 }
 
 void Window::clear() {
   shader_program.Clear(); GLERROR
   sph.Clear();
+  Sprite::Clear();
   glfwTerminate(); GLERROR
 }
 

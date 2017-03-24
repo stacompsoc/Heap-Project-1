@@ -10,17 +10,12 @@ Sprite::colorbuffer::colorbuffer(GLuint vbo, GLfloat *buffer):
 
 Sprite::colorbuffer::~colorbuffer() {
   ASSERT(buffer != NULL);
-  // delete buffer;
 }
 
 Sprite::Sprite()
 {}
 
 Sprite::~Sprite() {
-  for(auto &cb : colors_) {
-    ASSERT(cb.vbo != 0);
-    glDeleteBuffers(1, &cb.vbo); GLERROR
-  }
 }
 
 Sprite *Sprite::inst() {
@@ -59,7 +54,7 @@ const std::vector <Sprite::colorbuffer> &Sprite::colors() {
 }
 
 Sprite *Sprite::instance = NULL;
-void Sprite::setup() {
+void Sprite::Setup() {
   ASSERT(instance == NULL);
   instance = new Sprite();
   instance->add_color(1., 1., 1.);
@@ -67,4 +62,12 @@ void Sprite::setup() {
   instance->add_color(1., 0., 0.);
   instance->add_color(0., 1., 0.);
   instance->add_color(0., 0., 1.);
+}
+
+void Sprite::Clear() {
+  for(auto &cb : inst()->colors_) {
+    ASSERT(cb.vbo != 0);
+    glDeleteBuffers(1, &cb.vbo); GLERROR
+    /* delete cb.buffer; */
+  }
 }

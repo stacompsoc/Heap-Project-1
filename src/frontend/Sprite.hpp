@@ -23,5 +23,6 @@ public:
   void add_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.);
   void add_color(const glm::vec4 &color);
   const std::vector <colorbuffer> &colors();
-  static void setup();
+  static void Setup();
+  static void Clear();
 };
