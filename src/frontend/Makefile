@@ -4,7 +4,7 @@ ARCH = $(shell uname -m)
 CXXFLAGS = -std=c++1y -g3
 LDFLAGS = $(shell ./link_graphics)
 OBJECTS = $(wildcard *.cpp)
-BINARY = sphere
+BINARY = planetarium
 
 $(shell mkdir -p build)
 

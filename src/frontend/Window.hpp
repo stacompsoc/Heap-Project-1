@@ -3,15 +3,14 @@
 #include <glm/glm.hpp>
 
 #include "incgraphics.h"
+#include "Planetarium.hpp"
 #include "Shader.hpp"
 #include "Log.hpp"
-#include "Sphere.hpp"
 
 class Window {
   GLFWwindow *win_ = NULL;
   size_t width, height;
   ShaderProgram shader_program;
-  Sphere sph;
 
   void start();
   void init_glfw();

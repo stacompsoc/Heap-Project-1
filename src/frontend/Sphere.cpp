@@ -3,6 +3,7 @@
 #include "Log.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 #include <cmath>
 
 Sphere::Sphere(glm::vec3 position, GLfloat r):
@@ -17,20 +18,19 @@ Sphere::~Sphere()
 void Sphere::Init() {
   const int PRECISION = 16;
   const double step = M_PI / double(PRECISION);
-  size_t color = 0;
+  size_t color = 2 + rand() % 6;
   for(double dyx = 0.; dyx < M_PI; dyx += step) {
     for(double dzx = 0.; dzx < 2.*M_PI; dzx += step) {
       glm::vec3
-        &&a = Camera::point_on_sphere(dyx, dzx) * radius,
-        &&b = Camera::point_on_sphere(dyx + step, dzx + step) * radius,
-        &&c = Camera::point_on_sphere(dyx + step, dzx) * radius;
+        &&a = position + Camera::point_on_sphere(dyx, dzx) * radius,
+        &&b = position + Camera::point_on_sphere(dyx + step, dzx + step) * radius,
+        &&c = position + Camera::point_on_sphere(dyx + step, dzx) * radius;
       add_triangle(a, b, c, color);
       a = position + Camera::point_on_sphere(dyx, dzx) * radius;
       b = position + Camera::point_on_sphere(dyx, dzx + step) * radius;
       c = position + Camera::point_on_sphere(dyx + step, dzx + step) * radius;
       add_triangle(a, b, c, color);
     }
-    color = rand() % 3 + 2;
   }
 }
 
@@ -48,8 +48,9 @@ void Sphere::add_triangle(const glm::vec3 &a, const glm::vec3 &b, const glm::vec
 }
 
 void Sphere::Draw() {
-  for(auto &t : tessellation)
+  for(auto &t : tessellation) {
     t.Draw();
+  }
 }
 
 void Sphere::Clear() {

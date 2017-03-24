@@ -62,6 +62,9 @@ void Sprite::Setup() {
   instance->add_color(1., 0., 0.);
   instance->add_color(0., 1., 0.);
   instance->add_color(0., 0., 1.);
+  instance->add_color(0., 1., 1.);
+  instance->add_color(1., 0., 1.);
+  instance->add_color(1., 1., 0.);
 }
 
 void Sprite::Clear() {
