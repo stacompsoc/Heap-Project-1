@@ -18,10 +18,10 @@ class Window {
   void init_controls();
 public:
   Window(size_t width, size_t height);
-  void gl_version();
-  void idle();
-  void display();
-  void keyboard();
-  void clear();
+  void GLVersion();
+  void Idle();
+  void Display();
+  void Keyboard();
+  void Clear();
   ~Window();
 };

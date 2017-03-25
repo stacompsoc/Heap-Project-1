@@ -43,7 +43,7 @@ Camera *Camera::inst() {
 
 Camera *Camera::instance = NULL;
 void Camera::Setup(size_t width, size_t height) {
-  ASSERT(inst() == NULL);
+  ASSERT(instance == NULL);
   instance = new Camera(glm::lookAt(
       glm::vec3(0.0f, 0.0f, 1.0f), // camera is at (0, 0, 1)
       glm::vec3(0.0f, 0.0f, 0.0f), // camera looks at (0, 0, 0)
@@ -54,4 +54,10 @@ void Camera::Setup(size_t width, size_t height) {
     0.0f, // near clipping plane, keep it as high as possible
     10000.0f // far clipping placem keep it as low as possible
   ));
+}
+
+void Camera::Clear() {
+  ASSERT(instance != NULL);
+  delete instance;
+  instance = NULL;
 }

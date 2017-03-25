@@ -13,7 +13,8 @@ class ShaderProgram {
     vert = 0,
     frag = 0;
   const std::string
-    vert_fname, frag_fname;
+    vert_fname,
+    frag_fname;
 
   static char *load_text_file(const char *filename);
   void compile_shader(GLuint &shader, GLenum type, const char *filename);

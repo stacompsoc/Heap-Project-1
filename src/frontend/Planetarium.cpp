@@ -8,7 +8,7 @@ Planetarium::~Planetarium()
 {}
 
 void Planetarium::AddPlanet(Planet &&planet) {
-  inst()->planets_.push_back(planet);
+  instance->planets_.push_back(planet);
   planets_.back().Init();
 }
 
@@ -24,13 +24,16 @@ Planetarium *Planetarium::inst() {
 }
 
 void Planetarium::Setup() {
-  ASSERT(inst() == NULL);
+  ASSERT(instance == NULL);
   instance = new Planetarium();
 }
 
 void Planetarium::Clear() {
-  while(!inst()->planets_.empty()) {
+  ASSERT(instance != NULL);
+  while(!instance->planets_.empty()) {
     inst()->planets_.back().Clear();
     inst()->planets_.pop_back();
   }
+  delete instance;
+  instance = NULL;
 }

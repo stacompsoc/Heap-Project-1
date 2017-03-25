@@ -53,40 +53,40 @@ Window::Window(size_t width, size_t height):
   start();
 }
 
-void Window::gl_version() {
+void Window::GLVersion() {
   // get version info
   const GLubyte* renderer = glGetString(GL_RENDERER); GLERROR // get renderer string
   const GLubyte* version = glGetString(GL_VERSION); GLERROR // version as a string
-  /* printf("Renderer: %s\n", renderer); */
-  /* printf("OpenGL version supported %s\n", version); */
+  printf("Renderer: %s\n", renderer);
+  printf("OpenGL version supported %s\n", version);
 }
 
-void Window::idle() {
+void Window::Idle() {
   glEnable(GL_DEPTH_TEST); GLERROR
   glDepthFunc(GL_LESS); GLERROR
   Sprite::Setup();
-  Planetarium::Setup();
   Camera::Setup(width, height);
+  Planetarium::Setup();
   /* GLfloat position[] = { */
   /*   -0.5, -0.5, 0.0, */
   /*   0.0, 0.5, 0.0, */
   /*   0.5, -0.5, 0.0, */
   /* }; */
-  shader_program.Init({"vposition", "vcolor"});
   Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.0f, 0.0f, 0.0f), .3));
-  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.5f, 0.5f, 0.0f), .2));
-  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.0f, 0.5f, 0.0f), .3));
-  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(-0.3f, 0.2f, 0.0f), .2));
+  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.5f, 0.5f, 0.0f), .1));
+  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.5f, 0.5f, 0.5f), .2));
+  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.5f, -0.5f, 0.7f), .1));
+  shader_program.Init({"vposition", "vcolor"});
   glEnable(GL_CULL_FACE); GLERROR // cull face
   glCullFace(GL_BACK); GLERROR // cull back face
   glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise
   while(!glfwWindowShouldClose(win_)) {
-    display();
-    keyboard();
+    Display();
+    Keyboard();
   }
 }
 
-void Window::display() {
+void Window::Display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); GLERROR
   Camera::inst()->AttachToShader(shader_program);
   shader_program.Use(); GLERROR
@@ -96,7 +96,7 @@ void Window::display() {
   glfwSwapBuffers(win_); GLERROR
 }
 
-void Window::keyboard() {
+void Window::Keyboard() {
   Camera *cam = Camera::inst();
   if(glfwGetKey(win_, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(win_, true);
@@ -113,17 +113,18 @@ void Window::keyboard() {
   } else if(glfwGetKey(win_, GLFW_KEY_MINUS)) {
     cam->dist /= 1.05;
   } else if(glfwGetKey(win_, '0')) {
+    cam->dist = 1., cam->zx = 0., cam->yx = M_PI/2.;
   }
   cam->Update();
 }
 
-void Window::clear() {
+void Window::Clear() {
   shader_program.Clear(); GLERROR
-  Sprite::Clear();
   Planetarium::Clear();
+  Sprite::Clear();
+  Camera::Clear();
   glfwTerminate(); GLERROR
 }
 
-Window::~Window() {
-  clear();
-}
+Window::~Window()
+{}

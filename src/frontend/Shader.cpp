@@ -15,22 +15,19 @@ size_t file_length(const char *filename) {
 }
 
 char *ShaderProgram::load_text_file(const char *filename) {
-  char *text = (char *)malloc(file_length(filename));
+  size_t size = file_length(filename) + 1;
+  char *text = (char *)malloc(size * sizeof(char));
   assert(text != NULL);
 
   FILE *file = fopen(filename, "r");
   assert(file != NULL);
 
-  static char c;
-  int i = 0;
-  while((c = fgetc(file)) != EOF) {
-    text[i] = c;
-    ++i;
+  char *t = text;
+  while((*t = fgetc(file)) != EOF) {
+    ++t;
   }
-  text[i] = '\0';
+  *t = '\0';
 
-  text = (char *)realloc(text, i + 1);
-  assert(text != NULL);
   fclose(file);
   return text;
 }

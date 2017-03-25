@@ -20,4 +20,5 @@ public:
   void Update();
   static Camera *inst();
   static void Setup(size_t width, size_t height);
+  static void Clear();
 };

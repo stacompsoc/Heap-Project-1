@@ -74,5 +74,5 @@ void Triangle::Clear() {
   ASSERT(vb.vbo != 0);
   glDeleteBuffers(1, &vb.vbo); GLERROR
   glDeleteVertexArrays(1, &vao); GLERROR
-  /* delete vb.buffer; */
+  delete [] vb.buffer;
 }
