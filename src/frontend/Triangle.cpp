@@ -1,6 +1,8 @@
 #include "Triangle.hpp"
 #include "Log.hpp"
 
+#include <cstring>
+
 Triangle::vertexbuffer::vertexbuffer(GLfloat *buffer):
   buffer(buffer)
 {}
