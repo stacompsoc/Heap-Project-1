@@ -3,26 +3,29 @@
 #include <vector>
 #include <glm/glm.hpp>
 #include "incgraphics.h"
+#include "Texture.hpp"
 
 class Sprite {
 public:
   struct colorbuffer {
-    GLuint vbo;
-    GLfloat *buffer;
-    colorbuffer(GLuint, GLfloat *);
+    GLuint vbo = 0;
+    colorbuffer();
     ~colorbuffer();
   };
 protected:
   std::vector <colorbuffer> colors_;
-  void init_color(colorbuffer &cb);
+  std::vector <Texture> textures_;
+  void init_color(colorbuffer &cb, const GLfloat *buffer);
   Sprite();
   ~Sprite();
   static Sprite *instance;
 public:
   static Sprite *inst();
-  void add_color(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.);
-  void add_color(const glm::vec4 &color);
+  void AddColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.);
+  void AddColor(const glm::vec4 &color);
+  void AddTexture(const char *filename);
   const std::vector <colorbuffer> &colors();
+  const std::vector <Texture> &textures();
   static void Setup();
   static void Clear();
 };

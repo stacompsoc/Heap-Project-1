@@ -52,7 +52,7 @@ void Camera::Setup(size_t width, size_t height) {
     90.0f, // horizontal field of view
     float(width)/float(height), // aspect ratio, window width/height
     0.0f, // near clipping plane, keep it as high as possible
-    10000.0f // far clipping placem keep it as low as possible
+    100.0f // far clipping placem keep it as low as possible
   ));
 }
 

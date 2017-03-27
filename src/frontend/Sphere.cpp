@@ -13,12 +13,11 @@ Sphere::Sphere(glm::vec3 position, GLfloat r):
 Sphere::~Sphere()
 {}
 
-#define ASSERT_F(a,b) ASSERT(std::abs((a)-(b)) < 1e-3);
-#define ASSERT_V(vec, a,b,c) ASSERT_F((vec).x, (a)); ASSERT_F((vec).y, (b)); ASSERT_F((vec).z, (c));
 void Sphere::Init() {
   const int PRECISION = 16;
   const double step = M_PI / double(PRECISION);
-  size_t color = 2 + rand() % 6;
+  /* size_t color = 2 + rand() % 6; */
+  size_t color = 0;
   for(double dyx = 0.; dyx < M_PI; dyx += step) {
     for(double dzx = 0.; dzx < 2.*M_PI; dzx += step) {
       glm::vec3

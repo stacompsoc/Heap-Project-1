@@ -5,6 +5,7 @@
 int main(int argc, char *argv[]) {
   srand(time(NULL));
   Window w(960, 960);
+  w.Init();
   w.Idle();
   w.Clear();
 }

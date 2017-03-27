@@ -8,7 +8,7 @@
 #include "Shader.hpp"
 #include "Log.hpp"
 
-size_t file_length(const char *filename) {
+static size_t file_length(const char *filename) {
   struct stat st;
   stat(filename, &st);
   return st.st_size;
@@ -35,6 +35,7 @@ char *ShaderProgram::load_text_file(const char *filename) {
 void ShaderProgram::compile_shader(GLuint &shader, GLenum type, const char *filename) {
   shader = glCreateShader(type); GLERROR
   char *source_code = load_text_file(filename);
+  ASSERT(source_code != NULL);
   glShaderSource(shader, 1, &source_code, NULL); GLERROR
   glCompileShader(shader); GLERROR
   free(source_code);
@@ -42,20 +43,23 @@ void ShaderProgram::compile_shader(GLuint &shader, GLenum type, const char *file
 
 void ShaderProgram::compile_program() {
   compile_shader(vert, GL_VERTEX_SHADER, vert_fname.c_str());
+  compile_shader(geom, GL_GEOMETRY_SHADER, geom_fname.c_str());
   compile_shader(frag, GL_FRAGMENT_SHADER, frag_fname.c_str());
 
   program = glCreateProgram(); GLERROR
   glAttachShader(program, frag); GLERROR
+  glAttachShader(program, geom); GLERROR
   glAttachShader(program, vert); GLERROR
   glLinkProgram(program); GLERROR
 
   glDeleteShader(vert); GLERROR
+  glDeleteShader(geom); GLERROR
   glDeleteShader(frag); GLERROR
 }
 
 
-ShaderProgram::ShaderProgram(const std::string &vert, const std::string &frag):
-  vert_fname(vert), frag_fname(frag)
+ShaderProgram::ShaderProgram(const char *vert, const char *geom, const char *frag):
+  vert_fname(vert), geom_fname(geom), frag_fname(frag)
 {}
 
 ShaderProgram::~ShaderProgram()
@@ -72,7 +76,7 @@ void ShaderProgram::Use() {
 void ShaderProgram::Init(const std::vector <std::string> &&locations) {
   compile();
   bind(locations);
-  is_valid();
+  ASSERT(is_valid());
 }
 
 void ShaderProgram::compile() {
