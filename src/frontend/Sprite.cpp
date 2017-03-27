@@ -67,7 +67,6 @@ void Sprite::Setup() {
   instance->AddColor(0., 1., 1.);
   instance->AddColor(1., 0., 1.);
   instance->AddColor(1., 1., 0.);
-  instance->AddTexture("example.tga");
 }
 
 void Sprite::Clear() {

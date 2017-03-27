@@ -3,11 +3,11 @@
 #include "Screen.hpp"
 #include "Shader.hpp"
 
-class PlanetariumScreen : public Screen {
+class SpaceScreen : public Screen {
   ShaderProgram planet_program;
 public:
-  PlanetariumScreen(Window *win);
-  ~PlanetariumScreen();
+  SpaceScreen(Window *win);
+  ~SpaceScreen();
   void Init();
   void Display();
   void Keyboard();

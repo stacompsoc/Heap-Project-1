@@ -48,11 +48,12 @@ void Window::init_controls() {
 
 Window::Window(size_t width, size_t height):
   width_(width), height_(height),
-  planetscreen(this),
+  spacescreen(this),
   trianglescreen(this),
+  menuscreen(this),
   current_screen(NULL)
 {
-  current_screen = &planetscreen;
+  current_screen = &spacescreen;
   start();
 }
 
@@ -77,7 +78,7 @@ void Window::Init() {
   glDepthFunc(GL_LESS); GLERROR
   Camera::Setup(width(), height());
   Sprite::Setup();
-  planetscreen.Init();
+  spacescreen.Init();
   trianglescreen.Init();
   /* glEnable(GL_CULL_FACE); GLERROR // cull face */
   /* glCullFace(GL_BACK); GLERROR // cull back face */
@@ -103,7 +104,7 @@ void Window::Keyboard() {
 }
 
 void Window::Clear() {
-  planetscreen.Clear();
+  spacescreen.Clear();
   trianglescreen.Clear();
   Sprite::Clear();
   Camera::Clear();

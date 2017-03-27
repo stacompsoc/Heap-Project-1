@@ -6,13 +6,15 @@
 #include "Planetarium.hpp"
 #include "Shader.hpp"
 #include "Log.hpp"
-#include "PlanetariumScreen.hpp"
+#include "MenuScreen.hpp"
+#include "SpaceScreen.hpp"
 #include "TriangleScreen.hpp"
 
 class Window {
   size_t width_, height_;
 
-  PlanetariumScreen planetscreen;
+  MenuScreen menuscreen;
+  SpaceScreen spacescreen;
   TriangleScreen trianglescreen;
   Screen *current_screen;
 

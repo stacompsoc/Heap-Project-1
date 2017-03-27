@@ -1,5 +1,5 @@
 #include "incgraphics.h"
-#include "PlanetariumScreen.hpp"
+#include "SpaceScreen.hpp"
 #include "Planetarium.hpp"
 #include "Camera.hpp"
 #include "Log.hpp"
@@ -7,15 +7,15 @@
 
 #include <glm/glm.hpp>
 
-PlanetariumScreen::PlanetariumScreen(Window *win):
+SpaceScreen::SpaceScreen(Window *win):
   Screen(win),
   planet_program("planet.vert", "planet.geom", "planet.frag")
 {}
 
-PlanetariumScreen::~PlanetariumScreen()
+SpaceScreen::~SpaceScreen()
 {}
 
-void PlanetariumScreen::Init() {
+void SpaceScreen::Init() {
   Planetarium::Setup();
   Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.0f, 0.0f, 0.0f), .3));
   Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.5f, 0.5f, 0.0f), .1));
@@ -24,14 +24,14 @@ void PlanetariumScreen::Init() {
   planet_program.Init({"vposition", "vcolor"});
 }
 
-void PlanetariumScreen::Display() {
+void SpaceScreen::Display() {
   Camera::inst()->AttachToShader(planet_program);
   planet_program.Use(); GLERROR
   Camera::inst()->Update();
   Planetarium::inst()->Draw();
 }
 
-void PlanetariumScreen::Keyboard() {
+void SpaceScreen::Keyboard() {
   Camera *cam = Camera::inst();
   if(glfwGetKey(win_->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(win_->window, true);
@@ -53,7 +53,7 @@ void PlanetariumScreen::Keyboard() {
   cam->Update();
 }
 
-void PlanetariumScreen::Clear() {
+void SpaceScreen::Clear() {
   Planetarium::inst()->Clear();
   planet_program.Clear();
 }
