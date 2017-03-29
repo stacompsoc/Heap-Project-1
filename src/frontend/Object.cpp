@@ -4,15 +4,17 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <climits>
 
-Object::Object(Shape &shape, ShaderProgram &program):
+Object::Object(Shape &shape, ShaderProgram &program, size_t texture_id):
   shape(shape),
   program(program),
   u_scale(0), u_rotate(0), u_translate(0),
   rotate(glm::rotate(
     00.0f, // rotation degree
     glm::vec3(1.0f, 1.0f, 1.0f)
-  ))
+  )),
+  texture_id(texture_id)
 {
   Move(0.0f, 0.0f, 0.0f);
   SetScale(0.5f);
@@ -51,9 +53,15 @@ void Object::AttachToShader() {
 void Object::Draw() {
   if(!is_visible)
     return;
+  if(texture_id != UINT_MAX) {
+    Storage::inst()->textures()[texture_id].Bind();
+  }
   AttachToShader();
   Update();
   shape.Draw();
+  if(texture_id != UINT_MAX) {
+    Storage::inst()->textures()[texture_id].Unbind();
+  }
 }
 
 void Object::Clear() {

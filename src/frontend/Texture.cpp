@@ -55,9 +55,16 @@ void Texture::LoadTGA(const char *filename) {
   gl_log("TGA loading finished\n");
 }
 
+void Texture::LoadDummy() {
+  data = new unsigned char[600*600*4];
+  width = 60, height = 60;
+  memset(data, 0xff, sizeof(unsigned char) * width * height * 4);
+}
+
 // tga
 void Texture::Init(std::string filename) {
   ASSERT(filename.substr(filename.length() - 4, 4) == ".tga");
+  /* LoadDummy(); */
   LoadTGA(filename.c_str());
   glGenTextures(1, &tex); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR

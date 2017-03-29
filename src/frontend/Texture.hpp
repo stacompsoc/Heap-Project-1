@@ -15,6 +15,7 @@ struct Texture {
   Texture();
   ~Texture();
   void LoadTGA(const char *filename);
+  void LoadDummy();
   void Init(std::string filename);
   void AttachToShader(ShaderProgram &program);
   void Bind() const;

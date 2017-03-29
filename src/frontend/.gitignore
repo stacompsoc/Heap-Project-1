@@ -1,3 +1,4 @@
 planetarium
 *.dSYM
 build
+*.jpg

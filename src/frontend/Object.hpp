@@ -14,11 +14,12 @@ protected:
 public:
   ShaderProgram &program;
   bool is_visible = true;
+  size_t texture_id;
   glm::mat4 scale;
   glm::mat4 rotate;
   glm::mat4 translate;
 public:
-  Object(Shape &shape, ShaderProgram &program);
+  Object(Shape &shape, ShaderProgram &program, size_t texture_id = UINT_MAX);
   ~Object();
   virtual void Init();
   virtual void Update();

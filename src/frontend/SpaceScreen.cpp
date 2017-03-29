@@ -26,8 +26,8 @@ void SpaceScreen::Init() {
       planet_program
     )
   );
-  planet_program.Init({"vposition", "vcolor"});
-  Storage::inst()->AddTexture("example.tga");
+  planet_program.Init({"vposition", "vtexcoords"});
+  Storage::inst()->AddTexture("textures/earth2.tga");
   /* Storage::inst()->AddShape<Sphere>(); */
 }
 

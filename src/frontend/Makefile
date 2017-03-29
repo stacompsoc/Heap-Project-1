@@ -11,6 +11,7 @@ $(shell mkdir -p build)
 all:;$(MAKE) glsl;$(MAKE) $(BINARY) -j$(shell getconf _NPROCESSORS_ONLN)
 
 glsl:
+	glslangValidator plntclr.vert plntclr.geom plntclr.frag
 	glslangValidator planet.vert planet.geom planet.frag
 	glslangValidator labels.vert labels.frag
 

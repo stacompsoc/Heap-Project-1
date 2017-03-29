@@ -87,7 +87,6 @@ void Storage::Setup() {
   instance->AddColor(0., 1., 1.);
   instance->AddColor(1., 0., 1.);
   instance->AddColor(1., 1., 0.);
-  instance->AddTexture("triangle.tga");
   instance->AddShape<Sphere>();
 }
 

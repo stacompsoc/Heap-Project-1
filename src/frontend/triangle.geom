@@ -4,7 +4,6 @@ layout (triangles, invocations = 1) in;
 layout (triangle_strip, max_vertices = 3) out;
 
 in vec2 gtexcoords[3];
-
 out vec2 ftexcoords;
 
 void main() {
