@@ -44,37 +44,41 @@ void Texture::LoadTGA(const char *filename) {
   }
 
   long imgsize = width * height * bpp;
-  unsigned char *data = new unsigned char[imgsize];
+  data = new unsigned char[imgsize];
 
   tgafile.read(reinterpret_cast <char *> (data), sizeof(char) * imgsize);
 
-  for(GLuint cswap = 0; cswap < (unsigned int)imgsize; cswap += bpp)
+  for(GLuint cswap = 0; cswap < (unsigned int)imgsize; cswap += bpp) {
     std::swap(data[cswap], data[cswap + 2]);
+  }
   tgafile.close();
-
+  gl_log("TGA loading finished\n");
 }
 
 // tga
 void Texture::Init(std::string filename) {
   ASSERT(filename.substr(filename.length() - 4, 4) == ".tga");
   LoadTGA(filename.c_str());
-  const GLenum color_mode = GL_RGBA;
-  glGenTextures(1, &tex);
-  glBindTexture(GL_TEXTURE_2D, tex);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexImage2D(GL_TEXTURE_2D, 0, color_mode, width, height, 0, color_mode, GL_UNSIGNED_BYTE, data);
+  glGenTextures(1, &tex); GLERROR
+  glBindTexture(GL_TEXTURE_2D, tex); GLERROR
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GLERROR
+  glGenerateMipmap(GL_TEXTURE_2D); GLERROR
   delete [] data;
+  data = NULL;
 }
 
-void Texture::AttachToShader(ShaderProgram &program) const {
-  ASSERT(program.id() != 0);
-  glGetUniformLocation(program.id(), "tex"); GLERROR
+void Texture::AttachToShader(ShaderProgram &program) {
+  u_samp = glGetUniformLocation(program.id(), "tex"); GLERROR
 }
 
 void Texture::Bind() const {
   glActiveTexture(GL_TEXTURE0 + texcounter);
   glBindTexture(GL_TEXTURE_2D, tex);
+  glUniform1i(u_samp, texcounter);
 }
 
 void Texture::Unbind() const {

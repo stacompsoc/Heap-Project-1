@@ -61,14 +61,17 @@ size_t Storage::AddShape() {
 }
 
 const std::vector <Storage::colorbuffer> &Storage::colors() {
+  ASSERT(instance != NULL);
   return colors_;
 }
 
-const std::vector <Texture> &Storage::textures() {
+std::vector <Texture> &Storage::textures() {
+  ASSERT(instance != NULL);
   return textures_;
 }
 
 const std::vector <Shape *> &Storage::shapes() {
+  ASSERT(instance != NULL);
   return shapes_;
 }
 
@@ -84,6 +87,7 @@ void Storage::Setup() {
   instance->AddColor(0., 1., 1.);
   instance->AddColor(1., 0., 1.);
   instance->AddColor(1., 1., 0.);
+  instance->AddTexture("triangle.tga");
   instance->AddShape<Sphere>();
 }
 

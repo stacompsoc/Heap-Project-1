@@ -3,17 +3,18 @@
 layout (triangles, invocations = 1) in;
 layout (triangle_strip, max_vertices = 3) out;
 
-in vec4 gcolor[3];
-out vec4 fcolor;
+in vec2 gtexcoords[3];
+
+out vec2 ftexcoords;
 
 void main() {
-  fcolor = gcolor[0];
+  ftexcoords = gtexcoords[0];
   gl_Position = gl_in[0].gl_Position;
   EmitVertex();
-  fcolor = gcolor[1];
+  ftexcoords = gtexcoords[1];
   gl_Position = gl_in[1].gl_Position;
   EmitVertex();
-  fcolor = gcolor[2];
+  ftexcoords = gtexcoords[2];
   gl_Position = gl_in[2].gl_Position;
   EmitVertex();
   EndPrimitive();

@@ -5,6 +5,7 @@
 #include "Log.hpp"
 #include "Window.hpp"
 #include "Object.hpp"
+#include "Sphere.hpp"
 
 #include <glm/glm.hpp>
 
@@ -26,6 +27,8 @@ void SpaceScreen::Init() {
     )
   );
   planet_program.Init({"vposition", "vcolor"});
+  Storage::inst()->AddTexture("example.tga");
+  /* Storage::inst()->AddShape<Sphere>(); */
 }
 
 void SpaceScreen::Display() {

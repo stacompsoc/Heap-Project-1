@@ -20,7 +20,7 @@ Sphere::~Sphere()
 {}
 
 void Sphere::Init() {
-  const int PRECISION = 16;
+  const int PRECISION = 20;
   const double step = M_PI / double(PRECISION);
   size_t color = 2 + rand() % 6;
   /* size_t color = 0; */

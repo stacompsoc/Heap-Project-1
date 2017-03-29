@@ -25,7 +25,7 @@ class ShaderProgram {
   void compile();
   void bind(const std::vector <std::string> &locations);
   bool is_valid();
-  void _print_info_log();
+  void print_info_log();
   void print_all();
 public:
   ShaderProgram(const char *vert, const char *geom, const char *frag);

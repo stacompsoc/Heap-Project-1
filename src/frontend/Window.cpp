@@ -55,6 +55,7 @@ Window::Window(size_t width, size_t height):
   menuscreen(this),
   current_screen(NULL)
 {
+  /* current_screen = &trianglescreen; */
   current_screen = &spacescreen;
   start();
 }
@@ -80,9 +81,9 @@ void Window::Init() {
   glDepthFunc(GL_LESS); GLERROR
   Storage::Setup();
   current_screen->Init();
-  /* glEnable(GL_CULL_FACE); GLERROR // cull face */
-  /* glCullFace(GL_BACK); GLERROR // cull back face */
-  /* glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise */
+  glEnable(GL_CULL_FACE); GLERROR // cull face
+  glCullFace(GL_BACK); GLERROR // cull back face
+  glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise
 }
 
 void Window::Idle() {
@@ -93,7 +94,7 @@ void Window::Idle() {
 }
 
 void Window::Display() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); GLERROR
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); GLERROR
   current_screen->Display();
   glfwPollEvents(); GLERROR
   glfwSwapBuffers(window); GLERROR

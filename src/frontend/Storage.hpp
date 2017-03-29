@@ -31,7 +31,7 @@ public:
   template <typename T>
   size_t AddShape();
   const std::vector <colorbuffer> &colors();
-  const std::vector <Texture> &textures();
+  std::vector <Texture> &textures();
   const std::vector <Shape *> &shapes();
   static void Setup();
   static void Clear();

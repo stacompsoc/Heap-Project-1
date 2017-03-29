@@ -1,8 +1,11 @@
 #version 400
 
-in vec4 fcolor;
+uniform sampler2D samp;
+
+in vec2 ftexcoords;
+
 out vec4 frag_color;
 
 void main(void) {
-  frag_color = fcolor;
+  frag_color = texture(samp, ftexcoords).rgba;
 }

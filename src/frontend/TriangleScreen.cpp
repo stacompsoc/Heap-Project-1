@@ -2,6 +2,7 @@
 #include "Log.hpp"
 #include "Shader.hpp"
 #include "Window.hpp"
+#include "Storage.hpp"
 
 TriangleScreen::TriangleScreen(Window *win):
   Screen(win),
@@ -18,13 +19,22 @@ void TriangleScreen::Init() {
     0.0, 0.5, 0.0,
     0.5, -0.5, 0.0,
   };
-  tri.Init(position, 0);
-  triangle_program.Init({"vposition", "vcolor"});
+  GLfloat texcoords[] = {
+    0.0, 0.0,
+    0.5, 1.0,
+    1.0, 0.0,
+  };
+  /* tri.Init(position, 0); */
+  tri.Init(position, texcoords);
+  triangle_program.Init({"vposition", "vtexcoords"});
+  Storage::inst()->textures()[0].AttachToShader(triangle_program);
 }
 
 void TriangleScreen::Display() {
   triangle_program.Use();
+  Storage::inst()->textures()[0].Bind();
   tri.Draw();
+  Storage::inst()->textures()[0].Unbind();
 }
 
 void TriangleScreen::Keyboard() {
