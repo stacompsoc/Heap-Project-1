@@ -6,7 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <climits>
 
-Object::Object(Shape &shape, ShaderProgram &program, size_t texture_id):
+Object::Object(Shape &shape, ShaderProgram &program, size_t texture_id, double size):
   shape(shape),
   program(program),
   u_scale(0), u_rotate(0), u_translate(0),
@@ -17,7 +17,7 @@ Object::Object(Shape &shape, ShaderProgram &program, size_t texture_id):
   texture_id(texture_id)
 {
   Move(0.0f, 0.0f, 0.0f);
-  SetScale(0.5f);
+  SetScale(size);
 }
 
 Object::~Object()

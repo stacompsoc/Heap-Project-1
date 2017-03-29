@@ -27,7 +27,8 @@ void TriangleScreen::Init() {
   /* tri.Init(position, 0); */
   tri.Init(position, texcoords);
   triangle_program.Init({"vposition", "vtexcoords"});
-  Storage::inst()->textures()[0].AttachToShader(triangle_program);
+  size_t tex_idx = Storage::inst()->AddTexture("textures/triangle.tga");
+  Storage::inst()->textures()[tex_idx].AttachToShader(triangle_program);
 }
 
 void TriangleScreen::Display() {

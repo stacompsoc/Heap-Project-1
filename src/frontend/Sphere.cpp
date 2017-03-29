@@ -60,27 +60,29 @@ void Sphere::add_triangle(
     size_t color = 0;
     triangles.back().Init(buffer, color);
   } else {
-    size_t y = (index/2) / (2 * DIM), x = (index/2) % (2 * DIM);
+    size_t
+      y = DIM - 1 - (index/2) / (2 * DIM),
+      x = (index/2) % (2 * DIM);
     float xstep = 1.0f / float(DIM) / 2.;
-    float tx0 = float(x) / float (DIM * 2);
+    float tx0 = float(x) / float (2 * DIM);
     float tx1 = tx0 + xstep;
     float ystep = 1.0f / float(DIM);
     float ty0 = float(y) / float (DIM);
     float ty1 = ty0 + ystep;
     gl_log("is textured %d\n", is_textured);
     GLfloat cpy[6];
-    if(!(index & 1)) {
+    if(index & 1) {
       GLfloat texcoords[6] = {
         tx0, ty1,
+        tx1, ty1,
         tx1, ty0,
-        tx0, ty0,
       };
       memcpy(cpy, texcoords, 6 * sizeof(GLfloat));
     } else {
       GLfloat texcoords[6] = {
         tx0, ty1,
-        tx1, ty1,
         tx1, ty0,
+        tx0, ty0,
       };
       memcpy(cpy, texcoords, 6 * sizeof(GLfloat));
     }

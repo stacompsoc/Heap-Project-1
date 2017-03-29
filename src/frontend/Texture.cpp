@@ -74,6 +74,7 @@ void Texture::Init(std::string filename) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GLERROR
   glGenerateMipmap(GL_TEXTURE_2D); GLERROR
+  /* glBindTexture(GL_TEXTURE_2D, 0); GLERROR */
   delete [] data;
   data = NULL;
 }

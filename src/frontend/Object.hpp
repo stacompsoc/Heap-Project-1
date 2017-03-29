@@ -19,7 +19,8 @@ public:
   glm::mat4 rotate;
   glm::mat4 translate;
 public:
-  Object(Shape &shape, ShaderProgram &program, size_t texture_id = UINT_MAX);
+  Object(Shape &shape, ShaderProgram &program, size_t texture_id = UINT_MAX,
+         double size = 0.5);
   ~Object();
   virtual void Init();
   virtual void Update();
