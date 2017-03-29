@@ -51,6 +51,7 @@ void Object::AttachToShader() {
 }
 
 void Object::Draw() {
+  program.Use();
   if(!is_visible)
     return;
   if(texture_id != UINT_MAX) {
