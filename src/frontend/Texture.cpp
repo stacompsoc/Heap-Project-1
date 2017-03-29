@@ -16,9 +16,9 @@ Texture::~Texture()
 void Texture::LoadTGA(const char *filename) {
   std::ifstream tgafile(filename, std::ios::in | std::ios::binary);
   unsigned char header[20];
-  std::cerr << "TGA loading: " << filename << std::endl;
+  gl_log("TGA loading: %s\n", filename);
   if(!tgafile.is_open()) {
-    std::cerr << "TGA loading: Wasn't able to find image " << filename << std::endl;
+    gl_log("TGA loading: Wasn't able to find image %s\n", filename);
     return;
   }
 
@@ -26,7 +26,7 @@ void Texture::LoadTGA(const char *filename) {
 
   if(header[2] != 2) {
     tgafile.close();
-    std::cerr << "TGA loading: wrong file header " << filename << std::endl;
+    gl_log("TGA loading: wrong file header %s\n", filename);
     return;
   }
 
@@ -39,7 +39,7 @@ void Texture::LoadTGA(const char *filename) {
 
   if(bpp != 4) {
     tgafile.close();
-    std::cerr << "TGA loading: wrong bit depth: " << filename << std::endl;
+    gl_log("TGA loading: wrong bit depth: %s\n", filename);
     return;
   }
 

@@ -3,7 +3,7 @@
 #include <string>
 
 #include "incgraphics.h"
-#include "Sprite.hpp"
+#include "Storage.hpp"
 
 class Text {
   std::string text;

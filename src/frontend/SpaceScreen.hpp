@@ -2,6 +2,7 @@
 
 #include "Screen.hpp"
 #include "Shader.hpp"
+#include "Object.hpp"
 
 class SpaceScreen : public Screen {
   ShaderProgram planet_program;

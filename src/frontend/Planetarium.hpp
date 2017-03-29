@@ -2,17 +2,20 @@
 
 #include <vector>
 
-#include "Planet.hpp"
+#include "Camera.hpp"
+#include "Object.hpp"
 
 class Planetarium {
-  std::vector <Planet> planets_;
+  std::vector <Object> objects_;
   static Planetarium *instance;
-public:
-  Planetarium();
+  Planetarium(float width, float height);
   ~Planetarium();
-  void AddPlanet(Planet &&planet);
+  Camera cam;
+public:
+  void AddObject(Object &&object);
   void Draw();
   static Planetarium *inst();
-  static void Setup();
+  static Camera *Cam();
+  static void Setup(float width, float height);
   static void Clear();
 };

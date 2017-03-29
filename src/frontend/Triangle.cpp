@@ -20,7 +20,7 @@ Triangle::~Triangle() {
 void Triangle::Init(GLfloat *positions, size_t color_id) {
   vb.buffer = new GLfloat[9];
   memcpy(vb.buffer, positions, sizeof(GLfloat) * 9);
-  cb_vbo = Sprite::inst()->colors()[color_id].vbo;
+  cb_vbo = Storage::inst()->colors()[color_id].vbo;
   init_vertices();
   init_array_object();
 }
@@ -58,7 +58,7 @@ void Triangle::ChangePosition() {
 }
 
 void Triangle::ChangeColor(size_t color_id) {
-  cb_vbo = Sprite::inst()->colors()[color_id].vbo;
+  cb_vbo = Storage::inst()->colors()[color_id].vbo;
   glBindVertexArray(vao); GLERROR
   glBindBuffer(GL_ARRAY_BUFFER, cb_vbo); GLERROR
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR

@@ -3,9 +3,10 @@
 #include <string>
 
 #include "Window.hpp"
-#include "Sprite.hpp"
+#include "Storage.hpp"
 #include "Planetarium.hpp"
 #include "Camera.hpp"
+#include "Log.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -29,6 +30,7 @@ void Window::init_glfw() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
   // open a window and create its OpenGL context
   window = glfwCreateWindow(width(), height(), "Planetarium", NULL, NULL);
+  restart_gl_log();
   ASSERT(window != NULL);
   glfwMakeContextCurrent(window); GLERROR
 }
@@ -76,10 +78,8 @@ void Window::GLVersion() {
 void Window::Init() {
   glEnable(GL_DEPTH_TEST); GLERROR
   glDepthFunc(GL_LESS); GLERROR
-  Camera::Setup(width(), height());
-  Sprite::Setup();
-  spacescreen.Init();
-  trianglescreen.Init();
+  Storage::Setup();
+  current_screen->Init();
   /* glEnable(GL_CULL_FACE); GLERROR // cull face */
   /* glCullFace(GL_BACK); GLERROR // cull back face */
   /* glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise */
@@ -104,10 +104,8 @@ void Window::Keyboard() {
 }
 
 void Window::Clear() {
-  spacescreen.Clear();
-  trianglescreen.Clear();
-  Sprite::Clear();
-  Camera::Clear();
+  current_screen->Clear();
+  Storage::Clear();
   glfwTerminate(); GLERROR
   current_screen = NULL;
 }

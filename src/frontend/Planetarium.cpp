@@ -1,20 +1,22 @@
 #include "Log.hpp"
 #include "Planetarium.hpp"
 
-Planetarium::Planetarium()
+Planetarium::Planetarium(float width, float height):
+  cam(width, height)
 {}
 
 Planetarium::~Planetarium()
 {}
 
-void Planetarium::AddPlanet(Planet &&planet) {
-  instance->planets_.push_back(planet);
-  planets_.back().Init();
+void Planetarium::AddObject(Object &&object) {
+  instance->objects_.push_back(object);
+  objects_.back().Init();
 }
 
 void Planetarium::Draw() {
-  for(auto &p : planets_) {
-    p.Draw();
+  Cam()->Update();
+  for(auto &obj : objects_) {
+    obj.Draw();
   }
 }
 
@@ -23,16 +25,21 @@ Planetarium *Planetarium::inst() {
   return instance;
 }
 
-void Planetarium::Setup() {
+Camera *Planetarium::Cam() {
+  return &inst()->cam;
+}
+
+void Planetarium::Setup(float width, float height) {
   ASSERT(instance == NULL);
-  instance = new Planetarium();
+  instance = new Planetarium(width, height);
 }
 
 void Planetarium::Clear() {
   ASSERT(instance != NULL);
-  while(!instance->planets_.empty()) {
-    inst()->planets_.back().Clear();
-    inst()->planets_.pop_back();
+  Cam()->Clear();
+  while(!instance->objects_.empty()) {
+    inst()->objects_.back().Clear();
+    inst()->objects_.pop_back();
   }
   delete instance;
   instance = NULL;

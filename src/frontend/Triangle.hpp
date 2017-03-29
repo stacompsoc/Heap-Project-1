@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Sprite.hpp"
+#include "Storage.hpp"
 #include "incgraphics.h"
 
 struct Triangle {

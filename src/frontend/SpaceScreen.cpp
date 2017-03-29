@@ -4,6 +4,7 @@
 #include "Camera.hpp"
 #include "Log.hpp"
 #include "Window.hpp"
+#include "Object.hpp"
 
 #include <glm/glm.hpp>
 
@@ -16,23 +17,25 @@ SpaceScreen::~SpaceScreen()
 {}
 
 void SpaceScreen::Init() {
-  Planetarium::Setup();
-  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.0f, 0.0f, 0.0f), .3));
-  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.5f, 0.5f, 0.0f), .1));
-  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.5f, 0.5f, 0.5f), .2));
-  Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.5f, -0.5f, 0.7f), .1));
+  Planetarium::Setup(win_->width(), win_->height());
+  /* Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.0f, 0.0f, 0.0f), .3)); */
+  Planetarium::inst()->AddObject(
+    Object(
+      *Storage::inst()->shapes()[0],
+      planet_program
+    )
+  );
   planet_program.Init({"vposition", "vcolor"});
 }
 
 void SpaceScreen::Display() {
-  Camera::inst()->AttachToShader(planet_program);
+  Planetarium::Cam()->AttachToShader(planet_program);
   planet_program.Use(); GLERROR
-  Camera::inst()->Update();
   Planetarium::inst()->Draw();
 }
 
 void SpaceScreen::Keyboard() {
-  Camera *cam = Camera::inst();
+  Camera *cam = Planetarium::Cam();
   if(glfwGetKey(win_->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(win_->window, true);
   } else if(glfwGetKey(win_->window, GLFW_KEY_UP)) {

@@ -1,5 +1,5 @@
 #include "MenuScreen.hpp"
-#include "Sprite.hpp"
+#include "Storage.hpp"
 #include "Window.hpp"
 #include "Log.hpp"
 
@@ -11,8 +11,8 @@ MenuScreen::~MenuScreen()
 {}
 
 void MenuScreen::Init() {
-  /* Sprite::inst()->AddTexture("example.tga"); */
-  /* Sprite::inst()->AddTexture("background.tga"); */
+  /* Storage::inst()->AddTexture("example.tga"); */
+  /* Storage::inst()->AddTexture("background.tga"); */
 }
 
 void MenuScreen::Display() {

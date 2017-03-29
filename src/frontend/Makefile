@@ -2,7 +2,7 @@ UNAME = $(shell uname)
 ARCH = $(shell uname -m)
 
 CXXFLAGS = -std=c++1y -g3
-LDFLAGS = $(shell ./link_graphics) $(shell freetype-config --libs --cflags)
+LDFLAGS = $(shell ./link_graphics) $(shell pkg-config --libs --cflags glm) $(shell freetype-config --libs --cflags)
 OBJECTS = $(wildcard *.cpp)
 BINARY = planetarium
 

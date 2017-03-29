@@ -4,8 +4,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Camera::Camera(glm::mat4 view_matrix, glm::mat4 projection_matrix):
-  view_matrix(view_matrix), projection_matrix(projection_matrix)
+Camera::Camera(float width, float height):
+  projection_matrix(glm::perspective(
+    90.0f, // horizontal field of view
+    float(width)/float(height), // aspect ratio, window width/height
+    0.0f, // near clipping plane, keep it as high as possible
+    100.0f // far clipping placem keep it as low as possible
+  ))
 {}
 
 Camera::~Camera()
@@ -37,27 +42,8 @@ void Camera::Update() {
   glUniformMatrix4fvARB(u_projection, 1 , GL_FALSE, glm::value_ptr(projection_matrix)); GLERROR
 }
 
-Camera *Camera::inst() {
-  return instance;
-}
-
-Camera *Camera::instance = NULL;
-void Camera::Setup(size_t width, size_t height) {
-  ASSERT(instance == NULL);
-  instance = new Camera(glm::lookAt(
-      glm::vec3(0.0f, 0.0f, 1.0f), // camera is at (0, 0, 1)
-      glm::vec3(0.0f, 0.0f, 0.0f), // camera looks at (0, 0, 0)
-      glm::vec3(0.0f, 1.0f, 0.0f) // head position
-  ), glm::perspective(
-    90.0f, // horizontal field of view
-    float(width)/float(height), // aspect ratio, window width/height
-    0.0f, // near clipping plane, keep it as high as possible
-    100.0f // far clipping placem keep it as low as possible
-  ));
+void Init() {
 }
 
 void Camera::Clear() {
-  ASSERT(instance != NULL);
-  delete instance;
-  instance = NULL;
 }
