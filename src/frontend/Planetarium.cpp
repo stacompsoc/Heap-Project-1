@@ -37,38 +37,30 @@ void Planetarium::Setup(float width, float height) {
   instance = new Planetarium(width, height);
   instance->planet_program.Init({"vposition", "vtexcoords"});
   size_t
+    SUN = Storage::inst()->AddTexture("textures/sun.tga"),
+    MERCURY = Storage::inst()->AddTexture("textures/mercury.tga"),
     VENUS = Storage::inst()->AddTexture("textures/venus.tga"),
     EARTH = Storage::inst()->AddTexture("textures/earth.tga"),
-    MOON = Storage::inst()->AddTexture("textures/moon.tga"),
+    /* MOON = Storage::inst()->AddTexture("textures/moon.tga"), */
     MARS = Storage::inst()->AddTexture("textures/mars.tga"),
     JUPITER = Storage::inst()->AddTexture("textures/jupiter.tga"),
+    SATURN = Storage::inst()->AddTexture("textures/saturn.tga"),
+    URANUS = Storage::inst()->AddTexture("textures/uranus.tga"),
     NEPTUNE = Storage::inst()->AddTexture("textures/neptune.tga"),
     PLUTO = Storage::inst()->AddTexture("textures/pluto.tga"),
     GERMANY = Storage::inst()->AddTexture("textures/germany.tga");
-  instance->AddObject(
-    Object(
-      *Storage::inst()->shapes()[0],
-      instance->planet_program, EARTH,
-      0.3,
-      0.3, 0.3, 0.3
+  for(size_t i = SUN; i <= PLUTO; ++i) {
+    instance->AddObject(
+      Object(
+        *Storage::inst()->shapes()[0],
+        instance->planet_program, i,
+        0.1,
+        -0.8 + i/6.0f,
+        0.8f - i/6.0f,
+        0
       )
     );
-  instance->AddObject(
-    Object(
-      *Storage::inst()->shapes()[0],
-      instance->planet_program, MARS,
-      0.2,
-      -0.3, -0.3, -0.3
-    )
-  );
-  instance->AddObject(
-    Object(
-      *Storage::inst()->shapes()[0],
-      instance->planet_program, GERMANY,
-      0.3,
-      0.0, 0.0, 0.0
-    )
-  );
+  }
 }
 
 void Planetarium::Clear() {
