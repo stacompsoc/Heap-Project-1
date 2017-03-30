@@ -18,7 +18,7 @@ struct Texture {
   void LoadDummy();
   void Init(std::string filename);
   void AttachToShader(ShaderProgram &program);
-  void Bind() const;
+  void Bind(size_t index = 0) const;
   void Unbind() const;
   void Clear();
 };

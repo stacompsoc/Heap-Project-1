@@ -10,8 +10,7 @@
 #include <glm/glm.hpp>
 
 SpaceScreen::SpaceScreen(Window *win):
-  Screen(win),
-  planet_program("planet.vert", "planet.geom", "planet.frag")
+  Screen(win)
 {}
 
 SpaceScreen::~SpaceScreen()
@@ -19,21 +18,9 @@ SpaceScreen::~SpaceScreen()
 
 void SpaceScreen::Init() {
   Planetarium::Setup(win_->width(), win_->height());
-  /* Planetarium::inst()->AddPlanet(Sphere(glm::vec3(0.0f, 0.0f, 0.0f), .3)); */
-  Planetarium::inst()->AddObject(
-    Object(
-      *Storage::inst()->shapes()[0],
-      planet_program
-    )
-  );
-  planet_program.Init({"vposition", "vtexcoords"});
-  Storage::inst()->AddTexture("textures/germany.tga");
-  /* Storage::inst()->AddTexture("textures/jupiter.tga"); */
 }
 
 void SpaceScreen::Display() {
-  Planetarium::Cam()->AttachToShader(planet_program);
-  planet_program.Use(); GLERROR
   Planetarium::inst()->Draw();
 }
 
@@ -61,5 +48,4 @@ void SpaceScreen::Keyboard() {
 
 void SpaceScreen::Clear() {
   Planetarium::inst()->Clear();
-  planet_program.Clear();
 }

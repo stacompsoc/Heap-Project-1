@@ -19,20 +19,29 @@ Sphere::Sphere(glm::vec3 position, GLfloat r):
 Sphere::~Sphere()
 {}
 
+glm::vec3 point_on_sphere(double dyx, double dzx) {
+  //sin(dyx) is a radius of unitary zx circle
+  return glm::vec3(
+    /*x*/sin(dyx)*cos(dzx),
+    /*y*/cos(dyx),
+    /*z*/sin(dyx)*sin(dzx)
+  );
+}
+
 void Sphere::Init() {
   const double step = M_PI / double(DIM);
   int index = 0;
   for(double dyx = 0.; dyx < M_PI; dyx += step) {
     for(double dzx = 0.; dzx < 2.*M_PI; dzx += step) {
       glm::vec3
-        &&a = position + Camera::point_on_sphere(dyx, dzx) * radius,
-        &&b = position + Camera::point_on_sphere(dyx + step, dzx + step) * radius,
-        &&c = position + Camera::point_on_sphere(dyx + step, dzx) * radius;
+        &&a = position + point_on_sphere(dyx, dzx) * radius,
+        &&b = position + point_on_sphere(dyx + step, dzx + step) * radius,
+        &&c = position + point_on_sphere(dyx + step, dzx) * radius;
       add_triangle(a, b, c, index, true);
       ++index;
-      a = position + Camera::point_on_sphere(dyx, dzx) * radius;
-      b = position + Camera::point_on_sphere(dyx, dzx + step) * radius;
-      c = position + Camera::point_on_sphere(dyx + step, dzx + step) * radius;
+      a = position + point_on_sphere(dyx, dzx) * radius;
+      b = position + point_on_sphere(dyx, dzx + step) * radius;
+      c = position + point_on_sphere(dyx + step, dzx + step) * radius;
       add_triangle(a, b, c, index, true);
       ++index;
     }
@@ -63,11 +72,11 @@ void Sphere::add_triangle(
     size_t
       y = DIM - 1 - (index/2) / (2 * DIM),
       x = (index/2) % (2 * DIM);
-    float xstep = 1.0f / float(DIM) / 2.;
-    float tx0 = float(x) / float (2 * DIM);
+    float xstep = 0.5f / float(DIM);
+    float tx0 = float(x) / float(2 * DIM);
     float tx1 = tx0 + xstep;
     float ystep = 1.0f / float(DIM);
-    float ty0 = float(y) / float (DIM);
+    float ty0 = float(y) / float(DIM);
     float ty1 = ty0 + ystep;
     gl_log("is textured %d\n", is_textured);
     GLfloat cpy[6];

@@ -56,7 +56,7 @@ void Texture::LoadTGA(const char *filename) {
 }
 
 void Texture::LoadDummy() {
-  data = new unsigned char[600*600*4];
+  data = new unsigned char[60*60*4];
   width = 60, height = 60;
   memset(data, 0xff, sizeof(unsigned char) * width * height * 4);
 }
@@ -71,10 +71,10 @@ void Texture::Init(std::string filename) {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GLERROR
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GLERROR
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLERROR
   glGenerateMipmap(GL_TEXTURE_2D); GLERROR
-  /* glBindTexture(GL_TEXTURE_2D, 0); GLERROR */
+  Unbind();
   delete [] data;
   data = NULL;
 }
@@ -83,14 +83,14 @@ void Texture::AttachToShader(ShaderProgram &program) {
   u_samp = glGetUniformLocation(program.id(), "tex"); GLERROR
 }
 
-void Texture::Bind() const {
-  glActiveTexture(GL_TEXTURE0 + texcounter);
-  glBindTexture(GL_TEXTURE_2D, tex);
-  glUniform1i(u_samp, texcounter);
+void Texture::Bind(size_t index) const {
+  glActiveTexture(GL_TEXTURE0 + index); GLERROR
+  glBindTexture(GL_TEXTURE_2D, tex); GLERROR
+  glUniform1i(u_samp, texcounter); GLERROR
 }
 
 void Texture::Unbind() const {
-  glBindTexture(GL_TEXTURE_2D, tex);
+  glBindTexture(GL_TEXTURE_2D, 0); GLERROR
 }
 
 void Texture::Clear() {

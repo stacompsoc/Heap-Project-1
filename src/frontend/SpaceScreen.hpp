@@ -5,7 +5,6 @@
 #include "Object.hpp"
 
 class SpaceScreen : public Screen {
-  ShaderProgram planet_program;
 public:
   SpaceScreen(Window *win);
   ~SpaceScreen();
