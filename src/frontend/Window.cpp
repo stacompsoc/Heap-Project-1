@@ -77,6 +77,7 @@ void Window::GLVersion() {
 }
 
 void Window::Init() {
+  glEnable(GL_DEPTH_CLAMP); GLERROR // disable clipping
   glEnable(GL_DEPTH_TEST); GLERROR
   glDepthFunc(GL_LESS); GLERROR
   Storage::Setup();
