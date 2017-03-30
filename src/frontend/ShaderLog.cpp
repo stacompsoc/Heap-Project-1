@@ -3,25 +3,25 @@
 #include "Shader.hpp"
 #include "Log.hpp"
 
-void ShaderProgram::_print_info_log() {
+void ShaderProgram::print_info_log() {
   int max_length = 2048;
   int actual_length = 0;
   char program_log[2048];
   glGetProgramInfoLog(program, max_length, &actual_length, program_log); GLERROR
-  printf("program info log for GL index %u:\n%s", program, program_log);
+  gl_log("program info log for GL index %u:\n%s", program, program_log);
 }
 
 void ShaderProgram::print_all() {
-  printf("--------------------\nshader program %i info:\n", program);
+  gl_log("--------------------\nshader program %d info:\n", program);
   int params = -1;
   glGetProgramiv(program, GL_LINK_STATUS, &params);
-  printf("GL_LINK_STATUS = %i\n", params);
+  gl_log("GL_LINK_STATUS = %d\n", params);
 
   glGetProgramiv(program, GL_ATTACHED_SHADERS, &params);
-  printf("GL_ATTACHED_SHADERS = %i\n", params);
+  gl_log("GL_ATTACHED_SHADERS = %d\n", params);
 
   glGetProgramiv(program, GL_ACTIVE_ATTRIBUTES, &params);
-  printf("GL_ACTIVE_ATTRIBUTES = %i\n", params);
+  gl_log("GL_ACTIVE_ATTRIBUTES = %d\n", params);
   for (int i = 0; i < params; i++) {
     char name[64];
     int max_length = 64;
@@ -36,24 +36,24 @@ void ShaderProgram::print_all() {
       &size,
       &type,
       name
-      );
-    if (size > 1) {
+    );
+    if(size > 1) {
       for(int j = 0; j < size; j++) {
         char long_name[64];
-        sprintf(long_name, "%s[%i]", name, j);
+        sprintf(long_name, "%s[%d]", name, j);
         int location = glGetAttribLocation(program, long_name);
-        printf("  %i) type:%s name:%s location:%i\n",
+        gl_log("  %d) type:%s name:%s location:%d\n",
                i, GL_type_to_string(type), long_name, location);
       }
     } else {
       int location = glGetAttribLocation(program, name);
-      printf("  %i) type:%s name:%s location:%i\n",
+      gl_log("  %d) type:%s name:%s location:%d\n",
              i, GL_type_to_string(type), name, location);
     }
   }
 
   glGetProgramiv(program, GL_ACTIVE_UNIFORMS, &params);
-  printf("GL_ACTIVE_UNIFORMS = %i\n", params);
+  gl_log("GL_ACTIVE_UNIFORMS = %d\n", params);
   for(int i = 0; i < params; i++) {
     char name[64];
     int max_length = 64;
@@ -72,14 +72,14 @@ void ShaderProgram::print_all() {
     if(size > 1) {
     for(int j = 0; j < size; j++) {
       char long_name[64];
-      sprintf(long_name, "%s[%i]", name, j);
+      sprintf(long_name, "%s[%d]", name, j);
       int location = glGetUniformLocation(program, long_name);
-      printf("  %i) type:%s name:%s location:%i\n",
+      gl_log("  %d) type:%s name:%s location:%d\n",
          i, GL_type_to_string(type), long_name, location);
     }
     } else {
     int location = glGetUniformLocation(program, name);
-    printf("  %i) type:%s name:%s location:%i\n",
+    gl_log("  %d) type:%s name:%s location:%d\n",
          i, GL_type_to_string(type), name, location);
     }
   }
@@ -89,9 +89,10 @@ bool ShaderProgram::is_valid() {
   glValidateProgram(program);
   int params = -1;
   glGetProgramiv(program, GL_VALIDATE_STATUS, &params);
-  printf("program %i GL_VALIDATE_STATUS = %i\n", program, params);
+  gl_log("program %d GL_VALIDATE_STATUS = %d\n", program, params);
+  print_info_log();
+  print_all();
   if (GL_TRUE != params) {
-    _print_info_log();
     return false;
   }
   return true;

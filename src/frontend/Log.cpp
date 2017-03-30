@@ -6,7 +6,7 @@
 
 #include "Log.hpp"
 
-const char *log_file = "rubik.log";
+const char *log_file = "frontend.log";
 
 bool restart_gl_log() {
   FILE* file = fopen(log_file, "w");

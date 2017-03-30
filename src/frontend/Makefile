@@ -2,7 +2,7 @@ UNAME = $(shell uname)
 ARCH = $(shell uname -m)
 
 CXXFLAGS = -std=c++1y -g3
-LDFLAGS = $(shell ./link_graphics)
+LDFLAGS = $(shell ./link_graphics) $(shell pkg-config --libs --cflags glm) $(shell freetype-config --libs --cflags)
 OBJECTS = $(wildcard *.cpp)
 BINARY = planetarium
 
@@ -11,8 +11,9 @@ $(shell mkdir -p build)
 all:;$(MAKE) glsl;$(MAKE) $(BINARY) -j$(shell getconf _NPROCESSORS_ONLN)
 
 glsl:
-	glslangValidator $(wildcard *.vert)
-	glslangValidator $(wildcard *.frag)
+	glslangValidator plntclr.vert plntclr.geom plntclr.frag
+	glslangValidator planet.vert planet.geom planet.frag
+	glslangValidator labels.vert labels.frag
 
 $(BINARY) : $(notdir $(patsubst %.cpp, %.o, $(OBJECTS)))
 	$(CXX) $(wildcard build/*.o) $(CXXFLAGS) $(LDFLAGS) -o $(BINARY)
