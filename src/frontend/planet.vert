@@ -10,5 +10,5 @@ out vec2 gtexcoords;
 
 void main() {
   gtexcoords = vtexcoords;
-  gl_Position = model * vec4(vposition, 1.0);
+  gl_Position = camera * model * vec4(vposition, 1.0);
 }

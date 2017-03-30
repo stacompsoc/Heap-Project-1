@@ -19,19 +19,22 @@ public:
     translate;
   glm::mat4
     model_mat;
+  float deg_spin;
 public:
   Object(
     Shape &shape, ShaderProgram &program,
     size_t texture_id = UINT_MAX,
-    double size = 0.5, double x = 0., double y = 0., double z = 0.
+    double size = 0.5,
+    double x = 0., double y = 0., double z = 0.,
+    float deg_spin = 0.
   );
   ~Object();
   virtual void Init();
   virtual void Update();
   void Scale(float scaling);
   void SetScale(float scaling);
-  void Rotate(float x, float y, float z, float rad);
-  void SetRotation(float x, float y, float z, float rad);
+  void Rotate(float x, float y, float z, float deg);
+  void SetRotation(float x, float y, float z, float deg);
   void Translate(float x, float y, float z);
   void Move(float x, float y, float z);
   virtual void AttachToShader();

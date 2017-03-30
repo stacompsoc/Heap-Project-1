@@ -9,7 +9,7 @@
 
 class Sphere : public Shape {
 protected:
-  const int DIM = 20;
+  const int DIM = 10;
   glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
   GLfloat radius;
   void add_triangle(

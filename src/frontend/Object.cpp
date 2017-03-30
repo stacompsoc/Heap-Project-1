@@ -9,14 +9,17 @@
 Object::Object(
   Shape &shape, ShaderProgram &program,
   size_t texture_id,
-  double size, double x, double y, double z
+  double size, double x, double y, double z,
+  float deg_spin
 ):
   shape(shape),
   program(program),
-  texture_id(texture_id)
+  texture_id(texture_id),
+  deg_spin(deg_spin)
 {
   SetScale(size);
-  SetRotation(0, 1, 0, -M_PI/2);
+  SetRotation(0, 1, 0, -90);
+  Rotate(0, 0, 1, deg_spin);
   Translate(x, y, z);
 }
 
@@ -39,12 +42,12 @@ void Object::SetScale(float scaling) {
   scale = glm::scale(glm::vec3(scaling, scaling, scaling));
 }
 
-void Object::Rotate(float x, float y, float z, float rad) {
-  rotate = glm::rotate(rad, glm::vec3(x, y, z)) * rotate;
+void Object::Rotate(float x, float y, float z, float deg) {
+  rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z)) * rotate;
 }
 
-void Object::SetRotation(float x, float y, float z, float rad) {
-  rotate = glm::rotate(rad, glm::vec3(x, y, z));
+void Object::SetRotation(float x, float y, float z, float deg) {
+  rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z));
 }
 
 void Object::Move(float x, float y, float z) {
@@ -60,7 +63,9 @@ void Object::AttachToShader() {
 }
 
 void Object::Draw() {
-  Rotate(.1, 1, .1, -M_PI/70.);
+  if(deg_spin) {
+    Rotate(-deg_spin/90., 1, -deg_spin/90., 5.0);
+  }
   program.Use();
   if(!is_visible)
     return;

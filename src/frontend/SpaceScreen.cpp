@@ -26,22 +26,32 @@ void SpaceScreen::Display() {
 
 void SpaceScreen::Keyboard() {
   Camera *cam = Planetarium::Cam();
+  static float scale = 1.0f;
   if(glfwGetKey(win_->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(win_->window, true);
   } else if(glfwGetKey(win_->window, GLFW_KEY_UP)) {
-    cam->yx -= M_PI / 10.;
+    cam->MovePosition(0, -.05, 0);
   } else if(glfwGetKey(win_->window, GLFW_KEY_DOWN)) {
-    cam->yx += M_PI / 10.;
+    cam->MovePosition(0, .05, 0);
   } else if(glfwGetKey(win_->window, GLFW_KEY_LEFT)) {
-    cam->zx -= M_PI/10.;
+    cam->MovePosition(.05, 0, 0);
   } else if(glfwGetKey(win_->window, GLFW_KEY_RIGHT)) {
-    cam->zx += M_PI/10.;
+    cam->MovePosition(-.05, 0, 0);
+  } else if(glfwGetKey(win_->window, GLFW_KEY_H)) {
+    cam->Rotate(0, 1, 0, 10);
+  } else if(glfwGetKey(win_->window, GLFW_KEY_J)) {
+    cam->Rotate(1, 0, 0, 10);
+  } else if(glfwGetKey(win_->window, GLFW_KEY_K)) {
+    cam->Rotate(1, 0, 0, -10);
+  } else if(glfwGetKey(win_->window, GLFW_KEY_L)) {
+    cam->Rotate(0, 1, 0, -10);
   } else if(glfwGetKey(win_->window, GLFW_KEY_EQUAL)) {
-    cam->dist *= 1.05;
+    cam->ChangeScale(1.05);
   } else if(glfwGetKey(win_->window, GLFW_KEY_MINUS)) {
-    cam->dist /= 1.05;
+    cam->ChangeScale(1./1.05);
   } else if(glfwGetKey(win_->window, '0')) {
-    cam->dist = 1., cam->zx = 0., cam->yx = M_PI/2.;
+    cam->SetScale(1.0f);
+    cam->SetPosition(0, 0, .1);
   }
   cam->Update();
 }

@@ -18,6 +18,7 @@ void Planetarium::Draw() {
   Cam()->AttachToShader(planet_program);
   instance->planet_program.Use(); GLERROR
   Cam()->Update();
+  Cam()->UniformUpdate();
   for(auto &obj : objects_) {
     obj.Draw();
   }
@@ -41,26 +42,35 @@ void Planetarium::Setup(float width, float height) {
     MERCURY = Storage::inst()->AddTexture("textures/mercury.tga"),
     VENUS = Storage::inst()->AddTexture("textures/venus.tga"),
     EARTH = Storage::inst()->AddTexture("textures/earth.tga"),
-    /* MOON = Storage::inst()->AddTexture("textures/moon.tga"), */
+    MOON = Storage::inst()->AddTexture("textures/moon.tga"),
     MARS = Storage::inst()->AddTexture("textures/mars.tga"),
     JUPITER = Storage::inst()->AddTexture("textures/jupiter.tga"),
     SATURN = Storage::inst()->AddTexture("textures/saturn.tga"),
     URANUS = Storage::inst()->AddTexture("textures/uranus.tga"),
     NEPTUNE = Storage::inst()->AddTexture("textures/neptune.tga"),
-    PLUTO = Storage::inst()->AddTexture("textures/pluto.tga"),
-    GERMANY = Storage::inst()->AddTexture("textures/germany.tga");
+    PLUTO = Storage::inst()->AddTexture("textures/pluto.tga");
+  float posx = -.95, posy = .95;
   for(size_t i = SUN; i <= PLUTO; ++i) {
+    double r = .1;
+    posx += r + .05;
+    posy -= r + .05;
     instance->AddObject(
       Object(
         *Storage::inst()->shapes()[0],
         instance->planet_program, i,
-        0.1,
-        -0.8 + i/6.0f,
-        0.8f - i/6.0f,
-        0
+        r, posx,posy,0,
+        .0001
       )
     );
   }
+  /* instance->AddObject( */
+  /*   Object( */
+  /*     *Storage::inst()->shapes()[0], */
+  /*     instance->planet_program, EARTH, */
+  /*     0.5f, 0,0,0, */
+  /*     24 */
+  /*   ) */
+  /* ); */
 }
 
 void Planetarium::Clear() {

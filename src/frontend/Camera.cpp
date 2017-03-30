@@ -5,16 +5,12 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtx/transform.hpp>
 
-Camera::Camera(float width, float height):
-  projection_matrix(glm::perspective(
-    60.0f, // horizontal field of view
-    float(width)/float(height), // aspect ratio, window width/height
-    0.0f, // near clipping plane, keep it as high as possible
-    1000.0f // far clipping placem keep it as low as possible
-  ))
+Camera::Camera(float width, float height)
 {
-  SetCameraPosition(0, 0, 0);
-  UpdateViewMatrix();
+  SetScale(1.0f);
+  SetPosition(0, 0, 0.0);
+  SetRotation(0, 1, 0, 00.0f);
+  Update();
 }
 
 Camera::~Camera()
@@ -25,29 +21,35 @@ void Camera::AttachToShader(ShaderProgram &program) {
   u_camera = glGetUniformLocation(program.id(), "camera"); GLERROR;
 }
 
-void Camera::MoveCamera(float x, float y, float z) {
-  campos.x+=x,campos.y+=y,campos.z+=z;
+void Camera::SetPosition(float x, float y, float z) {
+  translate = glm::translate(glm::vec3(x, y, z));
 }
 
-void Camera::SetCameraPosition(float x, float y, float z) {
-  campos.x=x,campos.y=y,campos.z=z;
+void Camera::MovePosition(float x, float y, float z) {
+  translate = glm::translate(glm::vec3(x, y, z)) * translate;
 }
 
-void Camera::SetCameraLookAt(float x, float y, float z) {
-  lookat.x=x,lookat.y=y,lookat.z=z;
+void Camera::SetRotation(float x, float y, float z, float deg) {
+  rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z));
 }
 
-void Camera::UpdateViewMatrix() {
-  view_matrix = glm::lookAt(campos, lookat, upvector);
+void Camera::Rotate(float x, float y, float z, float deg) {
+  rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z)) * rotate;
+}
+
+void Camera::SetScale(float scaling) {
+  scale = glm::scale(glm::vec3(scaling, scaling, scaling));
+}
+
+void Camera::ChangeScale(float diff) {
+  scale = glm::scale(glm::vec3(diff, diff, diff)) * scale;
 }
 
 void Camera::Update() {
-  view_matrix = glm::lookAt(
-    campos,
-    lookat,
-    glm::vec3(0.0f, 1.0f, 0.0f)
-  );
-  cameramat = view_matrix;
+  cameramat = translate * rotate * scale;
+}
+
+void Camera::UniformUpdate() {
   glUniformMatrix4fvARB(u_camera, 1 , GL_FALSE, glm::value_ptr(cameramat)); GLERROR
 }
 
