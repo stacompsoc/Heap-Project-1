@@ -1,21 +1,23 @@
 #!/bin/bash
 
+args=$@
+
 link_opengl() {
-  [ "$(uname)" = Darwin ] && echo "-framework OpenGL"
-  [ "$(uname)" = Linux ] && pkg-config --libs --cflags gl
+  [ "$(uname)" = Darwin ] && [ "$(echo $args | grep "libs")" ] &&  echo "-framework OpenGL"
+  [ "$(uname)" = Linux ] && pkg-config $args gl
 }
 
 link_glew() {
-  pkg-config --libs --cflags glew
+  pkg-config $args glew
 }
 
 link_glfw3() {
   [ "$(uname)" = Darwin ] && {
-    pkg-config --libs --cflags glfw3
+    pkg-config $args glfw3
   } || {
-    [ "$(lsb_release -si)" = Arch ] && pkg-config --libs --cflags glfw3
-    [ "$(lsb_release -si)" = Fedora ] && pkg-config --libs --cflags libglfw
-    [ "$(lsb_release -si)" = Ubuntu ] && pkg-config --libs --cflags glfw3
+    [ "$(lsb_release -si)" = Arch ] && pkg-config $args glfw3
+    [ "$(lsb_release -si)" = Fedora ] && pkg-config $args libglfw
+    [ "$(lsb_release -si)" = Ubuntu ] && pkg-config $args glfw3
   }
 }
 

@@ -1,8 +1,8 @@
 UNAME = $(shell uname)
 ARCH = $(shell uname -m)
 
-CXXFLAGS = -std=c++1y -g3
-LIBS = $(shell ./link_graphics) $(shell pkg-config --libs --cflags glm) $(shell freetype-config --libs --cflags)
+CXXFLAGS = -std=c++1y -g3 $(shell ./link_graphics --cflags) $(shell freetype-config --cflags) $(shell pkg-config --cflags glm)
+LIBS = $(shell ./link_graphics --libs) $(shell pkg-config --libs glm) $(shell freetype-config --libs)
 OBJECTS = $(wildcard *.cpp)
 BINARY = planetarium
 
@@ -19,7 +19,7 @@ $(BINARY) : $(notdir $(patsubst %.cpp, %.o, $(OBJECTS)))
 	$(CXX) $(wildcard build/*.o) $(CXXFLAGS) $(LIBS) -o $(BINARY)
 
 %.o : %.cpp
-	$(CXX) -c $(CXXFLAGS) $(LIBS) -o "build/$@" "$<"
+	$(CXX) -c $(CXXFLAGS) -o "build/$@" "$<"
 
 clean :
 	rm -rvf build
