@@ -6,7 +6,7 @@
 
 TriangleScreen::TriangleScreen(Window *win):
   Screen(win),
-  triangle_program("triangle.vert", "triangle.geom", "triangle.frag"),
+  triangle_program({"triangle.vert", "triangle.geom", "triangle.frag"}),
   tri()
 {}
 
@@ -42,6 +42,9 @@ void TriangleScreen::Keyboard() {
   if(glfwGetKey(win_->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(win_->window, true);
   }
+}
+
+void TriangleScreen::Mouse(double x, double y) {
 }
 
 void TriangleScreen::Clear() {

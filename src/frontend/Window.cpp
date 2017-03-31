@@ -19,9 +19,12 @@ void Window::start() {
 }
 
 void Window::init_glfw() {
-  assert(restart_gl_log());
+  int rc;
+  rc = restart_gl_log();
+  ASSERT(rc);
   glfwSetErrorCallback(glfw_error_callback);
-  ASSERT(glfwInit() == 1);
+  rc = glfwInit();
+  ASSERT(rc == 1);
 
   /* glfwWindowHint(GLFW_SAMPLES, 4); */
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -30,7 +33,6 @@ void Window::init_glfw() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
   // open a window and create its OpenGL context
   window = glfwCreateWindow(width(), height(), "Planetarium", NULL, NULL);
-  restart_gl_log();
   ASSERT(window != NULL);
   glfwMakeContextCurrent(window); GLERROR
 }
@@ -45,7 +47,7 @@ void Window::init_glew() {
 void Window::init_controls() {
   // ensure we can capture the escape key
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE); GLERROR
-  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); GLERROR
+  /* glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); GLERROR */
 }
 
 Window::Window(size_t width, size_t height):
@@ -57,6 +59,7 @@ Window::Window(size_t width, size_t height):
 {
   /* current_screen = &trianglescreen; */
   current_screen = &spacescreen;
+  /* current_screen = &menuscreen; */
   start();
 }
 
@@ -80,17 +83,21 @@ void Window::Init() {
   glEnable(GL_DEPTH_CLAMP); GLERROR // disable clipping
   glEnable(GL_DEPTH_TEST); GLERROR
   glDepthFunc(GL_LESS); GLERROR
+  glEnable(GL_BLEND); GLERROR
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); GLERROR
   Storage::Setup();
   current_screen->Init();
-  glEnable(GL_CULL_FACE); GLERROR // cull face
-  glCullFace(GL_BACK); GLERROR // cull back face
-  glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise
+  /* glEnable(GL_CULL_FACE); GLERROR // cull face */
+  /* glCullFace(GL_BACK); GLERROR // cull back face */
+  /* glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise */
 }
 
 void Window::Idle() {
+  double m_x, m_y;
   while(!glfwWindowShouldClose(window)) {
     Display();
     Keyboard();
+    glfwGetCursorPos(window, &m_x, &m_y);
   }
 }
 
@@ -103,6 +110,10 @@ void Window::Display() {
 
 void Window::Keyboard() {
   current_screen->Keyboard();
+}
+
+void Window::Mouse(double x, double y) {
+  current_screen->Mouse(x, y);
 }
 
 void Window::Clear() {

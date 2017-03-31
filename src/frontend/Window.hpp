@@ -16,6 +16,7 @@ class Window {
   MenuScreen menuscreen;
   SpaceScreen spacescreen;
   TriangleScreen trianglescreen;
+
   Screen *current_screen;
 
   void start();
@@ -32,6 +33,7 @@ public:
   void Idle();
   void Display();
   void Keyboard();
+  void Mouse(double x, double y);
   void Clear();
   ~Window();
 };

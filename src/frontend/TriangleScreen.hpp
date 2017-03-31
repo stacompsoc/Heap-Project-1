@@ -13,5 +13,6 @@ public:
   void Init();
   void Display();
   void Keyboard();
+  void Mouse(double x, double y);
   void Clear();
 };

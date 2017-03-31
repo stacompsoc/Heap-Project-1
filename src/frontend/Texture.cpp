@@ -1,5 +1,6 @@
 #include "Texture.hpp"
 #include "Log.hpp"
+#include "Font.hpp"
 
 #include <fstream>
 
@@ -61,8 +62,8 @@ void Texture::LoadDummy() {
   memset(data, 0xff, sizeof(unsigned char) * width * height * 4);
 }
 
-// tga
 void Texture::Init(std::string filename) {
+  ASSERT(data == NULL);
   ASSERT(filename.substr(filename.length() - 4, 4) == ".tga");
   /* LoadDummy(); */
   LoadTGA(filename.c_str());
@@ -79,6 +80,19 @@ void Texture::Init(std::string filename) {
   data = NULL;
 }
 
+void Texture::Init(FT_GlyphSlot *glyph) {
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1); GLERROR
+  glGenTextures(1, &tex); GLERROR
+  glBindTexture(GL_TEXTURE_2D, tex); GLERROR
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, (*glyph)->bitmap.width, (*glyph)->bitmap.rows,
+               0, GL_RED, GL_UNSIGNED_BYTE, (*glyph)->bitmap.buffer); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLERROR
+  Unbind();
+}
+
 void Texture::AttachToShader(ShaderProgram &program) {
   u_samp = glGetUniformLocation(program.id(), "tex"); GLERROR
 }
@@ -89,7 +103,7 @@ void Texture::Bind(size_t index) const {
   glUniform1i(u_samp, texcounter); GLERROR
 }
 
-void Texture::Unbind() const {
+void Texture::Unbind() {
   glBindTexture(GL_TEXTURE_2D, 0); GLERROR
 }
 

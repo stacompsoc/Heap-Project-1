@@ -7,13 +7,7 @@
 #include <cmath>
 
 Sphere::Sphere():
-  Shape(),
-  radius(1.0f)
-{}
-
-Sphere::Sphere(glm::vec3 position, GLfloat r):
-  Shape(),
-  position(position), radius(r)
+  Shape()
 {}
 
 Sphere::~Sphere()
@@ -31,21 +25,24 @@ glm::vec3 point_on_sphere(double dyx, double dzx) {
 void Sphere::Init() {
   const double step = M_PI / double(DIM);
   int index = 0;
+  /* glm::vec3 p(1., 1., 1.); */
+  #define p
   for(double dyx = 0.; dyx < M_PI; dyx += step) {
     for(double dzx = 0.; dzx < 2.*M_PI; dzx += step) {
       glm::vec3
-        &&a = position + point_on_sphere(dyx, dzx) * radius,
-        &&b = position + point_on_sphere(dyx + step, dzx + step) * radius,
-        &&c = position + point_on_sphere(dyx + step, dzx) * radius;
-      add_triangle(a, b, c, index, true);
+        &&a = point_on_sphere(dyx, dzx),
+        &&b = point_on_sphere(dyx + step, dzx + step),
+        &&c = point_on_sphere(dyx + step, dzx);
+      add_triangle(p+a, p+b, p+c, index, true);
       ++index;
-      a = position + point_on_sphere(dyx, dzx) * radius;
-      b = position + point_on_sphere(dyx, dzx + step) * radius;
-      c = position + point_on_sphere(dyx + step, dzx + step) * radius;
-      add_triangle(a, b, c, index, true);
+      a = point_on_sphere(dyx, dzx);
+      b = point_on_sphere(dyx, dzx + step);
+      c = point_on_sphere(dyx + step, dzx + step);
+      add_triangle(p+a, p+b, p+c, index, true);
       ++index;
     }
   }
+  #undef p
 }
 
 void Sphere::add_triangle(

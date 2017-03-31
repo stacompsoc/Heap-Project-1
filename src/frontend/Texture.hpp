@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "freetype_config.h"
+#include <freetype/ftglyph.h>
 #include "incgraphics.h"
 #include "Shader.hpp"
 
@@ -17,8 +19,9 @@ struct Texture {
   void LoadTGA(const char *filename);
   void LoadDummy();
   void Init(std::string filename);
+  void Init(FT_GlyphSlot *glyph);
   void AttachToShader(ShaderProgram &program);
   void Bind(size_t index = 0) const;
-  void Unbind() const;
+  static void Unbind();
   void Clear();
 };

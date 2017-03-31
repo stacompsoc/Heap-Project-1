@@ -10,8 +10,6 @@
 class Sphere : public Shape {
 protected:
   const int DIM = 10;
-  glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-  GLfloat radius;
   void add_triangle(
     const glm::vec3 &a,
     const glm::vec3 &b,
@@ -21,7 +19,6 @@ protected:
   );
 public:
   Sphere();
-  Sphere(glm::vec3 position, GLfloat r);
   ~Sphere();
   void Init();
   using Shape::Draw;

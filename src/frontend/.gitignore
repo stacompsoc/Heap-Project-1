@@ -3,4 +3,5 @@ planetarium
 build
 *.jpg
 *.png
+*.log
 textures/sam.tga

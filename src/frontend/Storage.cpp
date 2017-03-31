@@ -2,6 +2,7 @@
 #include "Log.hpp"
 #include "Shape.hpp"
 #include "Sphere.hpp"
+#include "Ring.hpp"
 
 #include <cstring>
 #include <glm/gtc/type_ptr.hpp>
@@ -52,6 +53,12 @@ size_t Storage::AddTexture(const char *filename) {
   return textures().size() - 1;
 }
 
+size_t Storage::AddFont(const char *filename) {
+  fonts_.push_back(Font());
+  fonts_.back().Init(filename);
+  return fonts().size() - 1;
+}
+
 template <typename T>
 size_t Storage::AddShape() {
   using S = typename std::enable_if<std::is_base_of<Shape, T>::value, T>::type;
@@ -70,6 +77,11 @@ std::vector <Texture> &Storage::textures() {
   return textures_;
 }
 
+std::vector <Font> &Storage::fonts() {
+  ASSERT(instance != NULL);
+  return fonts_;
+}
+
 const std::vector <Shape *> &Storage::shapes() {
   ASSERT(instance != NULL);
   return shapes_;
@@ -78,6 +90,7 @@ const std::vector <Shape *> &Storage::shapes() {
 Storage *Storage::instance = NULL;
 void Storage::Setup() {
   ASSERT(instance == NULL);
+  Font::Setup();
   instance = new Storage();
   instance->AddColor(1., 1., 1.);
   instance->AddColor(0., 0., 0.);
@@ -88,6 +101,7 @@ void Storage::Setup() {
   instance->AddColor(1., 0., 1.);
   instance->AddColor(1., 1., 0.);
   instance->AddShape<Sphere>();
+  instance->AddShape<Ring>();
 }
 
 void Storage::Clear() {
@@ -98,10 +112,14 @@ void Storage::Clear() {
   for(auto &tex : instance->textures_) {
     tex.Clear();
   }
+  for(auto &f : instance->fonts_) {
+    f.Clear();
+  }
   for(auto &sh : instance->shapes_) {
     sh->Clear();
     delete sh;
   }
+  Font::Cleanup();
   delete instance;
   instance = NULL;
 }

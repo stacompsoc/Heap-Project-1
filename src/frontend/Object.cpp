@@ -7,20 +7,21 @@
 #include <climits>
 
 Object::Object(
-  Shape &shape, ShaderProgram &program,
+  size_t shape_id, ShaderProgram &program,
   size_t texture_id,
   double size, double x, double y, double z,
   float deg_spin
 ):
-  shape(shape),
+  shape(*Storage::inst()->shapes()[shape_id]),
   program(program),
   texture_id(texture_id),
   deg_spin(deg_spin)
 {
   SetScale(size);
   SetRotation(0, 1, 0, -90);
-  Rotate(0, 0, 1, deg_spin);
+  /* Rotate(1, 0, 0, deg_spin); */
   Translate(x, y, z);
+  spin = float(rand() % 100) / 10.;
 }
 
 Object::~Object()
@@ -50,6 +51,9 @@ void Object::SetRotation(float x, float y, float z, float deg) {
   rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z));
 }
 
+void Object::SetAxisRotation() {
+}
+
 void Object::Move(float x, float y, float z) {
   translate = glm::translate(glm::vec3(x, y, z)) * translate;
 }
@@ -64,7 +68,8 @@ void Object::AttachToShader() {
 
 void Object::Draw() {
   if(deg_spin) {
-    Rotate(-deg_spin/90., 1, -deg_spin/90., 5.0);
+    Rotate(0, 1, 0, spin);
+    /* rotate = axis_rotation * rotate; */
   }
   program.Use();
   if(!is_visible)

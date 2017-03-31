@@ -8,18 +8,47 @@
 #include "Shader.hpp"
 #include "Log.hpp"
 
-static size_t file_length(const char *filename) {
+ShaderProgram::Shader::Shader(std::string &filename):
+  filename(filename)
+{
+  if(is_ext(".vert")) {
+    type = GL_VERTEX_SHADER;
+  } else if(is_ext(".tesc")) {
+    type = GL_TESS_CONTROL_SHADER;
+  } else if(is_ext(".tese")) {
+    type = GL_TESS_EVALUATION_SHADER;
+  } else if(is_ext(".geom")) {
+    type = GL_GEOMETRY_SHADER;
+  } else if(is_ext(".frag")) {
+    type = GL_FRAGMENT_SHADER;
+  } else if(is_ext(".comp")) {
+    type = GL_COMPUTE_SHADER;
+  }
+  // else type == 0
+}
+
+ShaderProgram::Shader::~Shader()
+{}
+
+bool ShaderProgram::Shader::is_ext(const std::string &&ext) {
+  if(ext.length() > filename.length())
+    return false;
+  size_t f=filename.length(),e=ext.length();
+  return filename.substr(f-e, e) == ext;
+}
+
+size_t ShaderProgram::Shader::file_length() {
   struct stat st;
-  stat(filename, &st);
+  stat(filename.c_str(), &st);
   return st.st_size;
 }
 
-char *ShaderProgram::load_text_file(const char *filename) {
-  size_t size = file_length(filename) + 1;
+char *ShaderProgram::Shader::load_text_file() {
+  size_t size = file_length() + 1;
   char *text = (char *)malloc(size * sizeof(char));
   assert(text != NULL);
 
-  FILE *file = fopen(filename, "r");
+  FILE *file = fopen(filename.c_str(), "r");
   assert(file != NULL);
 
   char *t = text;
@@ -32,35 +61,38 @@ char *ShaderProgram::load_text_file(const char *filename) {
   return text;
 }
 
-void ShaderProgram::compile_shader(GLuint &shader, GLenum type, const char *filename) {
-  shader = glCreateShader(type); GLERROR
-  char *source_code = load_text_file(filename);
+void ShaderProgram::Shader::Compile() {
+  id = glCreateShader(type); GLERROR
+  char *source_code = load_text_file();
   ASSERT(source_code != NULL);
-  glShaderSource(shader, 1, &source_code, NULL); GLERROR
-  glCompileShader(shader); GLERROR
+  glShaderSource(id, 1, &source_code, NULL); GLERROR
+  glCompileShader(id); GLERROR
   free(source_code);
 }
 
 void ShaderProgram::compile_program() {
-  compile_shader(vert, GL_VERTEX_SHADER, vert_fname.c_str());
-  compile_shader(geom, GL_GEOMETRY_SHADER, geom_fname.c_str());
-  compile_shader(frag, GL_FRAGMENT_SHADER, frag_fname.c_str());
-
+  for(auto &s : shaders) {
+    s.Compile();
+  }
   program = glCreateProgram(); GLERROR
-  glAttachShader(program, frag); GLERROR
-  glAttachShader(program, geom); GLERROR
-  glAttachShader(program, vert); GLERROR
+  for(auto &s : shaders) {
+    glAttachShader(program, s.id); GLERROR
+  }
   glLinkProgram(program); GLERROR
 
-  glDeleteShader(vert); GLERROR
-  glDeleteShader(geom); GLERROR
-  glDeleteShader(frag); GLERROR
+  for(auto &s : shaders) {
+    glDeleteShader(s.id); GLERROR
+  }
 }
 
 
-ShaderProgram::ShaderProgram(const char *vert, const char *geom, const char *frag):
-  vert_fname(vert), geom_fname(geom), frag_fname(frag)
-{}
+ShaderProgram::ShaderProgram(std::vector <std::string> &&fnames):
+  shaders()
+{
+  for(size_t i = 0; i < fnames.size(); ++i) {
+    shaders.push_back(Shader(fnames[i]));
+  }
+}
 
 ShaderProgram::~ShaderProgram()
 {}

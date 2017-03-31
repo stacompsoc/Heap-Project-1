@@ -4,7 +4,7 @@
 
 class Ring : public Shape {
 protected:
-  const int DIM = 10;
+  const int DIM = 300;
   glm::vec3 position;
   double angle_yx, angle_zx;
   void add_triangle(

@@ -16,6 +16,9 @@ Camera::Camera(float width, float height)
 Camera::~Camera()
 {}
 
+void Init() {
+}
+
 void Camera::AttachToShader(ShaderProgram &program) {
   ASSERT(program.id() != 0);
   u_camera = glGetUniformLocation(program.id(), "camera"); GLERROR;
@@ -51,9 +54,6 @@ void Camera::Update() {
 
 void Camera::UniformUpdate() {
   glUniformMatrix4fvARB(u_camera, 1 , GL_FALSE, glm::value_ptr(cameramat)); GLERROR
-}
-
-void Init() {
 }
 
 void Camera::Clear() {
