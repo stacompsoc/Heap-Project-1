@@ -58,8 +58,8 @@ Window::Window(size_t width, size_t height):
   current_screen(NULL)
 {
   /* current_screen = &trianglescreen; */
-  current_screen = &spacescreen;
-  /* current_screen = &menuscreen; */
+  /* current_screen = &spacescreen; */
+  current_screen = &menuscreen;
   start();
 }
 
@@ -86,7 +86,9 @@ void Window::Init() {
   glEnable(GL_BLEND); GLERROR
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); GLERROR
   Storage::Setup();
-  current_screen->Init();
+  /* trianglescreen.Init(); */
+  spacescreen.Init();
+  menuscreen.Init();
   /* glEnable(GL_CULL_FACE); GLERROR // cull face */
   /* glCullFace(GL_BACK); GLERROR // cull back face */
   /* glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise */
@@ -98,17 +100,39 @@ void Window::Idle() {
     Display();
     Keyboard();
     glfwGetCursorPos(window, &m_x, &m_y);
+    Mouse(m_x, m_y);
+    if(current_screen->should_close)
+      Switch();
   }
 }
 
 void Window::Display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); GLERROR
   current_screen->Display();
-  glfwPollEvents(); GLERROR
-  glfwSwapBuffers(window); GLERROR
+  if(!current_screen->should_close) {
+    glfwPollEvents(); GLERROR
+    glfwSwapBuffers(window); GLERROR
+  }
+}
+
+void Window::Switch() {
+  if(current_screen == NULL) {
+    current_screen = &menuscreen;
+  } else if(current_screen == &menuscreen) {
+    current_screen = &spacescreen;
+    spacescreen.should_close = false;
+  } else if(current_screen == &spacescreen) {
+    current_screen = &menuscreen;
+    menuscreen.should_close = false;
+  } else {
+    glfwSetWindowShouldClose(window, true);
+  }
 }
 
 void Window::Keyboard() {
+  if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, true);
+  }
   current_screen->Keyboard();
 }
 
@@ -117,7 +141,9 @@ void Window::Mouse(double x, double y) {
 }
 
 void Window::Clear() {
-  current_screen->Clear();
+  /* trianglescreen.Clear(); */
+  menuscreen.Clear();
+  spacescreen.Clear();
   Storage::Clear();
   glfwTerminate(); GLERROR
   current_screen = NULL;

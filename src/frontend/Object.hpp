@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Triangle.hpp"
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
+#include "ShaderUniform.hpp"
 #include "Shape.hpp"
 #include <glm/glm.hpp>
 
 class Object {
 protected:
-  GLuint u_object = 0;
+  Uniform<MAT4>u_model;
   Shape &shape;
 public:
   ShaderProgram &program;
@@ -24,6 +25,9 @@ public:
   float deg_spin;
   float spin = 0;
 public:
+  bool has_changed = true;
+  bool need_to_update = true;
+public:
   Object(
     size_t shape_id, ShaderProgram &program,
     size_t texture_id = UINT_MAX,
@@ -35,7 +39,9 @@ public:
   virtual void Init();
   virtual void Update();
   void Scale(float scaling);
+  void Scale(float sx, float sy, float sz);
   void SetScale(float scaling);
+  void SetScale(float sx, float sy, float sz);
   void Rotate(float x, float y, float z, float deg);
 
   void SetRotation(float x, float y, float z, float deg);

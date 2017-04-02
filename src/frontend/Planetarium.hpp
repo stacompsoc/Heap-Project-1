@@ -4,10 +4,12 @@
 
 #include "Camera.hpp"
 #include "Object.hpp"
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 
 class Planetarium {
   ShaderProgram planet_program;
+  ShaderProgram skeleton_program;
+  ShaderProgram glow_program;
   std::vector <Object> objects_;
   static Planetarium *instance;
   Planetarium(float width, float height);

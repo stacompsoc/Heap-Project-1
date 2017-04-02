@@ -1,6 +1,6 @@
 planetarium
 *.dSYM
-build
+*.o
 *.jpg
 *.png
 *.log

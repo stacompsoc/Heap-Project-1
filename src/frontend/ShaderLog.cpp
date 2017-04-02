@@ -1,6 +1,6 @@
 #include <cstdio>
 
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "Log.hpp"
 
 void ShaderProgram::print_info_log() {

@@ -4,7 +4,7 @@
 
 #include "incgraphics.h"
 #include "Planetarium.hpp"
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "Log.hpp"
 #include "MenuScreen.hpp"
 #include "SpaceScreen.hpp"
@@ -32,6 +32,7 @@ public:
   void Init();
   void Idle();
   void Display();
+  void Switch();
   void Keyboard();
   void Mouse(double x, double y);
   void Clear();

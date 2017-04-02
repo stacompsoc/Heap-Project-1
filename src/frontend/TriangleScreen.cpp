@@ -1,6 +1,6 @@
 #include "TriangleScreen.hpp"
 #include "Log.hpp"
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "Window.hpp"
 #include "Storage.hpp"
 

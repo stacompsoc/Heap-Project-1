@@ -1,16 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <glm/glm.hpp>
-#include "incgraphics.h"
-
-#include "Triangle.hpp"
-#include "Object.hpp"
+#include "Shape.hpp"
 
 class Sphere : public Shape {
 protected:
-  const int DIM = 10;
-  void add_triangle(
+  const int DIM = 15;
+  void AddTriangle(
     const glm::vec3 &a,
     const glm::vec3 &b,
     const glm::vec3 &c,

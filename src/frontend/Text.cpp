@@ -1,4 +1,5 @@
 #include "Text.hpp"
+#include "ShaderUniform.hpp"
 #include "Log.hpp"
 
 Text::Text(std::string text):
@@ -27,7 +28,9 @@ void Text::SetText(std::string &&new_text) {
 
 void Text::Render(ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &&color) {
   program.Use();
-  glUniform3f(glGetUniformLocation(program.id(), "textcolor"), color.x, color.y, color.z); GLERROR
+  Uniform<VEC3>u_textcolor("textcolor");
+  u_textcolor.set_id(program.id());
+  u_textcolor.set_data(color);
   glActiveTexture(GL_TEXTURE0); GLERROR
   glBindVertexArray(vao); GLERROR
   Font &font = Storage::inst()->fonts()[font_id];

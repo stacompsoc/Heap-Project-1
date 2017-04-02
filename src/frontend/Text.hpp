@@ -6,7 +6,7 @@
 #include "freetype_config.h"
 #include "Storage.hpp"
 #include "Font.hpp"
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 
 #include <glm/glm.hpp>
 

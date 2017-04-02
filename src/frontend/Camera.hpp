@@ -3,10 +3,12 @@
 #include <glm/glm.hpp>
 #include "incgraphics.h"
 
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
+#include "ShaderUniform.hpp"
 
 class Camera {
-  GLuint u_camera = 0;
+  Uniform<MAT4>
+    u_camera;
   glm::mat4
     translate,
     rotate,
@@ -14,6 +16,8 @@ class Camera {
   glm::mat4
     cameramat;
 public:
+  bool has_changed = true;
+  bool need_to_update = true;
   Camera(float width, float height);
   ~Camera();
   void AttachToShader(ShaderProgram &program);
@@ -25,6 +29,5 @@ public:
   void SetPosition(float x, float y, float z);
   void MovePosition(float x, float y, float z);
   void Update();
-  void UniformUpdate();
   void Clear();
 };

@@ -3,8 +3,11 @@
 #include "Shape.hpp"
 #include "Sphere.hpp"
 #include "Ring.hpp"
+#include "Quad.hpp"
 
 #include <cstring>
+#include <type_traits>
+#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 Storage::colorbuffer::colorbuffer()
@@ -102,6 +105,7 @@ void Storage::Setup() {
   instance->AddColor(1., 1., 0.);
   instance->AddShape<Sphere>();
   instance->AddShape<Ring>();
+  instance->AddShape<Quad>();
 }
 
 void Storage::Clear() {

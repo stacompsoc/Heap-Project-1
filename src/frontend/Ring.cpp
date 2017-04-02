@@ -4,7 +4,8 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Ring::Ring()
+Ring::Ring():
+  Shape()
 {}
 
 Ring::~Ring()
@@ -24,16 +25,16 @@ void Ring::Init() {
       &&a = point_on_circle(angle),
       &&b = point_on_circle(angle + step),
       &&c = a * ir;
-    add_triangle(a, b, c, index, true);
+    AddTriangle(a, b, c, index, true);
     ++index;
     a = b * ir;
-    add_triangle(c, b, a, index, true);
+    AddTriangle(c, b, a, index, true);
     ++index;
     angle += step;
   }
 }
 
-void Ring::add_triangle(
+void Ring::AddTriangle(
   const glm::vec3 &a,
   const glm::vec3 &b,
   const glm::vec3 &c,

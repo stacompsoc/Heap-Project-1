@@ -3,7 +3,9 @@
 
 Planetarium::Planetarium(float width, float height):
   cam(width, height),
-  planet_program({"planet.vert", "planet.geom", "planet.frag"})
+  planet_program({"planet.vert", "planet.geom", "planet.frag"}),
+  skeleton_program({"planet.vert", "planet_skeleton.geom", "planet.frag"}),
+  glow_program({"planet.vert", "pglow.geom", "planet.frag"})
 {}
 
 Planetarium::~Planetarium()
@@ -15,11 +17,18 @@ void Planetarium::AddObject(Object &&object) {
 }
 
 void Planetarium::Draw() {
-  Cam()->AttachToShader(planet_program);
   instance->planet_program.Use(); GLERROR
+  Cam()->need_to_update = Cam()->has_changed;
+  Cam()->AttachToShader(planet_program);
   Cam()->Update();
-  Cam()->UniformUpdate();
+  instance->skeleton_program.Use(); GLERROR
+  Cam()->AttachToShader(skeleton_program);
+  Cam()->Update();
+  instance->glow_program.Use(); GLERROR
+  Cam()->AttachToShader(glow_program);
+  Cam()->Update();
   for(auto &obj : objects_) {
+    obj.need_to_update = true;
     obj.Draw();
   }
 }
@@ -37,9 +46,12 @@ void Planetarium::Setup(float width, float height) {
   ASSERT(instance == NULL);
   instance = new Planetarium(width, height);
   instance->planet_program.Init({"vposition", "vtexcoords"});
+  instance->skeleton_program.Init({"vposition", "vtexcoords"});
+  instance->glow_program.Init({"vposition", "vtexcoords"});
   size_t
     SPHERE = 0,
-    RING = 1;
+    RING = 1,
+    QUAD = 2;
   size_t
     TEST = Storage::inst()->AddTexture("textures/tester_ring.tga"),
     SUN = Storage::inst()->AddTexture("textures/sun.tga"),
@@ -64,7 +76,7 @@ void Planetarium::Setup(float width, float height) {
   /*   posx = 1.0f - float(rand() % 2000) / 1000.; */
   /*   posy = 1.0f - float(rand() % 2000) / 1000.; */
   /*   float posz = 1.0f - float(rand() % 2000) / 1000.; */
-  /*   int texture = rand() % (GERMANY); */
+  /*   int texture = SUN + rand() % (GERMANY - SUN); */
   /*   instance->AddObject( */
   /*     Object( */
   /*       SPHERE, */
@@ -74,29 +86,29 @@ void Planetarium::Setup(float width, float height) {
   /*     ) */
   /*   ); */
   /* } */
+  /* float rot = 23.5f; */
+  float rot = 0;
   /* instance->AddObject( */
   /*   Object( */
-  /*     SPHERE, */
-  /*     instance->planet_program, GERMANY, */
-  /*     0.5f, */
-  /*     0,0,0, */
-  /*     23.5 */
+  /*     SPHERE, instance->planet_program, EARTH, */
+  /*     0.2f, 0,0,0, */
+  /*     0.0f */
   /*   ) */
   /* ); */
   instance->AddObject(
     Object(
-      SPHERE, instance->planet_program, SATURN,
+      SPHERE, instance->skeleton_program, SUN,
       0.2f,
       0,0,0,
-      0.
+      rot
     )
   );
   instance->AddObject(
     Object(
-      RING, instance->planet_program, SATURN_RING,
+      RING, instance->skeleton_program, SATURN_RING,
       0.5f,
       0,0,0,
-      0.
+      rot
     )
   );
 }

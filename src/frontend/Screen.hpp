@@ -19,6 +19,7 @@ protected:
   bool key_released(int key);
   void KeyboardCaller();
 public:
+  bool should_close = false;
   virtual void Init() = 0;
   virtual void Display() = 0;
   virtual void Keyboard() = 0;

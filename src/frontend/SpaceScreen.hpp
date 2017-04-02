@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Screen.hpp"
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "Object.hpp"
 
 class SpaceScreen : public Screen {
