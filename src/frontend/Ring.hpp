@@ -2,9 +2,10 @@
 
 #include "Shape.hpp"
 
+template <int N>
 class Ring : public Shape {
 protected:
-  const int DIM = 30;
+  const int DIM = 60;
   void AddTriangle(
     const glm::vec3 &a,
     const glm::vec3 &b,

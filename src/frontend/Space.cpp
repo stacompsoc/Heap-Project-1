@@ -16,15 +16,23 @@ void Space::AddObject(Object &&object) {
 }
 
 void Space::Draw() {
+  glEnable(GL_DEPTH_CLAMP); GLERROR // disable clipping
+  glEnable(GL_DEPTH_TEST); GLERROR
+  glDepthFunc(GL_LESS); GLERROR
+  glEnable(GL_STENCIL_TEST); GLERROR
+  glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); GLERROR
+  glStencilMask(0xFF); GLERROR
+
+  /* glEnable(GL_CULL_FACE); GLERROR // cull face */
+  /* glCullFace(GL_BACK); GLERROR // cull back face */
+  /* glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise */
+
   instance->planet_program.Use(); GLERROR
   Cam()->need_to_update = Cam()->has_changed;
   Cam()->AttachToShader(planet_program);
   Cam()->Update();
   instance->skeleton_program.Use(); GLERROR
   Cam()->AttachToShader(skeleton_program);
-  Cam()->Update();
-  instance->glow_program.Use(); GLERROR
-  Cam()->AttachToShader(glow_program);
   Cam()->Update();
   for(auto &obj : objects_) {
     obj.need_to_update = true;
@@ -46,7 +54,6 @@ void Space::Setup(float width, float height) {
   instance = new Space(width, height);
   instance->planet_program.Init({"vposition", "vtexcoords"});
   instance->skeleton_program.Init({"vposition", "vtexcoords"});
-  instance->glow_program.Init({"vposition", "vtexcoords"});
   size_t
     SPHERE = 0,
     RING = 1,
@@ -96,7 +103,7 @@ void Space::Setup(float width, float height) {
   /* ); */
   instance->AddObject(
     Object(
-      SPHERE, instance->planet_program, PLUTO,
+      SPHERE, instance->planet_program, URANUS,
       0.2f,
       0,0,0,
       rot
@@ -104,7 +111,7 @@ void Space::Setup(float width, float height) {
   );
   instance->AddObject(
     Object(
-      RING, instance->planet_program, SATURN_RING,
+      RING, instance->planet_program, URANUS_RING,
       0.5f,
       0,0,0,
       rot

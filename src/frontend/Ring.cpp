@@ -4,19 +4,22 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Ring::Ring():
+template <int N>
+Ring<N>::Ring():
   Shape()
 {}
 
-Ring::~Ring()
+template <int N>
+Ring<N>::~Ring()
 {}
 
 glm::vec3 point_on_circle(float angle) {
   return glm::vec3(cos(angle), 0, sin(angle));
 }
 
-void Ring::Init() {
-  float ir = .7;
+template <int N>
+void Ring<N>::Init() {
+  float ir = float(10-N) / 10;
   double step = float(M_PI*2) / DIM;
   size_t index = 0;
   double angle = 0.;
@@ -34,7 +37,8 @@ void Ring::Init() {
   }
 }
 
-void Ring::AddTriangle(
+template <int N>
+void Ring<N>::AddTriangle(
   const glm::vec3 &a,
   const glm::vec3 &b,
   const glm::vec3 &c,
@@ -82,3 +86,7 @@ void Ring::AddTriangle(
     triangles.back().Init(buffer, cpy);
   }
 }
+
+template class Ring<1>;
+template class Ring<2>;
+template class Ring<3>;

@@ -87,18 +87,10 @@ void Window::GLVersion() {
 }
 
 void Window::Init() {
-  glEnable(GL_DEPTH_CLAMP); GLERROR // disable clipping
-  glEnable(GL_DEPTH_TEST); GLERROR
-  glDepthFunc(GL_LESS); GLERROR
-  glEnable(GL_BLEND); GLERROR
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); GLERROR
   Storage::Setup();
   /* trianglescreen.Init(); */
   spacescreen.Init();
   menuscreen.Init();
-  /* glEnable(GL_CULL_FACE); GLERROR // cull face */
-  /* glCullFace(GL_BACK); GLERROR // cull back face */
-  /* glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise */
 }
 
 void Window::Idle() {

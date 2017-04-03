@@ -55,6 +55,9 @@ void MenuScreen::Init() {
 }
 
 void MenuScreen::Display() {
+  glEnable(GL_BLEND); GLERROR
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); GLERROR
+
   quadprogram.Use();
 
   u_proj.set_id(quadprogram.id());
