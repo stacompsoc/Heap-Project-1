@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Screen.hpp"
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "Triangle.hpp"
 
 class TriangleScreen : public Screen {
@@ -13,5 +13,6 @@ public:
   void Init();
   void Display();
   void Keyboard();
+  void Mouse(double x, double y);
   void Clear();
 };

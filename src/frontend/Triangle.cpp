@@ -103,6 +103,6 @@ void Triangle::Clear() {
   if(tex.is_enabled) {
     glDeleteBuffers(1, &tex.vbo); GLERROR
   }
-  disable_vao_attribs();
+  /* disable_vao_attribs(); */
   glDeleteVertexArrays(1, &vao); GLERROR
 }

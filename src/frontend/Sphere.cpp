@@ -7,13 +7,7 @@
 #include <cmath>
 
 Sphere::Sphere():
-  Shape(),
-  radius(1.0f)
-{}
-
-Sphere::Sphere(glm::vec3 position, GLfloat r):
-  Shape(),
-  position(position), radius(r)
+  Shape()
 {}
 
 Sphere::~Sphere()
@@ -31,35 +25,38 @@ glm::vec3 point_on_sphere(double dyx, double dzx) {
 void Sphere::Init() {
   const double step = M_PI / double(DIM);
   int index = 0;
+  /* float rx = 1.0 - float(rand() % 10) / 10.; */
+  /* float ry = 1.0 - float(rand() % 10) / 10.; */
+  /* float rz = 1.0 - float(rand() % 10) / 10.; */
+  /* printf("%.2f,%.2f,%.2f\n", rx,ry,rz); */
+  /* glm::vec3 p(rx, ry, rz); */
+  #define p
   for(double dyx = 0.; dyx < M_PI; dyx += step) {
     for(double dzx = 0.; dzx < 2.*M_PI; dzx += step) {
       glm::vec3
-        &&a = position + point_on_sphere(dyx, dzx) * radius,
-        &&b = position + point_on_sphere(dyx + step, dzx + step) * radius,
-        &&c = position + point_on_sphere(dyx + step, dzx) * radius;
-      add_triangle(a, b, c, index, true);
+        &&a = point_on_sphere(dyx, dzx),
+        &&b = point_on_sphere(dyx + step, dzx + step),
+        &&c = point_on_sphere(dyx + step, dzx);
+      AddTriangle(p+a, p+b, p+c, index, true);
       ++index;
-      a = position + point_on_sphere(dyx, dzx) * radius;
-      b = position + point_on_sphere(dyx, dzx + step) * radius;
-      c = position + point_on_sphere(dyx + step, dzx + step) * radius;
-      add_triangle(a, b, c, index, true);
+      a = point_on_sphere(dyx, dzx);
+      b = point_on_sphere(dyx, dzx + step);
+      c = point_on_sphere(dyx + step, dzx + step);
+      AddTriangle(p+a, p+b, p+c, index, true);
       ++index;
     }
   }
+  #undef p
 }
 
-void Sphere::add_triangle(
+void Sphere::AddTriangle(
   const glm::vec3 &a,
   const glm::vec3 &b,
   const glm::vec3 &c,
   size_t index,
   bool is_textured)
 {
-  gl_log("add triangle\n");
   GLfloat buffer[9];
-  gl_log("%.2f,%.2f,%.2f\n", a.x,a.y,a.z);
-  gl_log("%.2f,%.2f,%.2f\n", b.x,b.y,b.z);
-  gl_log("%.2f,%.2f,%.2f\n", c.x,c.y,c.z);
   memcpy(buffer, glm::value_ptr(a), sizeof(GLfloat) * 3);
   memcpy(buffer + 3, glm::value_ptr(b), sizeof(GLfloat) * 3);
   memcpy(buffer + 6, glm::value_ptr(c), sizeof(GLfloat) * 3);

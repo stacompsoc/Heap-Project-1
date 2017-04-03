@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Screen.hpp"
-#include "Shader.hpp"
+#include "ShaderProgram.hpp"
 #include "Object.hpp"
 
 class SpaceScreen : public Screen {
@@ -11,5 +11,6 @@ public:
   void Init();
   void Display();
   void Keyboard();
+  void Mouse(double x, double y);
   void Clear();
 };

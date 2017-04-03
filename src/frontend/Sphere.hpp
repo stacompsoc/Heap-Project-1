@@ -1,18 +1,11 @@
 #pragma once
 
-#include <vector>
-#include <glm/glm.hpp>
-#include "incgraphics.h"
-
-#include "Triangle.hpp"
-#include "Object.hpp"
+#include "Shape.hpp"
 
 class Sphere : public Shape {
 protected:
-  const int DIM = 20;
-  glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f);
-  GLfloat radius;
-  void add_triangle(
+  const int DIM = 15;
+  void AddTriangle(
     const glm::vec3 &a,
     const glm::vec3 &b,
     const glm::vec3 &c,
@@ -21,7 +14,6 @@ protected:
   );
 public:
   Sphere();
-  Sphere(glm::vec3 position, GLfloat r);
   ~Sphere();
   void Init();
   using Shape::Draw;

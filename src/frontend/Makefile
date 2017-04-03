@@ -1,26 +1,27 @@
 UNAME = $(shell uname)
 ARCH = $(shell uname -m)
 
-CXXFLAGS = -std=c++1y -g3
-LDFLAGS = $(shell ./link_graphics) $(shell pkg-config --libs --cflags glm) $(shell freetype-config --libs --cflags)
+OPTFLAGS = -g3
+# OPTFLAGS = -DNDEBUG -O3 -march=native -m64
+CXXFLAGS = -std=c++1y $(OPTFLAGS) $(shell ./link_graphics --cflags) $(shell freetype-config --cflags) $(shell pkg-config --cflags glm)
+LIBS = $(shell ./link_graphics --libs) $(shell pkg-config --libs glm) $(shell freetype-config --libs)
 OBJECTS = $(wildcard *.cpp)
+COBJECTS = $(notdir $(patsubst %.cpp, %.o, $(OBJECTS)))
 BINARY = planetarium
-
-$(shell mkdir -p build)
 
 all:;$(MAKE) glsl;$(MAKE) $(BINARY) -j$(shell getconf _NPROCESSORS_ONLN)
 
 glsl:
-	glslangValidator plntclr.vert plntclr.geom plntclr.frag
-	glslangValidator planet.vert planet.geom planet.frag
-	glslangValidator labels.vert labels.frag
+	glslangValidator -t triangle.vert triangle.geom triangle.frag
+	glslangValidator -t plntclr.vert plntclr.geom plntclr.frag
+	glslangValidator -t planet.vert planet.geom planet.frag
+	glslangValidator -t planet.vert planet_skeleton.geom planet.frag
+	glslangValidator -t planet.vert pglow.geom planet.frag
+	glslangValidator -t ptext.vert ptext.frag
+	glslangValidator -t pquad.vert pquad.frag
 
-$(BINARY) : $(notdir $(patsubst %.cpp, %.o, $(OBJECTS)))
-	$(CXX) $(wildcard build/*.o) $(CXXFLAGS) $(LDFLAGS) -o $(BINARY)
-
-%.o : %.cpp
-	$(CXX) -c $(CXXFLAGS) -o "build/$@" "$<"
+$(BINARY) : $(COBJECTS)
+	$(CXX) $(COBJECTS) $(CXXFLAGS) $(LIBS) -o $(BINARY)
 
 clean :
-	rm -rvf build
-	rm -vf $(BINARY)
+	rm -rvf $(BINARY) $(wildcard *.o) *.dSYM

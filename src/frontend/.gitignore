@@ -1,6 +1,7 @@
 planetarium
 *.dSYM
-build
+*.o
 *.jpg
 *.png
+*.log
 textures/sam.tga

@@ -4,7 +4,6 @@
 
 #include "Window.hpp"
 #include "Storage.hpp"
-#include "Planetarium.hpp"
 #include "Camera.hpp"
 #include "Log.hpp"
 
@@ -19,9 +18,12 @@ void Window::start() {
 }
 
 void Window::init_glfw() {
-  assert(restart_gl_log());
+  int rc;
+  rc = restart_gl_log();
+  ASSERT(rc);
   glfwSetErrorCallback(glfw_error_callback);
-  ASSERT(glfwInit() == 1);
+  rc = glfwInit();
+  ASSERT(rc == 1);
 
   /* glfwWindowHint(GLFW_SAMPLES, 4); */
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -30,7 +32,6 @@ void Window::init_glfw() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //We don't want the old OpenGL
   // open a window and create its OpenGL context
   window = glfwCreateWindow(width(), height(), "Planetarium", NULL, NULL);
-  restart_gl_log();
   ASSERT(window != NULL);
   glfwMakeContextCurrent(window); GLERROR
 }
@@ -45,7 +46,7 @@ void Window::init_glew() {
 void Window::init_controls() {
   // ensure we can capture the escape key
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE); GLERROR
-  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); GLERROR
+  /* glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); GLERROR */
 }
 
 Window::Window(size_t width, size_t height):
@@ -56,7 +57,8 @@ Window::Window(size_t width, size_t height):
   current_screen(NULL)
 {
   /* current_screen = &trianglescreen; */
-  current_screen = &spacescreen;
+  /* current_screen = &spacescreen; */
+  current_screen = &menuscreen;
   start();
 }
 
@@ -74,38 +76,73 @@ void Window::GLVersion() {
   const GLubyte* version = glGetString(GL_VERSION); GLERROR // version as a string
   printf("Renderer: %s\n", renderer);
   printf("OpenGL version supported %s\n", version);
+  printf("Supported OpenGL extensions:\n");
+  GLint no_exts;
+  glGetIntegerv(GL_NUM_EXTENSIONS, &no_exts);
+  for(GLint i = 0; i < no_exts; ++i) {
+    putchar('\t');
+    const char* ext = (const char*)glGetStringi(GL_EXTENSIONS, i);
+    puts(ext);
+  }
 }
 
 void Window::Init() {
-  glEnable(GL_DEPTH_TEST); GLERROR
-  glDepthFunc(GL_LESS); GLERROR
   Storage::Setup();
-  current_screen->Init();
-  glEnable(GL_CULL_FACE); GLERROR // cull face
-  glCullFace(GL_BACK); GLERROR // cull back face
-  glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise
+  /* trianglescreen.Init(); */
+  spacescreen.Init();
+  menuscreen.Init();
 }
 
 void Window::Idle() {
+  double m_x, m_y;
   while(!glfwWindowShouldClose(window)) {
     Display();
     Keyboard();
+    glfwGetCursorPos(window, &m_x, &m_y);
+    Mouse(m_x, m_y);
+    if(current_screen->should_close)
+      Switch();
   }
 }
 
 void Window::Display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); GLERROR
   current_screen->Display();
-  glfwPollEvents(); GLERROR
-  glfwSwapBuffers(window); GLERROR
+  if(!current_screen->should_close) {
+    glfwPollEvents(); GLERROR
+    glfwSwapBuffers(window); GLERROR
+  }
+}
+
+void Window::Switch() {
+  if(current_screen == NULL) {
+    current_screen = &menuscreen;
+  } else if(current_screen == &menuscreen) {
+    current_screen = &spacescreen;
+    spacescreen.should_close = false;
+  } else if(current_screen == &spacescreen) {
+    current_screen = &menuscreen;
+    menuscreen.should_close = false;
+  } else {
+    glfwSetWindowShouldClose(window, true);
+  }
 }
 
 void Window::Keyboard() {
+  if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, true);
+  }
   current_screen->Keyboard();
 }
 
+void Window::Mouse(double x, double y) {
+  current_screen->Mouse(x, y);
+}
+
 void Window::Clear() {
-  current_screen->Clear();
+  /* trianglescreen.Clear(); */
+  menuscreen.Clear();
+  spacescreen.Clear();
   Storage::Clear();
   glfwTerminate(); GLERROR
   current_screen = NULL;

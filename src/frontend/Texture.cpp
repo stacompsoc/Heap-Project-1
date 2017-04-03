@@ -1,14 +1,12 @@
 #include "Texture.hpp"
 #include "Log.hpp"
+#include "Font.hpp"
 
 #include <fstream>
 
-int Texture::g_texcounter = 0;
 Texture::Texture():
-  texcounter(g_texcounter)
-{
-  ++g_texcounter;
-}
+  u_samp("samp")
+{}
 
 Texture::~Texture()
 {}
@@ -61,8 +59,8 @@ void Texture::LoadDummy() {
   memset(data, 0xff, sizeof(unsigned char) * width * height * 4);
 }
 
-// tga
 void Texture::Init(std::string filename) {
+  ASSERT(data == NULL);
   ASSERT(filename.substr(filename.length() - 4, 4) == ".tga");
   /* LoadDummy(); */
   LoadTGA(filename.c_str());
@@ -71,25 +69,39 @@ void Texture::Init(std::string filename) {
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GLERROR
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLERROR
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GLERROR
   glGenerateMipmap(GL_TEXTURE_2D); GLERROR
   Unbind();
   delete [] data;
   data = NULL;
 }
 
-void Texture::AttachToShader(ShaderProgram &program) {
-  u_samp = glGetUniformLocation(program.id(), "tex"); GLERROR
+void Texture::Init(FT_GlyphSlot *glyph) {
+  glPixelStorei(GL_UNPACK_ALIGNMENT, 1); GLERROR
+  glGenTextures(1, &tex); GLERROR
+  glBindTexture(GL_TEXTURE_2D, tex); GLERROR
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, (*glyph)->bitmap.width, (*glyph)->bitmap.rows,
+               0, GL_RED, GL_UNSIGNED_BYTE, (*glyph)->bitmap.buffer); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLERROR
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLERROR
+  Unbind();
 }
 
-void Texture::Bind(size_t index) const {
+void Texture::AttachToShader(ShaderProgram &program) {
+  ASSERT(program.id() != 0);
+  u_samp.set_id(program.id());
+}
+
+void Texture::Bind(size_t index) {
   glActiveTexture(GL_TEXTURE0 + index); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
-  glUniform1i(u_samp, texcounter); GLERROR
+  u_samp.set_data(index);
 }
 
-void Texture::Unbind() const {
+void Texture::Unbind() {
   glBindTexture(GL_TEXTURE_2D, 0); GLERROR
 }
 

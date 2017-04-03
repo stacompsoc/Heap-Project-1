@@ -3,9 +3,6 @@
 #include <glm/glm.hpp>
 
 #include "incgraphics.h"
-#include "Planetarium.hpp"
-#include "Shader.hpp"
-#include "Log.hpp"
 #include "MenuScreen.hpp"
 #include "SpaceScreen.hpp"
 #include "TriangleScreen.hpp"
@@ -16,6 +13,7 @@ class Window {
   MenuScreen menuscreen;
   SpaceScreen spacescreen;
   TriangleScreen trianglescreen;
+
   Screen *current_screen;
 
   void start();
@@ -31,7 +29,9 @@ public:
   void Init();
   void Idle();
   void Display();
+  void Switch();
   void Keyboard();
+  void Mouse(double x, double y);
   void Clear();
   ~Window();
 };

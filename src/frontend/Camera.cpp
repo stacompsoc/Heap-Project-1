@@ -6,52 +6,62 @@
 #include <glm/gtx/transform.hpp>
 
 Camera::Camera(float width, float height):
-  projection_matrix(glm::perspective(
-    60.0f, // horizontal field of view
-    float(width)/float(height), // aspect ratio, window width/height
-    0.0f, // near clipping plane, keep it as high as possible
-    1000.0f // far clipping placem keep it as low as possible
-  ))
+  u_camera("camera")
 {
-  SetCameraPosition(0, 0, 0);
-  UpdateViewMatrix();
+  SetScale(1.0f);
+  SetPosition(0, 0, 0.0);
+  SetRotation(0, 1, 0, 00.0f);
 }
 
 Camera::~Camera()
 {}
 
+void Init() {
+}
+
 void Camera::AttachToShader(ShaderProgram &program) {
   ASSERT(program.id() != 0);
-  u_camera = glGetUniformLocation(program.id(), "camera"); GLERROR;
+  u_camera.set_id(program.id());
 }
 
-void Camera::MoveCamera(float x, float y, float z) {
-  campos.x+=x,campos.y+=y,campos.z+=z;
+void Camera::SetPosition(float x, float y, float z) {
+  translate = glm::translate(glm::vec3(x, y, z));
+  has_changed = true;
 }
 
-void Camera::SetCameraPosition(float x, float y, float z) {
-  campos.x=x,campos.y=y,campos.z=z;
+void Camera::MovePosition(float x, float y, float z) {
+  translate = glm::translate(glm::vec3(x, y, z)) * translate;
+  has_changed = true;
 }
 
-void Camera::SetCameraLookAt(float x, float y, float z) {
-  lookat.x=x,lookat.y=y,lookat.z=z;
+void Camera::SetRotation(float x, float y, float z, float deg) {
+  rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z));
+  has_changed = true;
 }
 
-void Camera::UpdateViewMatrix() {
-  view_matrix = glm::lookAt(campos, lookat, upvector);
+void Camera::Rotate(float x, float y, float z, float deg) {
+  rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z)) * rotate;
+  has_changed = true;
+}
+
+void Camera::SetScale(float scaling) {
+  scale = glm::scale(glm::vec3(scaling, scaling, scaling));
+  has_changed = true;
+}
+
+void Camera::ChangeScale(float diff) {
+  scale = glm::scale(glm::vec3(diff, diff, diff)) * scale;
+  has_changed = true;
 }
 
 void Camera::Update() {
-  view_matrix = glm::lookAt(
-    campos,
-    lookat,
-    glm::vec3(0.0f, 1.0f, 0.0f)
-  );
-  cameramat = view_matrix;
-  glUniformMatrix4fvARB(u_camera, 1 , GL_FALSE, glm::value_ptr(cameramat)); GLERROR
-}
-
-void Init() {
+  if(has_changed) {
+    cameramat = translate * rotate * scale;
+    has_changed = false;
+  }
+  if(need_to_update) {
+    u_camera.set_data(cameramat);
+  }
 }
 
 void Camera::Clear() {
