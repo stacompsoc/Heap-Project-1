@@ -1,6 +1,6 @@
 #include "incgraphics.h"
 #include "SpaceScreen.hpp"
-#include "Planetarium.hpp"
+#include "Space.hpp"
 #include "Camera.hpp"
 #include "Log.hpp"
 #include "Window.hpp"
@@ -17,15 +17,15 @@ SpaceScreen::~SpaceScreen()
 {}
 
 void SpaceScreen::Init() {
-  Planetarium::Setup(win_->width(), win_->height());
+  Space::Setup(win_->width(), win_->height());
 }
 
 void SpaceScreen::Display() {
-  Planetarium::inst()->Draw();
+  Space::inst()->Draw();
 }
 
 void SpaceScreen::Keyboard() {
-  Camera *cam = Planetarium::Cam();
+  Camera *cam = Space::Cam();
   static float accel = 1.01;
   if(glfwGetKey(win_->window, GLFW_KEY_ENTER) == GLFW_PRESS) {
     /* should_close = true; */
@@ -60,5 +60,5 @@ void SpaceScreen::Mouse(double x, double y) {
 }
 
 void SpaceScreen::Clear() {
-  Planetarium::inst()->Clear();
+  Space::inst()->Clear();
 }

@@ -24,4 +24,4 @@ $(BINARY) : $(COBJECTS)
 	$(CXX) $(COBJECTS) $(CXXFLAGS) $(LIBS) -o $(BINARY)
 
 clean :
-	rm -vf $(BINARY) $(wildcard *.o)
+	rm -rvf $(BINARY) $(wildcard *.o) *.dSYM

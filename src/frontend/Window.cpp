@@ -4,7 +4,6 @@
 
 #include "Window.hpp"
 #include "Storage.hpp"
-#include "Planetarium.hpp"
 #include "Camera.hpp"
 #include "Log.hpp"
 
@@ -77,6 +76,14 @@ void Window::GLVersion() {
   const GLubyte* version = glGetString(GL_VERSION); GLERROR // version as a string
   printf("Renderer: %s\n", renderer);
   printf("OpenGL version supported %s\n", version);
+  printf("Supported OpenGL extensions:\n");
+  GLint no_exts;
+  glGetIntegerv(GL_NUM_EXTENSIONS, &no_exts);
+  for(GLint i = 0; i < no_exts; ++i) {
+    putchar('\t');
+    const char* ext = (const char*)glGetStringi(GL_EXTENSIONS, i);
+    puts(ext);
+  }
 }
 
 void Window::Init() {

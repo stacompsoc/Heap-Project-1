@@ -1,22 +1,21 @@
 #include "Log.hpp"
-#include "Planetarium.hpp"
+#include "Space.hpp"
 
-Planetarium::Planetarium(float width, float height):
+Space::Space(float width, float height):
   cam(width, height),
   planet_program({"planet.vert", "planet.geom", "planet.frag"}),
-  skeleton_program({"planet.vert", "planet_skeleton.geom", "planet.frag"}),
-  glow_program({"planet.vert", "pglow.geom", "planet.frag"})
+  skeleton_program({"planet.vert", "planet_skeleton.geom", "planet.frag"})
 {}
 
-Planetarium::~Planetarium()
+Space::~Space()
 {}
 
-void Planetarium::AddObject(Object &&object) {
+void Space::AddObject(Object &&object) {
   instance->objects_.push_back(object);
   objects_.back().Init();
 }
 
-void Planetarium::Draw() {
+void Space::Draw() {
   instance->planet_program.Use(); GLERROR
   Cam()->need_to_update = Cam()->has_changed;
   Cam()->AttachToShader(planet_program);
@@ -33,18 +32,18 @@ void Planetarium::Draw() {
   }
 }
 
-Planetarium *Planetarium::instance = NULL;
-Planetarium *Planetarium::inst() {
+Space *Space::instance = NULL;
+Space *Space::inst() {
   return instance;
 }
 
-Camera *Planetarium::Cam() {
+Camera *Space::Cam() {
   return &inst()->cam;
 }
 
-void Planetarium::Setup(float width, float height) {
+void Space::Setup(float width, float height) {
   ASSERT(instance == NULL);
-  instance = new Planetarium(width, height);
+  instance = new Space(width, height);
   instance->planet_program.Init({"vposition", "vtexcoords"});
   instance->skeleton_program.Init({"vposition", "vtexcoords"});
   instance->glow_program.Init({"vposition", "vtexcoords"});
@@ -97,7 +96,7 @@ void Planetarium::Setup(float width, float height) {
   /* ); */
   instance->AddObject(
     Object(
-      SPHERE, instance->skeleton_program, SUN,
+      SPHERE, instance->planet_program, PLUTO,
       0.2f,
       0,0,0,
       rot
@@ -105,7 +104,7 @@ void Planetarium::Setup(float width, float height) {
   );
   instance->AddObject(
     Object(
-      RING, instance->skeleton_program, SATURN_RING,
+      RING, instance->planet_program, SATURN_RING,
       0.5f,
       0,0,0,
       rot
@@ -113,7 +112,7 @@ void Planetarium::Setup(float width, float height) {
   );
 }
 
-void Planetarium::Clear() {
+void Space::Clear() {
   ASSERT(instance != NULL);
   Cam()->Clear();
   while(!instance->objects_.empty()) {

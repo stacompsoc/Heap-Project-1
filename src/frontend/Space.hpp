@@ -6,19 +6,18 @@
 #include "Object.hpp"
 #include "ShaderProgram.hpp"
 
-class Planetarium {
+class Space {
   ShaderProgram planet_program;
   ShaderProgram skeleton_program;
-  ShaderProgram glow_program;
   std::vector <Object> objects_;
-  static Planetarium *instance;
-  Planetarium(float width, float height);
-  ~Planetarium();
+  static Space *instance;
+  Space(float width, float height);
+  ~Space();
   Camera cam;
 public:
   void AddObject(Object &&object);
   void Draw();
-  static Planetarium *inst();
+  static Space *inst();
   static Camera *Cam();
   static void Setup(float width, float height);
   static void Clear();

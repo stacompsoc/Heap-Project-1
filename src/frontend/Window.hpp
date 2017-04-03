@@ -3,9 +3,6 @@
 #include <glm/glm.hpp>
 
 #include "incgraphics.h"
-#include "Planetarium.hpp"
-#include "ShaderProgram.hpp"
-#include "Log.hpp"
 #include "MenuScreen.hpp"
 #include "SpaceScreen.hpp"
 #include "TriangleScreen.hpp"
