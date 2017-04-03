@@ -28,7 +28,7 @@ COLORS = [
     (125, 125, 255),
 ]
 
-ICONPATH = os.path.relpath(sys.path[0] + "/../resources/solar.png")
+ICONPATH = os.path.relpath(sys.path[0] + "/resources/solar.png")
 
 
 class DisplayManager:
