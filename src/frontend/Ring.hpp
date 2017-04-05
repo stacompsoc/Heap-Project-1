@@ -1,22 +1,26 @@
 #pragma once
 
 #include "Shape.hpp"
+#include "Triangle.hpp"
 
 template <int N>
 class Ring : public Shape {
 protected:
-  const int DIM = 60;
-  void AddTriangle(
-    const glm::vec3 &a,
-    const glm::vec3 &b,
-    const glm::vec3 &c,
-    size_t index,
-    bool is_textured = false
-  );
+  GLuint vao = 0;
+  GLuint vert_vbo = 0;
+  GLuint tex_vbo = 0;
+  GLfloat
+    *vertices = NULL,
+    *txcoords = NULL;
+  static const size_t DIM;
+  static const size_t SIZE;
+  void SetTexcoords(int index);
+  void SetVertices(const glm::vec3 &a, const glm::vec3 &b, const glm::vec3 &c, size_t index);
 public:
   Ring();
   ~Ring();
   void Init();
-  using Shape::Draw;
-  using Shape::Clear;
+  void InitBuffers();
+  void Draw();
+  void Clear();
 };
