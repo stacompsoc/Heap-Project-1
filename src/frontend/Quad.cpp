@@ -21,6 +21,27 @@ void Quad::Init() {
   AddTriangle(c, d, a, 1, true);
 }
 
+void Quad::SetTexcoords(size_t index, GLfloat texcoords[6]) {
+  if(index == 0) {
+    GLfloat tmp[6] = {
+      0, 0,
+      0, 1,
+      1, 1,
+    };
+    memcpy(texcoords, tmp, 6 * sizeof(GLfloat));
+  } else {
+    GLfloat tmp[6] = {
+      1, 1,
+      1, 0,
+      0, 0,
+    };
+    memcpy(texcoords, tmp, 6 * sizeof(GLfloat));
+  }
+  gl_log("%.2f,%.2f\n", texcoords[0], texcoords[1]);
+  gl_log("%.2f,%.2f\n", texcoords[2], texcoords[3]);
+  gl_log("%.2f,%.2f\n", texcoords[4], texcoords[5]);
+}
+
 void Quad::AddTriangle(
   const glm::vec3 &a,
   const glm::vec3 &b,
@@ -38,25 +59,19 @@ void Quad::AddTriangle(
     size_t color = 0;
     triangles.back().Init(buffer, color);
   } else {
-    GLfloat cpy[6];
-    if(index == 0) {
-      GLfloat texcoords[6] = {
-        0, 0,
-        0, 1,
-        1, 1,
-      };
-      memcpy(cpy, texcoords, 6 * sizeof(GLfloat));
-    } else {
-      GLfloat texcoords[6] = {
-        1, 1,
-        1, 0,
-        0, 0,
-      };
-      memcpy(cpy, texcoords, 6 * sizeof(GLfloat));
-    }
-    gl_log("%.2f,%.2f\n", cpy[0], cpy[1]);
-    gl_log("%.2f,%.2f\n", cpy[2], cpy[3]);
-    gl_log("%.2f,%.2f\n", cpy[4], cpy[5]);
-    triangles.back().Init(buffer, cpy);
+    gl_log("is textured %d\n", is_textured);
+    GLfloat texcoords[6];
+    SetTexcoords(index, texcoords);
+    triangles.back().Init(buffer, texcoords);
   }
+}
+
+void Quad::Draw() {
+  for(auto &t : triangles)
+    t.Draw();
+}
+
+void Quad::Clear() {
+  for(auto &t : triangles)
+    t.Clear();
 }

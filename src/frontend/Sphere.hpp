@@ -1,21 +1,27 @@
 #pragma once
 
+#include <glm/glm.hpp>
+#include "incgraphics.h"
+
 #include "Shape.hpp"
 
 class Sphere : public Shape {
+  GLuint vao = 0;
+  GLuint vert_vbo = 0;
+  GLuint tex_vbo = 0;
+  GLfloat
+    *vertices = NULL,
+    *txcoords = NULL;
 protected:
-  const int DIM = 15;
-  void AddTriangle(
-    const glm::vec3 &a,
-    const glm::vec3 &b,
-    const glm::vec3 &c,
-    size_t index,
-    bool is_textured = false
-  );
+  static const size_t DIM;
+  static const size_t SIZE;
+  void SetTexcoords(size_t index);
+  void SetVertices(const glm::vec3 &&a, const glm::vec3 &&b, const glm::vec3 &&c, size_t index);
 public:
   Sphere();
   ~Sphere();
   void Init();
-  using Shape::Draw;
-  using Shape::Clear;
+  void InitBuffers();
+  void Draw();
+  void Clear();
 };

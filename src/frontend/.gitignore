@@ -4,4 +4,5 @@ planetarium
 *.jpg
 *.png
 *.log
+*.trace
 textures/sam.tga

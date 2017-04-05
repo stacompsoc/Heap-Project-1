@@ -1,7 +1,10 @@
 #include "Shape.hpp"
+#include "Triangle.hpp"
 
 class Quad : public Shape {
 protected:
+  std::vector <Triangle> triangles;
+  void SetTexcoords(size_t index, GLfloat texcoords[6]);
   void AddTriangle(
     const glm::vec3 &a,
     const glm::vec3 &b,
@@ -13,6 +16,6 @@ public:
   Quad();
   ~Quad();
   void Init();
-  using Shape::Draw;
-  using Shape::Clear;
+  void Draw();
+  void Clear();
 };

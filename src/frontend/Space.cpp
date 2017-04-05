@@ -97,7 +97,7 @@ void Space::Setup(float width, float height) {
   /* instance->AddObject( */
   /*   Object( */
   /*     SPHERE, instance->planet_program, EARTH, */
-  /*     0.2f, 0,0,0, */
+  /*     1.0f, 0,0,0, */
   /*     0.0f */
   /*   ) */
   /* ); */
