@@ -104,7 +104,7 @@ void Storage::Setup() {
   instance->AddColor(1., 0., 1.);
   instance->AddColor(1., 1., 0.);
   instance->AddShape<Sphere>();
-  instance->AddShape<Ring <1> >();
+  instance->AddShape<Ring <3> >();
   instance->AddShape<Quad>();
 }
 

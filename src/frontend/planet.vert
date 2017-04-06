@@ -12,6 +12,6 @@ out float gshade;
 void main() {
   gtexcoords = vtexcoords;
   gl_Position = camera * model * vec4(vposition, 1.0);
-  gshade = 1 - gl_Position.z;
+  gshade = .5 - gl_Position.z;
   if(gshade > 1.5)gshade = 1.5;
 }

@@ -16,14 +16,13 @@ public:
   size_t texture_id;
   glm::mat4
     scale,
+    axis_rotation,
     rotate,
     translate;
   glm::mat4
-    axis_rotation;
-  glm::mat4
     model_mat;
   float deg_spin;
-  float spin = 0;
+  float spin;
 public:
   bool has_changed = true;
   bool need_to_update = true;
@@ -33,7 +32,7 @@ public:
     size_t texture_id = UINT_MAX,
     double size = 0.5,
     double x = 0., double y = 0., double z = 0.,
-    float deg_spin = 0.
+    float deg_spin = 0., float deg = 0.0
   );
   ~Object();
   virtual void Init();
@@ -42,10 +41,9 @@ public:
   void Scale(float sx, float sy, float sz);
   void SetScale(float scaling);
   void SetScale(float sx, float sy, float sz);
+  void RotateAxis();
   void Rotate(float x, float y, float z, float deg);
-
   void SetRotation(float x, float y, float z, float deg);
-  void SetAxisRotation();
   void Translate(float x, float y, float z);
   void Move(float x, float y, float z);
   virtual void AttachToShader();

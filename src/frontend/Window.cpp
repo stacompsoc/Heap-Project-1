@@ -57,8 +57,8 @@ Window::Window(size_t width, size_t height):
   current_screen(NULL)
 {
   /* current_screen = &trianglescreen; */
-  current_screen = &spacescreen;
-  /* current_screen = &menuscreen; */
+  /* current_screen = &spacescreen; */
+  current_screen = &menuscreen;
   start();
 }
 

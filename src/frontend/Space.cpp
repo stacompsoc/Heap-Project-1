@@ -92,31 +92,31 @@ void Space::Setup(float width, float height) {
   /*     ) */
   /*   ); */
   /* } */
-  /* float rot = 23.5f; */
-  float rot = 0;
+  float rot = -23.5f;
+  float spin = 2.5f;
+  instance->AddObject(
+    Object(
+      SPHERE, instance->planet_program, EARTH,
+      1.0f, 0,0,0,
+      rot, spin
+    )
+  );
   /* instance->AddObject( */
   /*   Object( */
-  /*     SPHERE, instance->planet_program, EARTH, */
-  /*     1.0f, 0,0,0, */
-  /*     0.0f */
+  /*     SPHERE, instance->planet_program, SATURN, */
+  /*     0.5f, */
+  /*     0,0,0, */
+  /*     rot */
   /*   ) */
   /* ); */
-  instance->AddObject(
-    Object(
-      SPHERE, instance->planet_program, URANUS,
-      0.2f,
-      0,0,0,
-      rot
-    )
-  );
-  instance->AddObject(
-    Object(
-      RING, instance->planet_program, URANUS_RING,
-      0.5f,
-      0,0,0,
-      rot
-    )
-  );
+  /* instance->AddObject( */
+  /*   Object( */
+  /*     RING, instance->planet_program, SATURN_RING, */
+  /*     1.0f, */
+  /*     0,0,0, */
+  /*     rot */
+  /*   ) */
+  /* ); */
 }
 
 void Space::Clear() {
