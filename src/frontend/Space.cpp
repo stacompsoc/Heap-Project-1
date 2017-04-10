@@ -32,6 +32,8 @@ void Space::Init() {
   skeletonProgram.Init({"vposition", "vtexcoords"});
   mainScenerao.Init();
   size_t
+    EARTH_CLOUDS = Storage::AddTexture("textures/earth_clouds.tga"),
+    VENUS_CLOUDS = Storage::AddTexture("textures/venus_clouds.tga"),
     SUN = Storage::AddTexture("textures/sun.tga"),
     MERCURY = Storage::AddTexture("textures/mercury.tga"),
     VENUS = Storage::AddTexture("textures/venus.tga"),
@@ -46,34 +48,37 @@ void Space::Init() {
     SATURN_RING = Storage::AddTexture("textures/saturn_ring.tga"),
     URANUS_RING = Storage::AddTexture("textures/uranus_ring.tga"),
     TEST = Storage::AddTexture("textures/tester_ring.tga");
-  for(size_t i = 0; i < 1000; ++i) {
-    int texture = SUN + rand() % (SATURN_RING - SUN);
-    float r = float(1 + rand() % 10) / 100.;
-    float posx = 3.0f - float(rand() % 6000) / 1000.;
-    float posy = 3.0f - float(rand() % 6000) / 1000.;
-    float posz = 3.0f - float(rand() % 6000) / 1000.;
-    float rot = float(rand() % 180 - 90);
-    float spin = float(rand() % 20 - 10) / 10;
-    constructor.StartObject();
-    constructor.SetPosition(posx, posy, posz);
-    constructor.SetSize(r);
-    constructor.SetRotation(rot);
-    constructor.SetSpin(spin);
-    constructor.Spawn(Storage::SPHERE, texture, planetProgram);
-    if(rand() % 3 == 0) {
-      int ring = Storage::RING1 + (rand() % 3);
-      int ringtex = SATURN_RING + (rand() % (TEST - SATURN_RING));
-      constructor.SetSize(r / (float(10 - (ring - Storage::RING1 + 2)) / 10.));
-      constructor.Spawn(ring, ringtex, planetProgram);
-    }
-  }
+  /* for(size_t i = 0; i < 10000; ++i) { */
+  /*   int texture = SUN + rand() % (SATURN_RING - SUN); */
+  /*   float r = float(1 + rand() % 10) / 100.; */
+  /*   float posx = 10.0f - float(rand() % 20000) / 1000.; */
+  /*   float posy = 10.0f - float(rand() % 20000) / 1000.; */
+  /*   float posz = 10.0f - float(rand() % 20000) / 1000.; */
+  /*   float rot = float(rand() % 180 - 90); */
+  /*   float spin = float(rand() % 20 - 10) / 10; */
+  /*   constructor.StartObject(); */
+  /*   constructor.SetPosition(posx, posy, posz); */
+  /*   constructor.SetSize(r); */
+  /*   constructor.SetRotation(rot); */
+  /*   constructor.SetSpin(spin); */
+  /*   constructor.Spawn(Storage::SPHERE, texture, planetProgram); */
+  /*   if(rand() % 3 == 0) { */
+  /*     int ring = Storage::RING1 + (rand() % 3); */
+  /*     int ringtex = SATURN_RING + (rand() % (TEST - SATURN_RING)); */
+  /*     constructor.SetSize(r / (float(10 - (ring - Storage::RING1 + 2)) / 10.)); */
+  /*     constructor.Spawn(ring, ringtex, planetProgram); */
+  /*   } */
+  /* } */
 
-  /* constructor.StartObject(); */
-  /* constructor.SetRotation(-23.5f); */
-  /* constructor.SetSpin(2.5f); */
+  constructor.StartObject();
+  constructor.SetRotation(-23.5f);
+  constructor.SetSpin(0.5f);
 
-  /* constructor.SetSize(1.0); */
-  /* constructor.Spawn(Storage::SPHERE, EARTH, planetProgram); */
+  constructor.SetSize(0.8);
+  constructor.Spawn(Storage::SPHERE, VENUS, planetProgram);
+  constructor.SetSize(0.81);
+  constructor.SetSpin(0.3);
+  constructor.Spawn(Storage::SPHERE, VENUS_CLOUDS, planetProgram);
 
   /* constructor.SetSize(0.5f); */
   /* constructor.Spawn(Storage::SPHERE, SATURN, planetProgram); */
