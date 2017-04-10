@@ -9,11 +9,11 @@ class Screen {
 public:
   Screen(Window *win);
   ~Screen();
+  size_t width() const;
+  size_t height() const;
 protected:
   std::bitset <350> key_states;
   Window *win_ = NULL;
-  size_t width() const;
-  size_t height() const;
   bool key_pressed(int key);
   bool key_hold(int key);
   bool key_released(int key);

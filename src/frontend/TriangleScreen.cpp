@@ -1,8 +1,10 @@
 #include "TriangleScreen.hpp"
 #include "Log.hpp"
-#include "ShaderProgram.hpp"
+#include "Shader.hpp"
 #include "Window.hpp"
 #include "Storage.hpp"
+#include "Sprite.hpp"
+#include "Texture.hpp"
 
 TriangleScreen::TriangleScreen(Window *win):
   Screen(win),
@@ -27,15 +29,15 @@ void TriangleScreen::Init() {
   /* tri.Init(position, 0); */
   tri.Init(position, texcoords);
   triangle_program.Init({"vposition", "vtexcoords"});
-  size_t tex_idx = Storage::inst()->AddTexture("textures/triangle.tga");
-  Storage::inst()->textures()[tex_idx].AttachToShader(triangle_program);
+  tex_idx = Storage::AddTexture("textures/triangle.tga");
+  Sprite<Texture>::Access(tex_idx).AttachToShader(triangle_program);
 }
 
 void TriangleScreen::Display() {
   triangle_program.Use();
-  Storage::inst()->textures()[0].Bind();
+  Sprite<Texture>::Access(tex_idx).Bind();
   tri.Draw();
-  Storage::inst()->textures()[0].Unbind();
+  Texture::Unbind();
 }
 
 void TriangleScreen::Keyboard() {

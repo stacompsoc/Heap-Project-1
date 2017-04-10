@@ -1,18 +1,84 @@
-#include "Log.hpp"
 #include "Space.hpp"
+#include "Log.hpp"
+#include "Storage.hpp"
 
 Space::Space(float width, float height):
   cam(width, height),
-  planet_program({"planet.vert", "planet.geom", "planet.frag"}),
-  skeleton_program({"planet.vert", "planet_skeleton.geom", "planet.frag"})
+  planetProgram({"planet.vert", "planet.geom", "planet.frag"}),
+  skeletonProgram({"planet.vert", "planet_skeleton.geom", "planet.frag"}),
+  mainScenerao(this),
+  constructor(this)
 {}
 
 Space::~Space()
 {}
 
-void Space::AddObject(Object &&object) {
-  instance->objects_.push_back(object);
-  objects_.back().Init();
+size_t Space::AddMultiObject() {
+  if(!spaceObjects.empty()) {
+    spaceObjects.back().Init();
+  }
+  spaceObjects.push_back(MultiObject());
+  return spaceObjects.size() - 1;
+}
+
+size_t Space::AddObject(Object &&object) {
+  ASSERT(!spaceObjects.empty());
+  instance->spaceObjects.back().AddObject(object);
+  return spaceObjects.back().Size() - 1;
+}
+
+void Space::Init() {
+  planetProgram.Init({"vposition", "vtexcoords"});
+  skeletonProgram.Init({"vposition", "vtexcoords"});
+  mainScenerao.Init();
+  size_t
+    SUN = Storage::AddTexture("textures/sun.tga"),
+    MERCURY = Storage::AddTexture("textures/mercury.tga"),
+    VENUS = Storage::AddTexture("textures/venus.tga"),
+    EARTH = Storage::AddTexture("textures/earth.tga"),
+    MOON = Storage::AddTexture("textures/moon.tga"),
+    MARS = Storage::AddTexture("textures/mars.tga"),
+    JUPITER = Storage::AddTexture("textures/jupiter.tga"),
+    SATURN = Storage::AddTexture("textures/saturn.tga"),
+    URANUS = Storage::AddTexture("textures/uranus.tga"),
+    NEPTUNE = Storage::AddTexture("textures/neptune.tga"),
+    PLUTO = Storage::AddTexture("textures/pluto.tga"),
+    SATURN_RING = Storage::AddTexture("textures/saturn_ring.tga"),
+    URANUS_RING = Storage::AddTexture("textures/uranus_ring.tga"),
+    TEST = Storage::AddTexture("textures/tester_ring.tga");
+  for(size_t i = 0; i < 1000; ++i) {
+    int texture = SUN + rand() % (SATURN_RING - SUN);
+    float r = float(1 + rand() % 10) / 100.;
+    float posx = 3.0f - float(rand() % 6000) / 1000.;
+    float posy = 3.0f - float(rand() % 6000) / 1000.;
+    float posz = 3.0f - float(rand() % 6000) / 1000.;
+    float rot = float(rand() % 180 - 90);
+    float spin = float(rand() % 20 - 10) / 10;
+    constructor.StartObject();
+    constructor.SetPosition(posx, posy, posz);
+    constructor.SetSize(r);
+    constructor.SetRotation(rot);
+    constructor.SetSpin(spin);
+    constructor.Spawn(Storage::SPHERE, texture, planetProgram);
+    if(rand() % 3 == 0) {
+      int ring = Storage::RING1 + (rand() % 3);
+      int ringtex = SATURN_RING + (rand() % (TEST - SATURN_RING));
+      constructor.SetSize(r / (float(10 - (ring - Storage::RING1 + 2)) / 10.));
+      constructor.Spawn(ring, ringtex, planetProgram);
+    }
+  }
+
+  /* constructor.StartObject(); */
+  /* constructor.SetRotation(-23.5f); */
+  /* constructor.SetSpin(2.5f); */
+
+  /* constructor.SetSize(1.0); */
+  /* constructor.Spawn(Storage::SPHERE, EARTH, planetProgram); */
+
+  /* constructor.SetSize(0.5f); */
+  /* constructor.Spawn(Storage::SPHERE, SATURN, planetProgram); */
+  /* constructor.SetSize(1.0f); */
+  /* constructor.Spawn(Storage::RING3, SATURN_RING, planetProgram); */
 }
 
 void Space::Draw() {
@@ -27,17 +93,27 @@ void Space::Draw() {
   /* glCullFace(GL_BACK); GLERROR // cull back face */
   /* glFrontFace(GL_CW); GLERROR // GL_CCW for counter clock-wise */
 
-  instance->planet_program.Use(); GLERROR
-  Cam()->need_to_update = Cam()->has_changed;
-  Cam()->AttachToShader(planet_program);
-  Cam()->Update();
-  instance->skeleton_program.Use(); GLERROR
-  Cam()->AttachToShader(skeleton_program);
-  Cam()->Update();
-  for(auto &obj : objects_) {
-    obj.need_to_update = true;
+  cam.need_to_update = cam.has_changed;
+  planetProgram.Use(); GLERROR
+  cam.AttachToShader(planetProgram);
+  cam.Update();
+  skeletonProgram.Use(); GLERROR
+  cam.AttachToShader(skeletonProgram);
+  cam.Update();
+  for(auto &obj : spaceObjects) {
     obj.Draw();
   }
+}
+
+void Space::Clear() {
+  cam.Clear();
+  mainScenerao.Clear();
+  while(!spaceObjects.empty()) {
+    spaceObjects.back().Clear();
+    spaceObjects.pop_back();
+  }
+  planetProgram.Clear();
+  skeletonProgram.Clear();
 }
 
 Space *Space::instance = NULL;
@@ -46,87 +122,18 @@ Space *Space::inst() {
 }
 
 Camera *Space::Cam() {
-  return &inst()->cam;
+  return &instance->cam;
 }
 
 void Space::Setup(float width, float height) {
   ASSERT(instance == NULL);
   instance = new Space(width, height);
-  instance->planet_program.Init({"vposition", "vtexcoords"});
-  instance->skeleton_program.Init({"vposition", "vtexcoords"});
-  size_t
-    SPHERE = 0,
-    RING = 1,
-    QUAD = 2;
-  size_t
-    TEST = Storage::inst()->AddTexture("textures/tester_ring.tga"),
-    SUN = Storage::inst()->AddTexture("textures/sun.tga"),
-    MERCURY = Storage::inst()->AddTexture("textures/mercury.tga"),
-    VENUS = Storage::inst()->AddTexture("textures/venus.tga"),
-    EARTH = Storage::inst()->AddTexture("textures/earth.tga"),
-    MOON = Storage::inst()->AddTexture("textures/moon.tga"),
-    MARS = Storage::inst()->AddTexture("textures/mars.tga"),
-    JUPITER = Storage::inst()->AddTexture("textures/jupiter.tga"),
-    SATURN = Storage::inst()->AddTexture("textures/saturn.tga"),
-    URANUS = Storage::inst()->AddTexture("textures/uranus.tga"),
-    NEPTUNE = Storage::inst()->AddTexture("textures/neptune.tga"),
-    PLUTO = Storage::inst()->AddTexture("textures/pluto.tga"),
-    GERMANY = Storage::inst()->AddTexture("textures/germany.tga"),
-    SATURN_RING = Storage::inst()->AddTexture("textures/saturn_ring.tga"),
-    URANUS_RING = Storage::inst()->AddTexture("textures/uranus_ring.tga");
-  /* float posx = -.95, posy = .95; */
-  /* for(size_t i = 0; i < 100; ++i) { */
-  /*   double r = float(1 + rand() % 10) / 100.; */
-  /*   posx += r + .05; */
-  /*   posy -= r + .05; */
-  /*   posx = 1.0f - float(rand() % 2000) / 1000.; */
-  /*   posy = 1.0f - float(rand() % 2000) / 1000.; */
-  /*   float posz = 1.0f - float(rand() % 2000) / 1000.; */
-  /*   int texture = SUN + rand() % (GERMANY - SUN); */
-  /*   instance->AddObject( */
-  /*     Object( */
-  /*       SPHERE, */
-  /*       instance->planet_program, texture, */
-  /*       r, posx,posy,posz, */
-  /*       .0001 */
-  /*     ) */
-  /*   ); */
-  /* } */
-  float rot = -23.5f;
-  float spin = 2.5f;
-  instance->AddObject(
-    Object(
-      SPHERE, instance->planet_program, EARTH,
-      1.0f, 0,0,0,
-      rot, spin
-    )
-  );
-  /* instance->AddObject( */
-  /*   Object( */
-  /*     SPHERE, instance->planet_program, SATURN, */
-  /*     0.5f, */
-  /*     0,0,0, */
-  /*     rot */
-  /*   ) */
-  /* ); */
-  /* instance->AddObject( */
-  /*   Object( */
-  /*     RING, instance->planet_program, SATURN_RING, */
-  /*     1.0f, */
-  /*     0,0,0, */
-  /*     rot */
-  /*   ) */
-  /* ); */
+  instance->Init();
 }
 
-void Space::Clear() {
+void Space::Cleanup() {
   ASSERT(instance != NULL);
-  Cam()->Clear();
-  while(!instance->objects_.empty()) {
-    inst()->objects_.back().Clear();
-    inst()->objects_.pop_back();
-  }
-  instance->planet_program.Clear();
+  instance->Clear();
   delete instance;
   instance = NULL;
 }

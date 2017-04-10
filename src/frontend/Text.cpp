@@ -1,16 +1,17 @@
 #include "Text.hpp"
 #include "ShaderUniform.hpp"
+#include "Sprite.hpp"
 #include "Log.hpp"
 
-Text::Text(std::string text):
-  text(text)
+Text::Text():
+  u_textcolor("textcolor")
 {}
 
 Text::~Text()
 {}
 
-void Text::Init(size_t fontid, size_t colorid) {
-  font_id = fontid, color_id = colorid;
+void Text::Init(size_t fontid) {
+  font_id = fontid;
   glGenVertexArrays(1, &vao); GLERROR
   glGenBuffers(1, &vbo); GLERROR
   glBindVertexArray(vao); GLERROR
@@ -22,18 +23,32 @@ void Text::Init(size_t fontid, size_t colorid) {
   glBindVertexArray(0); GLERROR
 }
 
-void Text::SetText(std::string &&new_text) {
-  text = new_text;
+size_t Text::width() const {
+  return width_;
 }
 
-void Text::Render(ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &&color) {
+size_t Text::height() const {
+  return height_;
+}
+
+void Text::SetText(std::string &&new_text) {
+  text = new_text;
+  width_ = 0, height_ = 0;
+  for(const char *c = text.c_str(); *c != '\0'; ++c) {
+    Font::Character &ch = Sprite<Font>::Access(font_id).alphabet[*c];
+    width_ += ch.size.x + ch.bearing.x,
+    height_ += ch.size.y - ch.bearing.y;
+  }
+}
+
+void Text::Render(ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &color) {
   program.Use();
-  Uniform<VEC3>u_textcolor("textcolor");
+  u_textcolor.unset_id();
   u_textcolor.set_id(program.id());
   u_textcolor.set_data(color);
   glActiveTexture(GL_TEXTURE0); GLERROR
   glBindVertexArray(vao); GLERROR
-  Font &font = Storage::inst()->fonts()[font_id];
+  Font &font = Sprite<Font>::Access(font_id);
   for(const GLchar *c = text.c_str(); *c != '\0'; ++c) {
     Font::Character &ch = font.alphabet[*c];
     GLfloat
@@ -58,7 +73,7 @@ void Text::Render(ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, g
     glDrawArrays(GL_TRIANGLES, 0, 6); GLERROR
     x += (ch.advance >> 6) * scale;
   }
-  glBindVertexArray(0);
+  glBindVertexArray(0); GLERROR
   glBindTexture(GL_TEXTURE_2D, 0); GLERROR
 }
 

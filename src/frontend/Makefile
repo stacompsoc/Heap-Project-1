@@ -3,8 +3,8 @@ ARCH = $(shell uname -m)
 
 OPTFLAGS = -g3
 # OPTFLAGS = -DNDEBUG -O3 -march=native -m64
-CXXFLAGS = -std=c++1y $(OPTFLAGS) $(shell ./link_graphics --cflags) $(shell freetype-config --cflags) $(shell pkg-config --cflags glm)
-LIBS = $(shell ./link_graphics --libs) $(shell pkg-config --libs glm) $(shell freetype-config --libs)
+CXXFLAGS = -std=c++1y $(OPTFLAGS) $(shell ./link_graphics --cflags) $(shell pkg-config --cflags glm openal freealut) $(shell freetype-config --cflags)
+LIBS = $(shell ./link_graphics --libs) $(shell pkg-config --libs glm openal freealut) $(shell freetype-config --libs)
 OBJECTS = $(wildcard *.cpp)
 COBJECTS = $(notdir $(patsubst %.cpp, %.o, $(OBJECTS)))
 BINARY = planetarium

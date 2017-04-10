@@ -6,6 +6,7 @@
 #include <glm/gtx/transform.hpp>
 
 Camera::Camera(float width, float height):
+  Moveable(),
   u_camera("camera")
 {
   SetScale(1.0f);
@@ -22,31 +23,6 @@ void Init() {
 void Camera::AttachToShader(ShaderProgram &program) {
   ASSERT(program.id() != 0);
   u_camera.set_id(program.id());
-}
-
-void Camera::SetPosition(float x, float y, float z) {
-  translate = glm::translate(glm::vec3(x, y, z));
-  has_changed = true;
-}
-
-void Camera::MovePosition(float x, float y, float z) {
-  translate = glm::translate(glm::vec3(x, y, z)) * translate;
-  has_changed = true;
-}
-
-void Camera::SetRotation(float x, float y, float z, float deg) {
-  rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z));
-  has_changed = true;
-}
-
-void Camera::Rotate(float x, float y, float z, float deg) {
-  rotate = glm::rotate(glm::radians(deg), glm::vec3(x, y, z)) * rotate;
-  has_changed = true;
-}
-
-void Camera::SetScale(float scaling) {
-  scale = glm::scale(glm::vec3(scaling, scaling, scaling));
-  has_changed = true;
 }
 
 void Camera::ChangeScale(float diff) {

@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <iostream>
 
+#include "incaudio.h"
 #include "incgraphics.h"
 
 bool restart_gl_log();
@@ -28,8 +29,10 @@ const char* GL_type_to_string(GLenum type);
 	}
 
 #define GLERROR { GLenum ret = glGetError(); if(ret != GL_NO_ERROR) { describe_error(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
+#define ALERROR ASSERT(alGetError() == AL_NO_ERROR);
 #else
 #define ASSERT(CONDITION)
 #define GLERROR
+#define ALERROR
 #endif
 void describe_error(GLenum code);

@@ -3,17 +3,19 @@
 #include <glm/glm.hpp>
 
 #include "incgraphics.h"
+#include "Audio.hpp"
 #include "MenuScreen.hpp"
 #include "SpaceScreen.hpp"
 #include "TriangleScreen.hpp"
 
 class Window {
+protected:
   size_t width_, height_;
 
+  Audio audio;
   MenuScreen menuscreen;
   SpaceScreen spacescreen;
   TriangleScreen trianglescreen;
-
   Screen *current_screen;
 
   void start();

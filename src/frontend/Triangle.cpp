@@ -1,5 +1,7 @@
 #include "Triangle.hpp"
 #include "Log.hpp"
+#include "ColorBuffer.hpp"
+#include "Sprite.hpp"
 
 #include <cstring>
 #include <stdexcept>
@@ -25,7 +27,7 @@ Triangle::~Triangle()
 
 void Triangle::Init(GLfloat *positions, size_t color_id) {
   init_vertices(positions);
-  cb_vbo = Storage::inst()->colors()[color_id].vbo;
+  cb_vbo = Sprite<ColorBuffer>::Access(color_id).vbo;
   init_array_object();
 }
 
@@ -87,7 +89,7 @@ void Triangle::ChangePosition() {
 
 void Triangle::ChangeColor(size_t color_id) {
   ASSERT(!tex.is_enabled);
-  cb_vbo = Storage::inst()->colors()[color_id].vbo;
+  cb_vbo = Sprite<ColorBuffer>::Access(color_id).vbo;
   glBindVertexArray(vao); GLERROR
   glBindBuffer(GL_ARRAY_BUFFER, cb_vbo); GLERROR
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR

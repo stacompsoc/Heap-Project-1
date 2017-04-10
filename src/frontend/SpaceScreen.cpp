@@ -60,5 +60,5 @@ void SpaceScreen::Mouse(double x, double y) {
 }
 
 void SpaceScreen::Clear() {
-  Space::inst()->Clear();
+  Space::Cleanup();
 }

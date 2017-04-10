@@ -10,10 +10,28 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+Window::Window(size_t width, size_t height):
+  width_(width), height_(height),
+  spacescreen(this),
+  trianglescreen(this),
+  menuscreen(this),
+  current_screen(NULL)
+{
+}
+
+size_t Window::width() const {
+  return width_;
+}
+
+size_t Window::height() const {
+  return height_;
+}
+
 void Window::start() {
   init_glfw();
   init_glew();
   init_controls();
+  audio.Init();
   /* log_gl_params(); */
 }
 
@@ -40,34 +58,13 @@ void Window::init_glew() {
   // Initialize GLEW
   glewExperimental = true; // Needed for core profile
   GLuint res = glewInit(); GLERROR
-  ASSERT(res == GLEW_OK);
+    ASSERT(res == GLEW_OK);
 }
 
 void Window::init_controls() {
   // ensure we can capture the escape key
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE); GLERROR
-  /* glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); GLERROR */
-}
-
-Window::Window(size_t width, size_t height):
-  width_(width), height_(height),
-  spacescreen(this),
-  trianglescreen(this),
-  menuscreen(this),
-  current_screen(NULL)
-{
-  /* current_screen = &trianglescreen; */
-  /* current_screen = &spacescreen; */
-  current_screen = &menuscreen;
-  start();
-}
-
-size_t Window::width() const {
-  return width_;
-}
-
-size_t Window::height() const {
-  return height_;
+    /* glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); GLERROR */
 }
 
 void Window::GLVersion() {
@@ -87,6 +84,10 @@ void Window::GLVersion() {
 }
 
 void Window::Init() {
+  /* current_screen = &trianglescreen; */
+  /* current_screen = &spacescreen; */
+  current_screen = &menuscreen;
+  start();
   Storage::Setup();
   /* trianglescreen.Init(); */
   spacescreen.Init();
@@ -95,6 +96,7 @@ void Window::Init() {
 
 void Window::Idle() {
   double m_x, m_y;
+  audio.Play();
   while(!glfwWindowShouldClose(window)) {
     Display();
     Keyboard();
@@ -103,6 +105,7 @@ void Window::Idle() {
     if(current_screen->should_close)
       Switch();
   }
+  audio.Stop();
 }
 
 void Window::Display() {
@@ -146,6 +149,7 @@ void Window::Clear() {
   Storage::Clear();
   glfwTerminate(); GLERROR
   current_screen = NULL;
+  audio.Clear();
 }
 
 Window::~Window()

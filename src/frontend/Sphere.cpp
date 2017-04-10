@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cmath>
 
-const size_t Sphere::DIM = 100;
+const size_t Sphere::DIM = 50;
 const size_t Sphere::SIZE = DIM*2 * DIM*2;
 Sphere::Sphere():
   Shape()

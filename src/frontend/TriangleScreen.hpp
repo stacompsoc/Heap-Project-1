@@ -7,6 +7,7 @@
 class TriangleScreen : public Screen {
   ShaderProgram triangle_program;
   Triangle tri;
+  size_t tex_idx = 1e9;
 public:
   TriangleScreen(Window *win);
   ~TriangleScreen();
