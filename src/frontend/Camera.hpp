@@ -23,7 +23,6 @@ public:
   ~Camera();
   void AttachToShader(ShaderProgram &program);
   void Init();
-  void ChangeScale(float diff);
   void Update();
   void Clear();
 };

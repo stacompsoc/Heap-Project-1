@@ -25,11 +25,6 @@ void Camera::AttachToShader(ShaderProgram &program) {
   u_camera.set_id(program.id());
 }
 
-void Camera::ChangeScale(float diff) {
-  scale = glm::scale(glm::vec3(diff, diff, diff)) * scale;
-  has_changed = true;
-}
-
 void Camera::Update() {
   if(has_changed) {
     cameramat = translate * rotate * scale;

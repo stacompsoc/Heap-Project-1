@@ -46,9 +46,9 @@ void SpaceScreen::Keyboard() {
   } else if(glfwGetKey(win_->window, GLFW_KEY_L)) {
     cam->Rotate(0, 1, 0, -10);
   } else if(glfwGetKey(win_->window, GLFW_KEY_EQUAL)) {
-    cam->ChangeScale(1.05);
+    cam->Scale(1.05);
   } else if(glfwGetKey(win_->window, GLFW_KEY_MINUS)) {
-    cam->ChangeScale(1./1.05);
+    cam->Scale(1./1.05);
   } else if(glfwGetKey(win_->window, GLFW_KEY_0)) {
     cam->SetScale(1.0f);
     cam->SetPosition(0, 0, .1);
