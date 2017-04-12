@@ -1,6 +1,8 @@
 #include "Texture.hpp"
 #include "Log.hpp"
 #include "Font.hpp"
+#include "PNGImage.hpp"
+#include "JPEGImage.hpp"
 
 #include <fstream>
 
@@ -11,70 +13,29 @@ Texture::Texture():
 Texture::~Texture()
 {}
 
-void Texture::LoadTGA(const char *filename) {
-  std::ifstream tgafile(filename, std::ios::in | std::ios::binary);
-  unsigned char header[20];
-  gl_log("TGA loading: %s\n", filename);
-  if(!tgafile.is_open()) {
-    gl_log("TGA loading: Wasn't able to find image %s\n", filename);
-    return;
+Image *Texture::NewImage(std::string &filename) {
+  if(filename.substr(filename.length() - strlen(".png"), strlen(".png")) == ".png") {
+    return new PNGImage(filename.c_str());
+  } else if(filename.substr(filename.length() - strlen(".jpg"), strlen(".jpg")) == ".jpg") {
+    return new JPEGImage(filename.c_str());
   }
-
-  tgafile.read(reinterpret_cast <char *> (header), sizeof(char) * 18);
-
-  if(header[2] != 2) {
-    tgafile.close();
-    gl_log("TGA loading: wrong file header %s\n", filename);
-    return;
-  }
-
-  if(header[0])
-    tgafile.seekg(header[0], std::ios_base::cur);
-
-  width = header[13] * 256 + header[12];
-  height = header[15] * 256 + header[14];
-  int bpp = header[16] / 8;
-
-  if(bpp != 4) {
-    tgafile.close();
-    gl_log("TGA loading: wrong bit depth: %s\n", filename);
-    return;
-  }
-
-  long imgsize = width * height * bpp;
-  data = new unsigned char[imgsize];
-
-  tgafile.read(reinterpret_cast <char *> (data), sizeof(char) * imgsize);
-
-  for(GLuint cswap = 0; cswap < (unsigned int)imgsize; cswap += bpp) {
-    std::swap(data[cswap], data[cswap + 2]);
-  }
-  tgafile.close();
-  gl_log("TGA loading finished\n");
-}
-
-void Texture::LoadDummy() {
-  data = new unsigned char[60*60*4];
-  width = 60, height = 60;
-  memset(data, 0xff, sizeof(unsigned char) * width * height * 4);
+  throw std::runtime_error("invalid image format");
 }
 
 void Texture::Init(std::string filename) {
-  ASSERT(data == NULL);
-  ASSERT(filename.substr(filename.length() - 4, 4) == ".tga");
-  /* LoadDummy(); */
-  LoadTGA(filename.c_str());
+  Image *image = NewImage(filename);
+  image->Load();
   glGenTextures(1, &tex); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data); GLERROR
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->width, image->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); GLERROR
   glGenerateMipmap(GL_TEXTURE_2D); GLERROR
   Unbind();
-  delete [] data;
-  data = NULL;
+  image->Clear();
+  delete image;
 }
 
 void Texture::Init(FT_GlyphSlot *glyph) {

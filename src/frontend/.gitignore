@@ -2,6 +2,6 @@ planetarium
 *.dSYM
 *.o
 *.jpg
-*.png
+*.tga
 *.log
 *.trace

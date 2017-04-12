@@ -15,12 +15,6 @@ GLuint VertexArray::get_id() const {
   return id;
 }
 
-void VertexArray::EnableBuffer(GLuint buffer) {
-  glEnableVertexAttribArray(number_of_buffers); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, buffer); GLERROR
-  //
-}
-
 void VertexArray::Bind() {
   glBindVertexArray(id); GLERROR
 }

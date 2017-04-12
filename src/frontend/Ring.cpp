@@ -22,8 +22,8 @@ glm::vec3 point_on_circle(float angle) {
 
 template <int N>
 void Ring<N>::Init() {
-  glGenVertexArrays(1, &vao); GLERROR
-  glBindVertexArray(vao); GLERROR
+  vao.Init();
+  vao.Bind();
 
   txcoords = new GLfloat[SIZE * 6];
   ASSERT(txcoords != NULL);
@@ -114,7 +114,7 @@ void Ring<N>::SetVertices(const glm::vec3 &a, const glm::vec3 &b, const glm::vec
 
 template <int N>
 void Ring<N>::Draw() {
-  glBindVertexArray(vao); GLERROR
+  vao.Bind();
   glDrawArrays(GL_TRIANGLES, 0, SIZE * 3); GLERROR
 }
 
@@ -122,7 +122,7 @@ template <int N>
 void Ring<N>::Clear() {
   glDeleteBuffers(1, &vert_vbo); GLERROR
   glDeleteBuffers(1, &tex_vbo); GLERROR
-  glDeleteVertexArrays(1, &vao); GLERROR
+  vao.Clear();
 }
 
 template class Ring<1>;

@@ -2,12 +2,13 @@
 
 #include <glm/glm.hpp>
 #include "Shape.hpp"
+#include "VertexArray.hpp"
 #include "Triangle.hpp"
 
 template <int N>
 class Ring : public Shape {
 protected:
-  GLuint vao = 0;
+  VertexArray vao;
   GLuint vert_vbo = 0;
   GLuint tex_vbo = 0;
   GLfloat

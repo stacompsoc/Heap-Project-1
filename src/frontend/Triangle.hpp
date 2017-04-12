@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Storage.hpp"
 #include "incgraphics.h"
+#include "Storage.hpp"
+#include "VertexArray.hpp"
 
 struct Triangle {
   struct vertexbuffer {
@@ -15,7 +16,7 @@ struct Triangle {
     texcoordbuffer();
     ~texcoordbuffer();
   };
-  GLuint vao = 0;
+  VertexArray vao;
   vertexbuffer vb;
   texcoordbuffer tex;
   GLuint cb_vbo;
@@ -29,6 +30,6 @@ struct Triangle {
   void disable_vao_attribs();
   void ChangePosition();
   void ChangeColor(size_t color_id);
-  void Draw() const;
+  void Draw();
   void Clear();
 };

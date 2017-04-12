@@ -6,7 +6,7 @@
 #include <iostream>
 #include <cmath>
 
-const size_t Sphere::DIM = 10;
+const size_t Sphere::DIM = 50;
 const size_t Sphere::SIZE = DIM*2 * DIM*2;
 Sphere::Sphere():
   Shape()
@@ -25,8 +25,8 @@ glm::vec3 point_on_sphere(double dyx, double dzx) {
 }
 
 void Sphere::Init() {
-  glGenVertexArrays(1, &vao); GLERROR
-  glBindVertexArray(vao); GLERROR
+  vao.Init();
+  vao.Bind();
 
   txcoords = new GLfloat[SIZE * 6];
   ASSERT(txcoords != NULL);
@@ -137,12 +137,12 @@ void Sphere::SetVertices(const glm::vec3 &&a, const glm::vec3 &&b, const glm::ve
 }
 
 void Sphere::Draw() {
-  glBindVertexArray(vao); GLERROR
+  vao.Bind();
   glDrawArrays(GL_TRIANGLES, 0, SIZE * 3); GLERROR
 }
 
 void Sphere::Clear() {
   glDeleteBuffers(1, &vert_vbo); GLERROR
   glDeleteBuffers(1, &tex_vbo); GLERROR
-  glDeleteVertexArrays(1, &vao); GLERROR
+  vao.Clear();
 }

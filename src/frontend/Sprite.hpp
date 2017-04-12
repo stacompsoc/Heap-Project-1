@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <cstdlib>
 
 template <typename T> class Data;
 

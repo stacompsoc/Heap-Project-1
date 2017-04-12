@@ -3,10 +3,11 @@
 #include <glm/glm.hpp>
 #include "incgraphics.h"
 
+#include "VertexArray.hpp"
 #include "Shape.hpp"
 
 class Sphere : public Shape {
-  GLuint vao = 0;
+  VertexArray vao;
   GLuint vert_vbo = 0;
   GLuint tex_vbo = 0;
   GLfloat
