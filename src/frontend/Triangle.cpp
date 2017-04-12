@@ -18,8 +18,7 @@ Triangle::texcoordbuffer::texcoordbuffer()
 Triangle::texcoordbuffer::~texcoordbuffer()
 {}
 
-Triangle::Triangle():
-  vb(), tex()
+Triangle::Triangle()
 {}
 
 Triangle::~Triangle()

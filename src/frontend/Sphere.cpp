@@ -41,12 +41,12 @@ void Sphere::Init() {
   /*          v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8]); */
   /* } */
 
-  glGenBuffers(1, &vert_vbo); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, vert_vbo); GLERROR
+  vert.Init(GL_ARRAY_BUFFER);
+  vert.Bind();
   glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat) * 9, vertices, GL_STREAM_DRAW); GLERROR
 
-  glGenBuffers(1, &tex_vbo); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, tex_vbo); GLERROR
+  tex.Init(GL_ARRAY_BUFFER);
+  tex.Bind();
   glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat) * 6, txcoords, GL_STREAM_DRAW); GLERROR
 
   ASSERT(vertices != NULL);
@@ -55,11 +55,11 @@ void Sphere::Init() {
   delete txcoords;
 
   glEnableVertexAttribArray(0); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, vert_vbo); GLERROR
+  vert.Bind();
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
 
   glEnableVertexAttribArray(1); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, tex_vbo); GLERROR
+  tex.Bind();
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
 
   glVertexAttribDivisor(0, 0); GLERROR
@@ -142,7 +142,7 @@ void Sphere::Draw() {
 }
 
 void Sphere::Clear() {
-  glDeleteBuffers(1, &vert_vbo); GLERROR
-  glDeleteBuffers(1, &tex_vbo); GLERROR
+  vert.Clear();
+  tex.Clear();
   vao.Clear();
 }

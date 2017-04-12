@@ -10,6 +10,7 @@
 
 class Space {
 protected:
+  friend class Scenerao;
   ShaderProgram
     planetProgram,
     skeletonProgram;

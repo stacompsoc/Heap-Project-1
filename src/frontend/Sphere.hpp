@@ -3,13 +3,14 @@
 #include <glm/glm.hpp>
 #include "incgraphics.h"
 
-#include "VertexArray.hpp"
 #include "Shape.hpp"
+#include "VertexArray.hpp"
+#include "ShaderAttrib.hpp"
 
 class Sphere : public Shape {
   VertexArray vao;
-  GLuint vert_vbo = 0;
-  GLuint tex_vbo = 0;
+  ShaderAttrib
+    vert, tex;
   GLfloat
     *vertices = NULL,
     *txcoords = NULL;

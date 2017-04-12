@@ -2,15 +2,16 @@
 
 #include <glm/glm.hpp>
 #include "Shape.hpp"
-#include "VertexArray.hpp"
 #include "Triangle.hpp"
+#include "VertexArray.hpp"
+#include "ShaderAttrib.hpp"
 
 template <int N>
 class Ring : public Shape {
 protected:
   VertexArray vao;
-  GLuint vert_vbo = 0;
-  GLuint tex_vbo = 0;
+  ShaderAttrib
+    vert, tex;
   GLfloat
     *vertices = NULL,
     *txcoords = NULL;

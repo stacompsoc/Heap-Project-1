@@ -16,7 +16,7 @@ link_glfw3() {
     pkg-config $args glfw3
   } || {
     [ "$(lsb_release -si)" = Arch ] && pkg-config $args glfw3
-    [ "$(lsb_release -si)" = Fedora ] && pkg-config $args libglfw
+    [ "$(lsb_release -si)" = Fedora ] && pkg-config $args glfw3
     [ "$(lsb_release -si)" = Ubuntu ] && pkg-config $args glfw3
   }
 }
