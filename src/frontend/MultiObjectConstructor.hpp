@@ -21,5 +21,7 @@ public:
   void SetRotation(float r);
   void SetSpin(float s);
   void Spawn(size_t shape_id, size_t texture_id, ShaderProgram &program);
+  void SpawnPlanet(size_t texture_id, ShaderProgram &program);
+  void SpawnClouds(size_t texture_id, ShaderProgram &program);
   void StartObject();
 };

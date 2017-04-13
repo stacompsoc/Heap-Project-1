@@ -12,7 +12,7 @@ protected:
   ~Storage();
   static Storage *instance;
 public:
-  static size_t SPHERE, RING1, RING2, RING3, QUAD;
+  static size_t SPHERE, RING1, RING2, RING3, RING7, RING8, QUAD;
   static Storage *inst();
   static size_t AddColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a = 1.);
   static size_t AddTexture(const char *filename);

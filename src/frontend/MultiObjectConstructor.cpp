@@ -1,6 +1,7 @@
 #include "MultiObjectConstructor.hpp"
 #include "Log.hpp"
 #include "Space.hpp"
+#include "Storage.hpp"
 
 MultiObjectConstructor::MultiObjectConstructor(Space *space):
   space(space), position(0, 0, 0), size(1, 1, 1)
@@ -41,6 +42,18 @@ void MultiObjectConstructor::Spawn(size_t shape_id, size_t texture_id, ShaderPro
       rot, spin
     )
   );
+}
+
+void MultiObjectConstructor::SpawnPlanet(size_t texture_id, ShaderProgram &program) {
+  Spawn(Storage::SPHERE, texture_id, program);
+}
+
+void MultiObjectConstructor::SpawnClouds(size_t texture_id, ShaderProgram &program) {
+  glm::vec3 cur_size = size;
+  glm::vec3 new_size = cur_size*1.01f;
+  SetSize(new_size.x, new_size.y, new_size.z);
+  Spawn(Storage::SPHERE, texture_id, program);
+  SetSize(cur_size.x, cur_size.y, cur_size.z);
 }
 
 void MultiObjectConstructor::StartObject() {

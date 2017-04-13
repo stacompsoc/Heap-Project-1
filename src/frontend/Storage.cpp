@@ -55,6 +55,8 @@ size_t Storage::SPHERE = 0;
 size_t Storage::RING1 = 0;
 size_t Storage::RING2 = 0;
 size_t Storage::RING3 = 0;
+size_t Storage::RING7 = 0;
+size_t Storage::RING8 = 0;
 size_t Storage::QUAD = 0;
 Storage *Storage::instance = NULL;
 void Storage::Setup() {
@@ -73,6 +75,8 @@ void Storage::Setup() {
   RING1 = instance->AddShape<Ring <1> >();
   RING2 = instance->AddShape<Ring <2> >();
   RING3 = instance->AddShape<Ring <3> >();
+  RING7 = instance->AddShape<Ring <7> >();
+  RING8 = instance->AddShape<Ring <8> >();
   QUAD = instance->AddShape<Quad>();
 }
 

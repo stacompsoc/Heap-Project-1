@@ -4,6 +4,7 @@
 #include "incgraphics.h"
 
 struct VertexArray {
+  static GLuint last_vao;
   GLuint id = 0;
   VertexArray();
   ~VertexArray();

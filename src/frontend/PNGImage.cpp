@@ -102,4 +102,7 @@ void PNGImage::Load() {
   }
 
   png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
+  for(size_t y = 0; y < height; ++y)
+    free(row_pointers[y]);
+  free(row_pointers);
 }

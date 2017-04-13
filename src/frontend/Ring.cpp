@@ -128,3 +128,5 @@ void Ring<N>::Clear() {
 template class Ring<1>;
 template class Ring<2>;
 template class Ring<3>;
+template class Ring<7>;
+template class Ring<8>;

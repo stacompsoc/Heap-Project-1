@@ -37,14 +37,18 @@ void SpaceScreen::Keyboard() {
     cam->MovePosition(.05, 0, 0);
   } else if(glfwGetKey(win_->window, GLFW_KEY_RIGHT)) {
     cam->MovePosition(-.05, 0, 0);
-  } else if(glfwGetKey(win_->window, GLFW_KEY_H)) {
-    cam->Rotate(0, 1, 0, 10);
-  } else if(glfwGetKey(win_->window, GLFW_KEY_J)) {
+  } else if(glfwGetKey(win_->window, GLFW_KEY_W)) {
     cam->Rotate(1, 0, 0, 10);
-  } else if(glfwGetKey(win_->window, GLFW_KEY_K)) {
+  } else if(glfwGetKey(win_->window, GLFW_KEY_S)) {
     cam->Rotate(1, 0, 0, -10);
-  } else if(glfwGetKey(win_->window, GLFW_KEY_L)) {
+  } else if(glfwGetKey(win_->window, GLFW_KEY_A)) {
+    cam->Rotate(0, 1, 0, 10);
+  } else if(glfwGetKey(win_->window, GLFW_KEY_D)) {
     cam->Rotate(0, 1, 0, -10);
+  } else if(glfwGetKey(win_->window, GLFW_KEY_Q)) {
+    cam->Rotate(0, 0, 1, 10);
+  } else if(glfwGetKey(win_->window, GLFW_KEY_E)) {
+    cam->Rotate(0, 0, 1, -10);
   } else if(glfwGetKey(win_->window, GLFW_KEY_EQUAL)) {
     cam->Scale(1.05);
   } else if(glfwGetKey(win_->window, GLFW_KEY_MINUS)) {
