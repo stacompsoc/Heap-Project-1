@@ -25,7 +25,7 @@ The project consists of two parts: a basic physics engine, simulating 3d pseudop
 * libpng, libjpeg
 * FreeType
 * OpenAL-Soft
-* FreeALUT
+* libsndfile
 * Make, pkg-config
 
 ## Usage
