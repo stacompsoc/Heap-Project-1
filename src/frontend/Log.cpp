@@ -132,7 +132,7 @@ const char* GL_type_to_string(GLenum type) {
   return "other";
 }
 
-void describe_error(GLenum code) {
+void explain_glerror(GLenum code) {
   std::string err;
   switch(code) {
     case GL_NO_ERROR:
@@ -160,8 +160,18 @@ void describe_error(GLenum code) {
       err = "table too large";
     break;
     default:
-      err = "unknown_error " + std::to_string(code) + "\n";
+      err = "unknown_error " + std::to_string(code);
     break;
   }
   std::cerr << err << std::endl;
+}
+
+void explain_alerror(ALenum code) {
+  std::string err;
+  switch(code) {
+    case 40962:
+      err = "invalid enum";
+    break;
+  }
+  std::cerr << "alerror: " << err << " (" << code << ")" << std::endl;
 }

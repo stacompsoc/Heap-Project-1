@@ -3,6 +3,8 @@
 #include <cstdlib>
 #include "incaudio.h"
 
+#include "Sound.hpp"
+
 struct AudioBuffer {
   ALuint buffer = 0;
 
