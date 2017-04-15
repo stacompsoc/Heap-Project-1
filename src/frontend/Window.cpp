@@ -109,7 +109,6 @@ void Window::Idle() {
 }
 
 void Window::Display() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); GLERROR
   current_screen->Display();
   if(!current_screen->should_close) {
     glfwPollEvents(); GLERROR
