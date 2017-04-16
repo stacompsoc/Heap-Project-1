@@ -2,11 +2,12 @@
 #include "Log.hpp"
 #include "incaudio.h"
 
+#include <cstring>
 #include <sys/stat.h>
 #include <sndfile.h>
 
 WAVSound::WAVSound(const char *filename):
-  Sound(filename)
+  Sound(strdup(filename))
 {}
 
 static size_t file_length(std::string &filename) {
@@ -19,7 +20,9 @@ void WAVSound::Load() {
   ASSERT(data == NULL);
   SF_INFO sfinfo;
   SNDFILE *sndfile = sf_open(filename.c_str(), SFM_READ, &sfinfo);
-  format = sfinfo.channels == 1 ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16;
+  if(sndfile == NULL)
+    throw std::runtime_error("error opening file " + filename + ": " + sf_strerror(NULL));
+  format = ((sfinfo.channels == 1) ? AL_FORMAT_MONO16 : AL_FORMAT_STEREO16);
   size = sfinfo.channels * sfinfo.frames;
   data = new short[size];
   freq = sfinfo.samplerate;

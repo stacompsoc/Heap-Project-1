@@ -172,6 +172,9 @@ void explain_alerror(ALenum code) {
     case 40962:
       err = "invalid enum";
     break;
+    case 40963:
+      err = "invalid format";
+    break;
   }
   std::cerr << "alerror: " << err << " (" << code << ")" << std::endl;
 }

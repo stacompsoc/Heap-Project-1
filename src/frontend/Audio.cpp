@@ -20,7 +20,7 @@ void Audio::Init() {
   context = alcCreateContext(device, NULL);
   int res = alcMakeContextCurrent(context);
   ASSERT(res);
-  theme.Init("sounds/theme.wav");
+  theme.Init("sounds/theme.flac");
   musicbox.Init(glm::vec3(0, 0, 1), AL_TRUE);
   SetListener(glm::vec3(0, 0, 1), glm::vec3(0, 0, 0));
   musicbox.SetBuffer(theme.buffer);

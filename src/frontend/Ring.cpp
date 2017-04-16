@@ -1,6 +1,7 @@
 #include "Ring.hpp"
 #include "Log.hpp"
 
+#include <omp.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -61,9 +62,10 @@ template <int N>
 void Ring<N>::InitBuffers() {
   const static float ir = float(10-N) / 10;
   const double step = float(M_PI*2) / DIM;
-  size_t index = 0;
-  double angle = 0.;
+  #pragma omp parallel for num_threads(8)
   for(size_t i = 0; i < DIM; ++i) {
+    const double angle = double(i) * step;
+    size_t index = i * 2;
     glm::vec3
       &&a = point_on_circle(angle),
       &&b = point_on_circle(angle + step),
@@ -73,7 +75,6 @@ void Ring<N>::InitBuffers() {
     a = b * ir;
     SetTexcoords(index);
     SetVertices(c, b, a, index), ++index;
-    angle += step;
   }
 }
 

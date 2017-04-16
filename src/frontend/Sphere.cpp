@@ -2,11 +2,12 @@
 #include "Camera.hpp"
 #include "Log.hpp"
 
+#include <omp.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <cmath>
 
-const size_t Sphere::DIM = 50;
+const size_t Sphere::DIM = 120;
 const size_t Sphere::SIZE = DIM*2 * DIM*2;
 Sphere::Sphere():
   Shape()
@@ -67,18 +68,14 @@ void Sphere::Init() {
 }
 
 void Sphere::InitBuffers() {
-  int index = 0;
   const double step = M_PI / double(DIM);
-  /* float rx = 1.0 - float(rand() % 10) / 10.; */
-  /* float ry = 1.0 - float(rand() % 10) / 10.; */
-  /* float rz = 1.0 - float(rand() % 10) / 10.; */
-  /* printf("%.2f,%.2f,%.2f\n", rx,ry,rz); */
-  /* glm::vec3 p(rx, ry, rz); */
-  #define p
+  #pragma omp parallel for num_threads(8)
   for(size_t i = 0; i < DIM; ++i) {
-    double dyx = double(i) * step;
+    const double dyx = double(i) * step;
     for(size_t j = 0; j < DIM*2; ++j) {
-      double dzx = double(j) * step;
+      int index = 2 * (i * DIM * 2 + j);
+      /* std::cout << omp_get_thread_num() << " : " << index / 2 << std::endl; */
+      const double dzx = double(j) * step;
       SetTexcoords(index);
       SetVertices(
         point_on_sphere(dyx, dzx),
@@ -92,10 +89,8 @@ void Sphere::InitBuffers() {
         point_on_sphere(dyx, dzx + step),
         point_on_sphere(dyx + step, dzx + step),
       index);
-      ++index;
     }
   }
-  #undef p
 }
 
 void Sphere::SetTexcoords(size_t index) {

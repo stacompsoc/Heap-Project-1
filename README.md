@@ -18,14 +18,11 @@ The project consists of two parts: a basic physics engine, simulating 3d pseudop
 
 ### Frontend
 
-* c++1y
-* OpenGL 3-4, GLSL
-* GLEW, GLFW
-* GLM
-* libpng, libjpeg
-* FreeType
-* OpenAL-Soft
-* libsndfile
+* c++14
+* opengl4, glsl
+* glew, glfw3, glm, openal-soft
+* libpng, libjpeg, libsndfile, freetype
+* openmp
 * Make, pkg-config
 
 ## Usage
