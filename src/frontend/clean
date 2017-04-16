@@ -1,0 +1,4 @@
+#!/bin/sh
+
+make clean
+rm -rvf CMakeCache.txt CMakeFiles cmake_install.cmake Makefile tags *.o

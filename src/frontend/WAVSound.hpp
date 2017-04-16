@@ -1,8 +1,6 @@
 #pragma once
 
 #include "Sound.hpp"
+#include "SndFileSound.hpp"
 
-struct WAVSound : public Sound {
-  WAVSound(const char *filename);
-  void Load();
-};
+typedef SndFileSound WAVSound;

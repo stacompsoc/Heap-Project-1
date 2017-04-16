@@ -8,13 +8,14 @@
 #include "ShaderProgram.hpp"
 #include "ShaderUniform.hpp"
 #include "Image.hpp"
+#include "File.hpp"
 
 struct Texture {
   GLuint tex;
   Uniform<SAMPLER2D>u_samp;
   Texture();
   ~Texture();
-  Image *NewImage(std::string &filename);
+  Image *NewImage(File &&file);
   void Init(std::string filename);
   void Init(FT_GlyphSlot *glyph);
   void AttachToShader(ShaderProgram &program);

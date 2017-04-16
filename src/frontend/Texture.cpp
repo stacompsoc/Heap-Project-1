@@ -13,17 +13,17 @@ Texture::Texture():
 Texture::~Texture()
 {}
 
-Image *Texture::NewImage(std::string &filename) {
-  if(filename.substr(filename.length() - strlen(".png"), strlen(".png")) == ".png") {
-    return new PNGImage(filename.c_str());
-  } else if(filename.substr(filename.length() - strlen(".jpg"), strlen(".jpg")) == ".jpg") {
-    return new JPEGImage(filename.c_str());
+Image *Texture::NewImage(File &&file) {
+  if(file.is_ext(".png")) {
+    return new PNGImage(file.name().c_str());
+  } else if(file.is_ext(".jpg") || file.is_ext(".jpeg")) {
+    return new JPEGImage(file.name().c_str());
   }
   throw std::runtime_error("invalid image format");
 }
 
 void Texture::Init(std::string filename) {
-  Image *image = NewImage(filename);
+  Image *image = NewImage(File(filename.c_str()));
   image->Load();
   glGenTextures(1, &tex); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR

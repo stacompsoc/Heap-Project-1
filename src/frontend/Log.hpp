@@ -13,7 +13,6 @@ void glfw_error_callback(int error, const char* description);
 void log_gl_params();
 const char* GL_type_to_string(GLenum type);
 
-#ifndef NDEBUG
 #define STR(x) #x
 #define TOSTR(x) STR(x)
 #define ERROR(format) fprintf(stderr, "error: " format "\n");
@@ -28,6 +27,7 @@ const char* GL_type_to_string(GLenum type);
     throw std::runtime_error("\033[1;91merror\033[0m at " CODE_LOCATION CONDITION_TOSTR(CONDITION)); \
   }
 
+#ifndef NDEBUG
 #define GLERROR { GLenum ret = glGetError(); if(ret != GL_NO_ERROR) { explain_glerror(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
 #define ALERROR { GLenum ret = alGetError(); if(ret != GL_NO_ERROR) { explain_alerror(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
 #else

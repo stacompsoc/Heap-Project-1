@@ -1,4 +1,4 @@
-#include "WAVSound.hpp"
+#include "SndFileSound.hpp"
 #include "Log.hpp"
 #include "incaudio.h"
 
@@ -6,17 +6,11 @@
 #include <sys/stat.h>
 #include <sndfile.h>
 
-WAVSound::WAVSound(const char *filename):
+SndFileSound::SndFileSound(const char *filename):
   Sound(strdup(filename))
 {}
 
-static size_t file_length(std::string &filename) {
-  struct stat st;
-  stat(filename.c_str(), &st);
-  return st.st_size;
-}
-
-void WAVSound::Load() {
+void SndFileSound::Load() {
   ASSERT(data == NULL);
   SF_INFO sfinfo;
   SNDFILE *sndfile = sf_open(filename.c_str(), SFM_READ, &sfinfo);

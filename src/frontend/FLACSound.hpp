@@ -1,5 +1,5 @@
 #pragma once
 
-#include "WAVSound.hpp"
+#include "SndFileSound.hpp"
 
-typedef WAVSound FLACSound;
+typedef SndFileSound FLACSound;

@@ -4,6 +4,7 @@
 #include "incaudio.h"
 
 #include "Sound.hpp"
+#include "File.hpp"
 
 struct AudioBuffer {
   ALuint buffer = 0;
@@ -15,6 +16,7 @@ struct AudioBuffer {
 
   AudioBuffer();
   ~AudioBuffer();
+  Sound *NewSound(File &&snd);
   void Init(const char *file);
   void Clear();
 };
