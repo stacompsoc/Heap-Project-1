@@ -9,6 +9,6 @@ Image::~Image()
 
 void Image::Clear() {
   width=0,height=0,depth=1;
-  delete data;
+  delete [] data;
   data = NULL;
 }

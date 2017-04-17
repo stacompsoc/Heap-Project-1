@@ -1,8 +1,11 @@
 #include "Texture.hpp"
 #include "Log.hpp"
 #include "Font.hpp"
+
 #include "PNGImage.hpp"
 #include "JPEGImage.hpp"
+#include "TIFFImage.hpp"
+#include "BMPImage.hpp"
 
 #include <fstream>
 
@@ -14,10 +17,15 @@ Texture::~Texture()
 {}
 
 Image *Texture::NewImage(File &&file) {
+  const char *fname = file.name().c_str();
   if(file.is_ext(".png")) {
-    return new PNGImage(file.name().c_str());
+    return new PNGImage(fname);
   } else if(file.is_ext(".jpg") || file.is_ext(".jpeg")) {
-    return new JPEGImage(file.name().c_str());
+    return new JPEGImage(fname);
+  } else if(file.is_ext(".tiff")) {
+    return new TIFFImage(fname);
+  } else if(file.is_ext(".bmp")) {
+    return new BMPImage(fname);
   }
   throw std::runtime_error("invalid image format");
 }
@@ -27,7 +35,7 @@ void Texture::Init(std::string filename) {
   image->Load();
   glGenTextures(1, &tex); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image->width, image->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image->data); GLERROR
+  glTexImage2D(GL_TEXTURE_2D, 0, image->format, image->width, image->height, 0, image->format, GL_UNSIGNED_BYTE, image->data); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); GLERROR
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); GLERROR

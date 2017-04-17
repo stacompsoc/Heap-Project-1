@@ -49,7 +49,7 @@ void UserInterface::Init() {
   size_t ARIAL = Storage::AddFont("fonts/Arial.ttf");
   quadProgram.Init({"vposition", "vtexcoords"});
   textProgram.Init({"vertex"});
-  BCKGR = Storage::AddTexture("textures/menubackground.png");
+  BCKGR = Storage::AddTexture("textures/menubackground.jpg");
   BTN = Storage::AddTexture("textures/button.png");
   BTNSEL = Storage::AddTexture("textures/button_sel.png");
   projection_matrix = glm::ortho(0.0f, float(width()), 0.0f, float(height()));

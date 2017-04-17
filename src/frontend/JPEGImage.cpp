@@ -30,20 +30,20 @@ void JPEGImage::Load() {
   jpeg_start_decompress(&info);    // decompress the file
 
   //set width and height
+  size_t bpp = info.num_components;
   width = info.output_width;
   height = info.output_height;
-  ASSERT(info.num_components == 3);
-  /* if(info.num_components != 4) { */
-  /*   gl_log("[jpeg] error: expecting RGBA image."); */
-  /*   return; */
-  /* } */
+  if(bpp == 3)
+    format = GL_RGB;
+  else if(bpp == 4)
+    format = GL_RGBA;
+  else
+    throw std::runtime_error("error: unknown pixel format");
 
-  size_t bpp = 3;
   data = new unsigned char[width * height * bpp];
   while(info.output_scanline < info.output_height) {
     // Enable jpeg_read_scanlines() to fill our jdata array
-    rowptr[0] = (unsigned char *)data + // secret to method
-            bpp * width * info.output_scanline;
+    rowptr[0] = (unsigned char *)data + /* secret to method */ bpp * width * (height - 1 - info.output_scanline);
     jpeg_read_scanlines(&info, rowptr, 1);
   }
   jpeg_finish_decompress(&info);

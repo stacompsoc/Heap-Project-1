@@ -21,7 +21,7 @@ The project consists of two parts: a basic physics engine, simulating 3d pseudop
 * c++14
 * opengl4, glsl
 * glew, glfw3, glm, openal-soft
-* libpng, libjpeg, libsndfile, freetype
+* libpng, libjpeg, libtiff, libsndfile, freetype
 * openmp
 * Make, pkg-config
 

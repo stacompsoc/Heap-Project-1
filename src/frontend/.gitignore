@@ -1,7 +1,10 @@
 planetarium
 *.dSYM
 *.o
-*.jpg
 *.tga
 *.log
 *.trace
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake

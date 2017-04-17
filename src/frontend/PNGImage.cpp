@@ -14,6 +14,7 @@ PNGImage::~PNGImage()
 
 void PNGImage::Load() {
   unsigned char header[8];    // 8 is the maximum size that can be checked
+  format = GL_RGBA;
 
   /* open file and test for it being a png */
   FILE *fp = fopen(filename.c_str(), "rb");
@@ -23,7 +24,6 @@ void PNGImage::Load() {
     gl_log("[read_png_file] File %s is not recognized as a PNG file", filename.c_str());
     return;
   }
-
 
   /* initialize stuff */
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
@@ -72,19 +72,15 @@ void PNGImage::Load() {
 
   fclose(fp);
 
-  if(png_get_color_type(png_ptr, info_ptr) == PNG_COLOR_TYPE_RGB) {
-    gl_log("[process_file] input file is PNG_COLOR_TYPE_RGB but must be PNG_COLOR_TYPE_RGBA "
-           "(lacks the alpha channel)");
-    return;
-  }
+  size_t bpp = png_get_channels(png_ptr, info_ptr);
 
-  if(png_get_color_type(png_ptr, info_ptr) != PNG_COLOR_TYPE_RGBA) {
-    gl_log("[process_file] color_type of input file must be PNG_COLOR_TYPE_RGBA (%d) (is %d)",
-           PNG_COLOR_TYPE_RGBA, png_get_color_type(png_ptr, info_ptr));
-    return;
-  }
+  if(bpp == 3)
+    format = GL_RGB;
+  else if(bpp == 4)
+    format = GL_RGBA;
+  else
+    throw std::runtime_error("unknown image format " + std::to_string(bpp) + " for file " + filename);
 
-  size_t bpp = 4;
   data = new unsigned char[height * width * bpp];
   for (size_t y = 0; y < height; ++y) {
     png_byte *row = row_pointers[y];
@@ -94,10 +90,8 @@ void PNGImage::Load() {
       /*        x, y, ptr[0], ptr[1], ptr[2], ptr[3]); */
       /* set red value to 0 and green value to the blue one */
       unsigned char *dataptr = &data[bpp * ((height - 1 - y) * width + x)];
-      dataptr[0] = ptr[0];
-      dataptr[1] = ptr[1];
-      dataptr[2] = ptr[2];
-      dataptr[3] = ptr[3];
+      for(size_t i = 0; i < bpp; ++i)
+        dataptr[i] = ptr[i];
     }
   }
 
