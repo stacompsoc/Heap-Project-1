@@ -1,4 +1,5 @@
 #include "File.hpp"
+#include "Debug.hpp"
 
 #include <cassert>
 #include <unistd.h>
@@ -36,13 +37,11 @@ bool File::exists() {
   return access(filename.c_str(), F_OK) != -1;
 }
 
-unsigned char *File::load() {
+char *File::load_text() {
   size_t size = length() + 1;
-  char *text = (char *)malloc(size * sizeof(char));
-  assert(text != NULL);
+  char *text = (char *)malloc(size * sizeof(char)); ASSERT(text != NULL);
 
-  FILE *file = fopen(filename.c_str(), "r");
-  assert(file != NULL);
+  FILE *file = fopen(filename.c_str(), "r"); ASSERT(file != NULL);
 
   char *t = text;
   while((*t = fgetc(file)) != EOF)
@@ -50,5 +49,5 @@ unsigned char *File::load() {
   *t = '\0';
 
   fclose(file);
-  return (unsigned char *)text;
+  return text;
 }

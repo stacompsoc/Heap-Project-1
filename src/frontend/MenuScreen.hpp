@@ -11,6 +11,7 @@ public:
   void Init();
   void Display();
   void Keyboard();
+  void KeyPress(int key, int scancode, int mods);
   void Mouse(double x, double y);
   void Clear();
 };

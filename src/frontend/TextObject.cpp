@@ -1,5 +1,5 @@
 #include "TextObject.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 TextObject::TextObject(
     const char *text,

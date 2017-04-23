@@ -1,5 +1,6 @@
 #include "TIFFImage.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <tiffio.h>
 
@@ -26,7 +27,7 @@ void TIFFImage::Load() {
       TIFFError(filename.c_str(), error);
       exit(1);
     }
-    gl_log("read tiff image %s (%d x %d)\n", filename.c_str(), img.width, img.height);
+    Logger::Info("read tiff image %s (%d x %d)\n", filename.c_str(), img.width, img.height);
   }
   else {
     TIFFError(filename.c_str(), error);

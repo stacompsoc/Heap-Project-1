@@ -1,5 +1,5 @@
 #include "TriangleScreen.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "Shader.hpp"
 #include "Window.hpp"
 #include "Storage.hpp"

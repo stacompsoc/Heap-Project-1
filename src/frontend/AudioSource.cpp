@@ -1,5 +1,5 @@
 #include "AudioSource.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 AudioSource::AudioSource()
 {}

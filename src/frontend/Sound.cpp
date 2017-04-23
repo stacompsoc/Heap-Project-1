@@ -1,5 +1,5 @@
 #include "Sound.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 Sound::Sound(const char *filename):
   filename(filename)

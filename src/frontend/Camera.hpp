@@ -10,17 +10,15 @@
 class Camera : public Moveable {
   Uniform<MAT4>
     u_camera;
-  /* glm::mat4 */
-  /*   translate, */
-  /*   rotate, */
-  /*   scale; */
   glm::mat4
+    projection,
     cameramat;
 public:
   /* bool has_changed = true; */
   bool need_to_update = true;
-  Camera(float width, float height);
+  Camera();
   ~Camera();
+  void WindowResized(float new_width, float new_height);
   void AttachToShader(ShaderProgram &program);
   void Init();
   void Update();

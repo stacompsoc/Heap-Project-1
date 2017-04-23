@@ -1,5 +1,6 @@
 #include "Model.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <libgen.h>
 
@@ -13,7 +14,7 @@ Model::~Model()
 void Model::Init(const char *file) {
   const aiScene *scene = importer.ReadFile(file, aiProcess_Triangulate | aiProcess_FlipUVs);
   if(scene == NULL || scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || scene->mRootNode == NULL) {
-    gl_log("error: %s\n", importer.GetErrorString());
+    Logger::Error("%s\n", importer.GetErrorString());
   }
   /* directory = dirname(file); */
 }

@@ -12,5 +12,5 @@ public:
   std::string name();
   bool is_ext(const std::string &&ext);
   bool exists();
-  unsigned char *load();
+  char *load_text();
 };

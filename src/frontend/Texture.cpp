@@ -1,5 +1,6 @@
 #include "Texture.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 #include "Font.hpp"
 
 #include "PNGImage.hpp"
@@ -31,7 +32,7 @@ Image *Texture::NewImage(File &file) {
 }
 
 void Texture::Init(std::string filename) {
-  gl_log("Loading texture '%s'\n", filename.c_str());
+  Logger::Info("Loading texture '%s'\n", filename.c_str());
   File file(filename.c_str());
   Image *image = NewImage(file);
   image->Load();
@@ -46,7 +47,7 @@ void Texture::Init(std::string filename) {
   Unbind();
   image->Clear();
   delete image;
-  gl_log("Finished loading texture '%s'.\n", filename.c_str());
+  Logger::Info("Finished loading texture '%s'.\n", filename.c_str());
 }
 
 void Texture::Init(FT_GlyphSlot *glyph) {

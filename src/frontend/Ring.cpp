@@ -1,5 +1,6 @@
 #include "Ring.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <omp.h>
 #include <glm/glm.hpp>
@@ -95,9 +96,9 @@ void Ring<N>::SetTexcoords(int index) {
     buffer[2] = tx0, buffer[3] = 0,
     buffer[4] = tx1, buffer[5] = 1;
   }
-  gl_log("%.2f,%.2f\n", buffer[0], buffer[1]);
-  gl_log("%.2f,%.2f\n", buffer[2], buffer[3]);
-  gl_log("%.2f,%.2f\n", buffer[4], buffer[5]);
+  Logger::Say("%.2f,%.2f\n", buffer[0], buffer[1]);
+  Logger::Say("%.2f,%.2f\n", buffer[2], buffer[3]);
+  Logger::Say("%.2f,%.2f\n", buffer[4], buffer[5]);
 }
 
 template <int N>
@@ -107,10 +108,10 @@ void Ring<N>::SetVertices(const glm::vec3 &a, const glm::vec3 &b, const glm::vec
   memcpy(buffer, glm::value_ptr(a), sizeof(GLfloat) * 3);
   memcpy(buffer + 3, glm::value_ptr(b), sizeof(GLfloat) * 3);
   memcpy(buffer + 6, glm::value_ptr(c), sizeof(GLfloat) * 3);
-  gl_log("adding triangle_strip\n");
-  gl_log("%.2f,%.2f,%.2f\n", a.x,a.y,a.z);
-  gl_log("%.2f,%.2f,%.2f\n", b.x,b.y,b.z);
-  gl_log("%.2f,%.2f,%.2f\n", c.x,c.y,c.z);
+  Logger::Say("adding triangle_strip\n");
+  Logger::Say("%.2f,%.2f,%.2f\n", a.x,a.y,a.z);
+  Logger::Say("%.2f,%.2f,%.2f\n", b.x,b.y,b.z);
+  Logger::Say("%.2f,%.2f,%.2f\n", c.x,c.y,c.z);
 }
 
 template <int N>

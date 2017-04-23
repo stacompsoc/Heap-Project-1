@@ -1,5 +1,5 @@
 #include "VertexArray.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 GLuint VertexArray::last_vao = 0;
 VertexArray::VertexArray()

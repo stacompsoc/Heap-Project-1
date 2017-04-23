@@ -1,6 +1,6 @@
 #include "SndFileSound.hpp"
-#include "Log.hpp"
-#include "incaudio.h"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <cstring>
 #include <sys/stat.h>
@@ -22,6 +22,6 @@ void SndFileSound::Load() {
   freq = sfinfo.samplerate;
   sf_read_short(sndfile, data, size);
   size *= sizeof(short);
-  gl_log("%lu %lu %lu\n", size, format, freq);
+  Logger::Info("%lu %lu %lu\n", size, format, freq);
   sf_close(sndfile);
 }

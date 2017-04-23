@@ -1,5 +1,6 @@
 #include "AudioBuffer.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include "WAVSound.hpp"
 #include "FLACSound.hpp"
@@ -18,7 +19,8 @@ Sound *AudioBuffer::NewSound(File &&snd) {
   } else if(snd.is_ext(".flac")) {
     return new FLACSound(snd.name().c_str());
   }
-  throw std::domain_error("error: unsupported file format");
+  Logger::Error("unsupported file format");
+  return NULL;
 }
 
 void AudioBuffer::Init(const char *file) {

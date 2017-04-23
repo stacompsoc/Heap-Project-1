@@ -1,9 +1,9 @@
 #include "Space.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "Storage.hpp"
 
-Space::Space(float width, float height):
-  cam(width, height),
+Space::Space():
+  cam(),
   planetProgram({"planet.vert", "planet.geom", "planet.frag"}),
   skeletonProgram({"planet.vert", "planet_skeleton.geom", "planet.frag"}),
   mainScenerao(this),
@@ -78,9 +78,9 @@ Camera *Space::Cam() {
   return &instance->cam;
 }
 
-void Space::Setup(float width, float height) {
+void Space::Setup() {
   ASSERT(instance == NULL);
-  instance = new Space(width, height);
+  instance = new Space();
   instance->Init();
 }
 

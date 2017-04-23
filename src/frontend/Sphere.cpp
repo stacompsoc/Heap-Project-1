@@ -1,6 +1,7 @@
 #include "Sphere.hpp"
 #include "Camera.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <omp.h>
 #include <glm/gtc/type_ptr.hpp>
@@ -38,7 +39,7 @@ void Sphere::Init() {
 
   for(size_t i = 0; i < SIZE; ++i) {
     GLfloat *v = &vertices[i*9];
-    gl_log("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
+    Logger::Say("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
            v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8]);
   }
 
@@ -113,9 +114,9 @@ void Sphere::SetTexcoords(size_t index) {
     buffer[2] = tx1, buffer[3] = ty0,
     buffer[4] = tx0, buffer[5] = ty0;
   }
-  gl_log("%.2f,%.2f\n", buffer[0], buffer[1]);
-  gl_log("%.2f,%.2f\n", buffer[2], buffer[3]);
-  gl_log("%.2f,%.2f\n", buffer[4], buffer[5]);
+  Logger::Say("%.2f,%.2f\n", buffer[0], buffer[1]);
+  Logger::Say("%.2f,%.2f\n", buffer[2], buffer[3]);
+  Logger::Say("%.2f,%.2f\n", buffer[4], buffer[5]);
 }
 
 void Sphere::SetVertices(const glm::vec3 &&a, const glm::vec3 &&b, const glm::vec3 &&c, size_t index) {
@@ -124,10 +125,10 @@ void Sphere::SetVertices(const glm::vec3 &&a, const glm::vec3 &&b, const glm::ve
   memcpy(buffer, glm::value_ptr(a), sizeof(GLfloat) * 3);
   memcpy(buffer + 3, glm::value_ptr(b), sizeof(GLfloat) * 3);
   memcpy(buffer + 6, glm::value_ptr(c), sizeof(GLfloat) * 3);
-  gl_log("adding triangle_strip\n");
-  gl_log("%.2f,%.2f,%.2f\n", buffer[0], buffer[1], buffer[2]);
-  gl_log("%.2f,%.2f,%.2f\n", buffer[3], buffer[4], buffer[5]);
-  gl_log("%.2f,%.2f,%.2f\n", buffer[6], buffer[7], buffer[8]);
+  Logger::Say("adding triangle_strip\n");
+  Logger::Say("%.2f,%.2f,%.2f\n", buffer[0], buffer[1], buffer[2]);
+  Logger::Say("%.2f,%.2f,%.2f\n", buffer[3], buffer[4], buffer[5]);
+  Logger::Say("%.2f,%.2f,%.2f\n", buffer[6], buffer[7], buffer[8]);
 }
 
 void Sphere::Draw() {

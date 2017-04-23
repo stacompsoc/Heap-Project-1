@@ -1,5 +1,5 @@
 #include "ShaderAttrib.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 ShaderAttrib::ShaderAttrib()
 {}

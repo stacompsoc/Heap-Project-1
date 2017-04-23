@@ -1,5 +1,6 @@
 #pragma once
 
+#include <map>
 #include <glm/glm.hpp>
 
 #include "incgraphics.h"
@@ -22,18 +23,30 @@ protected:
   void init_glfw();
   void init_glew();
   void init_controls();
+  const GLFWvidmode *vidmode = NULL;
 public:
   GLFWwindow *window = NULL;
-  Window(size_t width, size_t height);
+  Window();
+  ~Window();
   size_t width() const;
   size_t height() const;
   void GLVersion();
   void Init();
   void Idle();
   void Display();
+  void Resize(float new_width, float new_height);
   void Switch();
   void Keyboard();
+  void KeyboardEvent(int key, int scancode, int action, int mods);
   void Mouse(double x, double y);
+  void MouseClick(double x, double y, int button, int action, int mods);
+  void MouseScroll(double xoffset, double yoffset);
   void Clear();
-  ~Window();
 };
+
+extern std::map <GLFWwindow *, Window *> window_reference;
+void glfw_error_callback(int error, const char* description);
+void glfw_keypress_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+void glfw_size_callback(GLFWwindow *window, int new_width, int new_height);
+void glfw_mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
+void glfw_mouse_scroll_callback(GLFWwindow *window, double xoffset, double yoffset);

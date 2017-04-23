@@ -1,7 +1,7 @@
 #include "Text.hpp"
+#include "Debug.hpp"
 #include "ShaderUniform.hpp"
 #include "Sprite.hpp"
-#include "Log.hpp"
 
 Text::Text():
   u_textcolor("textcolor")

@@ -1,5 +1,5 @@
 #include "MultiObjectConstructor.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "Space.hpp"
 #include "Storage.hpp"
 

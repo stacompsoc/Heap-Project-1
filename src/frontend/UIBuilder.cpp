@@ -1,5 +1,5 @@
 #include "UIBuilder.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "UserInterface.hpp"
 
 UIBuilder::UIBuilder(UserInterface *ui):

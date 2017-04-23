@@ -1,5 +1,5 @@
 #include "Storage.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "Shape.hpp"
 #include "Sphere.hpp"
 #include "Ring.hpp"

@@ -1,5 +1,6 @@
 #include "Mesh.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <sstream>
 

@@ -1,5 +1,5 @@
 #include "Object.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "Texture.hpp"
 #include "Sprite.hpp"
 #include "Storage.hpp"

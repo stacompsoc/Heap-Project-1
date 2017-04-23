@@ -2,7 +2,7 @@
 #include "SpaceScreen.hpp"
 #include "Space.hpp"
 #include "Camera.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "Window.hpp"
 #include "Object.hpp"
 #include "Sphere.hpp"
@@ -17,7 +17,7 @@ SpaceScreen::~SpaceScreen()
 {}
 
 void SpaceScreen::Init() {
-  Space::Setup(win_->width(), win_->height());
+  Space::Setup();
 }
 
 void SpaceScreen::Display() {
@@ -25,12 +25,14 @@ void SpaceScreen::Display() {
   Space::inst()->Draw();
 }
 
+void SpaceScreen::Resize() {
+  Space::Cam()->WindowResized(width(), height());
+}
+
 void SpaceScreen::Keyboard() {
   Camera *cam = Space::Cam();
   static float accel = 1.01;
-  if(glfwGetKey(win_->window, GLFW_KEY_ENTER) == GLFW_PRESS) {
-    /* should_close = true; */
-  } else if(glfwGetKey(win_->window, GLFW_KEY_UP)) {
+  if(glfwGetKey(win_->window, GLFW_KEY_UP)) {
     cam->MovePosition(0, -.05, 0);
   } else if(glfwGetKey(win_->window, GLFW_KEY_DOWN)) {
     cam->MovePosition(0, .05, 0);
@@ -61,7 +63,17 @@ void SpaceScreen::Keyboard() {
   }
 }
 
+void SpaceScreen::KeyPress(int key, int scancode, int mods) {
+  if(key == GLFW_KEY_ENTER)
+    should_close = true;
+}
+
 void SpaceScreen::Mouse(double x, double y) {
+}
+
+void SpaceScreen::MouseScroll(double xoffset, double yoffset) {
+  Space::Cam()->Rotate(0, 1, 0, xoffset * 2);
+  Space::Cam()->Rotate(1, 0, 0, yoffset * 2);
 }
 
 void SpaceScreen::Clear() {

@@ -1,21 +1,9 @@
 #pragma once
 
-#include <stdexcept>
 #include <iostream>
 
-#include "incaudio.h"
 #include "incgraphics.h"
-
-char *strdup(const char *s);
-
-bool restart_gl_log(const char *filename);
-void mirror_log(FILE *another = stdout);
-bool gl_log(const char* message, ...);
-bool gl_log_err(const char* message, ...);
-void close_gl_log();
-void glfw_error_callback(int error, const char* description);
-void log_gl_params();
-const char* GL_type_to_string(GLenum type);
+#include "incaudio.h"
 
 #define STR(x) #x
 #define TOSTR(x) STR(x)
@@ -32,11 +20,16 @@ const char* GL_type_to_string(GLenum type);
   }
 
 #ifndef NDEBUG
+
 #define GLERROR { GLenum ret = glGetError(); if(ret != GL_NO_ERROR) { explain_glerror(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
 #define ALERROR { GLenum ret = alGetError(); if(ret != GL_NO_ERROR) { explain_alerror(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
+
 #else
+
 #define GLERROR
 #define ALERROR
+
 #endif
+
 void explain_glerror(GLenum code);
 void explain_alerror(ALenum code);

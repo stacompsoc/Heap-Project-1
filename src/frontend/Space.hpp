@@ -23,7 +23,7 @@ protected:
   std::vector <MultiObject>
     spaceObjects;
   static Space *instance;
-  Space(float width, float height);
+  Space();
   ~Space();
 public:
   size_t AddMultiObject();
@@ -33,6 +33,6 @@ public:
   void Clear();
   static Space *inst();
   static Camera *Cam();
-  static void Setup(float width, float height);
+  static void Setup();
   static void Cleanup();
 };

@@ -1,8 +1,7 @@
 #include "UserInterface.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 UserInterface::UserInterface(Screen *screen):

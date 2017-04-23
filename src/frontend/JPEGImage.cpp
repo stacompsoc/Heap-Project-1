@@ -1,5 +1,6 @@
 #include "JPEGImage.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <cstdio>
 #include <jpeglib.h>

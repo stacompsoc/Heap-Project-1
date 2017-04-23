@@ -1,5 +1,6 @@
 #include "PNGImage.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <cstdio>
 #include <setjmp.h>
@@ -17,12 +18,11 @@ void PNGImage::Load() {
   format = GL_RGBA;
 
   /* open file and test for it being a png */
-  gl_log("PNG OPENING FILE '%s'\n", filename.c_str());
   FILE *fp = fopen(filename.c_str(), "rb");
   ASSERT(fp != NULL);
   fread(header, 1, 8, fp);
   if(png_sig_cmp(header, 0, 8)) {
-    gl_log("[read_png_file] File %s is not recognized as a PNG file", filename.c_str());
+    Logger::Error("[read_png_file] File %s is not recognized as a PNG file", filename.c_str());
     return;
   }
 
@@ -30,18 +30,18 @@ void PNGImage::Load() {
   png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
 
   if(png_ptr == NULL) {
-    gl_log("[read_png_file] png_create_read_struct failed");
+    Logger::Error("[read_png_file] png_create_read_struct failed");
     return;
   }
 
   png_infop info_ptr = png_create_info_struct(png_ptr);
   if(!info_ptr) {
-    gl_log("[read_png_file] png_create_info_struct failed");
+    Logger::Error("[read_png_file] png_create_info_struct failed");
     return;
   }
 
   if(setjmp(png_jmpbuf(png_ptr))) {
-    gl_log("[read_png_file] Error during init_io");
+    Logger::Error("[read_png_file] Error during init_io");
     return;
   }
 
@@ -61,7 +61,7 @@ void PNGImage::Load() {
 
   /* read file */
   if(setjmp(png_jmpbuf(png_ptr))) {
-    gl_log("[read_png_file] Error during read_image");
+    Logger::Error("[read_png_file] read_image failed");
     return;
   }
 
@@ -80,7 +80,7 @@ void PNGImage::Load() {
   else if(bpp == 4)
     format = GL_RGBA;
   else
-    throw std::runtime_error("unknown image format " + std::to_string(bpp) + " for file " + filename);
+    Logger::Error("unknown image format %d for file %s\n", bpp, filename.c_str()),abort();
 
   data = new unsigned char[height * width * bpp];
   for (size_t y = 0; y < height; ++y) {

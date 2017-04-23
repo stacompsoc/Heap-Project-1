@@ -1,5 +1,6 @@
 #include "Shader.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <cstdlib>
 #include <cstdio>
@@ -29,27 +30,9 @@ Shader::Shader(std::string &filename):
 Shader::~Shader()
 {}
 
-char *Shader::load_text_file() {
-  size_t size = file.length() + 1;
-  char *text = (char *)malloc(size * sizeof(char));
-  assert(text != NULL);
-
-  FILE *fp = fopen(file.name().c_str(), "r");
-  assert(fp != NULL);
-
-  char *t = text;
-  while((*t = fgetc(fp)) != EOF) {
-    ++t;
-  }
-  *t = '\0';
-
-  fclose(fp);
-  return text;
-}
-
 void Shader::Compile() {
   id = glCreateShader(type); GLERROR
-  char *source_code = load_text_file();
+  char *source_code = file.load_text();
   ASSERT(source_code != NULL);
   glShaderSource(id, 1, &source_code, NULL); GLERROR
   glCompileShader(id); GLERROR

@@ -1,5 +1,5 @@
 #include "Audio.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 #include <cstdlib>
 #include <cstring>

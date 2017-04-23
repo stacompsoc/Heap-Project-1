@@ -1,5 +1,6 @@
 #include "Triangle.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 #include "ColorBuffer.hpp"
 #include "Sprite.hpp"
 
@@ -62,7 +63,7 @@ void Triangle::init_array_object() {
     glBindBuffer(GL_ARRAY_BUFFER, tex.vbo); GLERROR
     glEnableVertexAttribArray(1); GLERROR // layout(location == 2)
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
-    gl_log("triangle: vertex array == %d\n", vao.get_id());
+    Logger::Info("triangle: vertex array == %d\n", vao.get_id());
   } else {
     glBindBuffer(GL_ARRAY_BUFFER, cb_vbo); GLERROR
     glEnableVertexAttribArray(1); GLERROR // layout(location == 1)

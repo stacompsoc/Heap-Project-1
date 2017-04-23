@@ -1,5 +1,5 @@
 #include "ShaderUniform.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 

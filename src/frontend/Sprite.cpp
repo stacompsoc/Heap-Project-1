@@ -1,5 +1,5 @@
 #include "Sprite.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "ColorBuffer.hpp"
 #include "Texture.hpp"
 #include "Font.hpp"

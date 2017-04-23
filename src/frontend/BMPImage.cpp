@@ -1,5 +1,6 @@
 #include "BMPImage.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <omp.h>
 
@@ -39,11 +40,11 @@ void BMPImage::Load() {
   format = GL_RGB;
   // Some BMP files are misformatted, guess missing information
   if(img_size == 0 || img_size != width * height * bpp) {
-    gl_log("[bmp] warning: file [%s] has incorrect img_size %d\n", filename.c_str(), img_size);
+    Logger::Warning("[bmp] warning: file [%s] has incorrect img_size %d\n", filename.c_str(), img_size);
     img_size = width * height * bpp;
   }
   if(data_pos != 138) {
-    gl_log("[bmp] warning: file [%s] has incorrect data_pos %d\n", filename.c_str(), data_pos);
+    Logger::Warning("[bmp] warning: file [%s] has incorrect data_pos %d\n", filename.c_str(), data_pos);
     data_pos = 138;
   }
   ASSERT(img_size == width * height * bpp);

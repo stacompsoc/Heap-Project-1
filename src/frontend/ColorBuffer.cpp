@@ -1,5 +1,5 @@
 #include "ColorBuffer.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 ColorBuffer::ColorBuffer()
 {}

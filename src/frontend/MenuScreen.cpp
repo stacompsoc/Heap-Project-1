@@ -1,8 +1,7 @@
 #include "MenuScreen.hpp"
-#include "Storage.hpp"
-#include "Window.hpp"
-#include "Log.hpp"
 #include "UserInterface.hpp"
+#include "Window.hpp"
+#include "Debug.hpp"
 
 MenuScreen::MenuScreen(Window *win):
   Screen(win)
@@ -21,11 +20,11 @@ void MenuScreen::Display() {
 }
 
 void MenuScreen::Keyboard() {
-  if(glfwGetKey(win_->window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-    glfwSetWindowShouldClose(win_->window, true);
-  } else if(glfwGetKey(win_->window, GLFW_KEY_ENTER) == GLFW_PRESS) {
+}
+
+void MenuScreen::KeyPress(int key, int scancode, int mods) {
+  if(key == GLFW_KEY_ENTER)
     should_close = true;
-  }
 }
 
 void MenuScreen::Mouse(double x, double y) {

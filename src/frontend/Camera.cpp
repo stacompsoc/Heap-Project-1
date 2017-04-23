@@ -1,11 +1,9 @@
 #include "Camera.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 #include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/transform.hpp>
 
-Camera::Camera(float width, float height):
+Camera::Camera():
   Moveable(),
   u_camera("camera")
 {
@@ -20,6 +18,11 @@ Camera::~Camera()
 void Init() {
 }
 
+void Camera::WindowResized(float new_width, float new_height) {
+  projection = glm::ortho(-new_width/new_height, new_width/new_height, -1.0f, 1.0f, 1.0f, -1.0f);
+  has_changed = true;
+}
+
 void Camera::AttachToShader(ShaderProgram &program) {
   ASSERT(program.id() != 0);
   u_camera.set_id(program.id());
@@ -27,7 +30,7 @@ void Camera::AttachToShader(ShaderProgram &program) {
 
 void Camera::Update() {
   if(has_changed) {
-    cameramat = translate * rotate * scale;
+    cameramat = projection * translate * rotate * scale;
     has_changed = false;
   }
   if(need_to_update) {
