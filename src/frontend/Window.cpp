@@ -28,6 +28,9 @@ size_t Window::height() const {
 }
 
 void Window::start() {
+  int rc = restart_gl_log("frontend.log");
+  /* mirror_log(stdout); */
+  ASSERT(rc);
   init_glfw();
   init_glew();
   init_controls();
@@ -36,11 +39,8 @@ void Window::start() {
 }
 
 void Window::init_glfw() {
-  int rc;
-  rc = restart_gl_log();
-  ASSERT(rc);
   glfwSetErrorCallback(glfw_error_callback);
-  rc = glfwInit();
+  int rc = glfwInit();
   ASSERT(rc == 1);
 
   /* glfwWindowHint(GLFW_SAMPLES, 4); */
@@ -149,6 +149,7 @@ void Window::Clear() {
   glfwTerminate(); GLERROR
   current_screen = NULL;
   audio.Clear();
+  close_gl_log();
 }
 
 Window::~Window()

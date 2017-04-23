@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 2.8.2)
 
+  cmake_minimum_required(VERSION 2.8.2)
 project(frontend)
 
-message("C++ Compilter ${CMAKE_CXX_COMPILER}")
+message("C++ Compiler ${CMAKE_CXX_COMPILER}")
 
 if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     if (CMAKE_CXX_COMPILER_VERSION VERSION_LESS 4.8)
@@ -16,7 +16,8 @@ else()
     message(WARNING "You are using unsupported compiler, and will probably have to change the source code.")
 endif()
 
-set(OPTFLAGS "-g3")
+#set(OPTFLAGS "-g3")
+set(OPTFLAGS "-Ofast -DNDEBUG")
 add_compile_options(-std=c++1y)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPTFLAGS} -Wno-deprecated -Wno-delete-non-virtual-dtor")
 
@@ -83,7 +84,7 @@ else()
   message(FATAL_ERROR "ASSIMP not found")
 endif(ASSIMP_FOUND)
 
-find_package(FreeType REQUIRED)
+find_package(Freetype REQUIRED)
 if(FREETYPE_FOUND)
   message("using ${FREETYPE_LIBRARIES} ${FREETYPE_INCLUDE_DIRS}")
   include_directories(${FREETYPE_INCLUDE_DIRS})

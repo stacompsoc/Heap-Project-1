@@ -16,22 +16,24 @@ Texture::Texture():
 Texture::~Texture()
 {}
 
-Image *Texture::NewImage(File &&file) {
-  const char *fname = file.name().c_str();
+Image *Texture::NewImage(File &file) {
+  ASSERT(file.exists());
   if(file.is_ext(".png")) {
-    return new PNGImage(fname);
+    return new PNGImage(file.name().c_str());
   } else if(file.is_ext(".jpg") || file.is_ext(".jpeg")) {
-    return new JPEGImage(fname);
+    return new JPEGImage(file.name().c_str());
   } else if(file.is_ext(".tiff")) {
-    return new TIFFImage(fname);
+    return new TIFFImage(file.name().c_str());
   } else if(file.is_ext(".bmp")) {
-    return new BMPImage(fname);
+    return new BMPImage(file.name().c_str());
   }
   throw std::runtime_error("invalid image format");
 }
 
 void Texture::Init(std::string filename) {
-  Image *image = NewImage(File(filename.c_str()));
+  gl_log("Loading texture '%s'\n", filename.c_str());
+  File file(filename.c_str());
+  Image *image = NewImage(file);
   image->Load();
   glGenTextures(1, &tex); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
@@ -44,6 +46,7 @@ void Texture::Init(std::string filename) {
   Unbind();
   image->Clear();
   delete image;
+  gl_log("Finished loading texture '%s'.\n", filename.c_str());
 }
 
 void Texture::Init(FT_GlyphSlot *glyph) {

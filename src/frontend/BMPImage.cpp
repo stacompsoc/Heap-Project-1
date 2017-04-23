@@ -53,7 +53,7 @@ void BMPImage::Load() {
   for(size_t y = 0; y < height; ++y) {
     r = fread(row, sizeof(unsigned char), width*bpp, file);
     ASSERT(r == width  * bpp);
-    #pragma omp parallel for num_threads(8)
+    #pragma omp parallel for num_threads(4)
     for(size_t x = 0; x < width; ++x) {
       unsigned char
         *dptr = &data[width * y * bpp + x * bpp],

@@ -17,6 +17,7 @@ void PNGImage::Load() {
   format = GL_RGBA;
 
   /* open file and test for it being a png */
+  gl_log("PNG OPENING FILE '%s'\n", filename.c_str());
   FILE *fp = fopen(filename.c_str(), "rb");
   ASSERT(fp != NULL);
   fread(header, 1, 8, fp);

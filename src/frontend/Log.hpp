@@ -6,9 +6,13 @@
 #include "incaudio.h"
 #include "incgraphics.h"
 
-bool restart_gl_log();
+char *strdup(const char *s);
+
+bool restart_gl_log(const char *filename);
+void mirror_log(FILE *another = stdout);
 bool gl_log(const char* message, ...);
 bool gl_log_err(const char* message, ...);
+void close_gl_log();
 void glfw_error_callback(int error, const char* description);
 void log_gl_params();
 const char* GL_type_to_string(GLenum type);
@@ -31,7 +35,6 @@ const char* GL_type_to_string(GLenum type);
 #define GLERROR { GLenum ret = glGetError(); if(ret != GL_NO_ERROR) { explain_glerror(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
 #define ALERROR { GLenum ret = alGetError(); if(ret != GL_NO_ERROR) { explain_alerror(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
 #else
-#define ASSERT(CONDITION)
 #define GLERROR
 #define ALERROR
 #endif

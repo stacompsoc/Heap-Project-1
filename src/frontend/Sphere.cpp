@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cmath>
 
-const size_t Sphere::DIM = 120;
+const size_t Sphere::DIM = 100;
 const size_t Sphere::SIZE = DIM*2 * DIM*2;
 Sphere::Sphere():
   Shape()
@@ -36,11 +36,11 @@ void Sphere::Init() {
 
   InitBuffers();
 
-  /* for(size_t i = 0; i < SIZE; ++i) { */
-  /*   GLfloat *v = &vertices[i*9]; */
-  /*   printf("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n", */
-  /*          v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8]); */
-  /* } */
+  for(size_t i = 0; i < SIZE; ++i) {
+    GLfloat *v = &vertices[i*9];
+    gl_log("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
+           v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8]);
+  }
 
   vert.Init(GL_ARRAY_BUFFER);
   vert.Bind();
@@ -74,7 +74,6 @@ void Sphere::InitBuffers() {
     const double dyx = double(i) * step;
     for(size_t j = 0; j < DIM*2; ++j) {
       int index = 2 * (i * DIM * 2 + j);
-      /* std::cout << omp_get_thread_num() << " : " << index / 2 << std::endl; */
       const double dzx = double(j) * step;
       SetTexcoords(index);
       SetVertices(

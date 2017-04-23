@@ -1,4 +1,5 @@
 #!/bin/sh
 
 make clean
-rm -rvf CMakeCache.txt CMakeFiles cmake_install.cmake Makefile tags *.o
+rm -vf *.ninja .ninja* *.o CMakeCache.txt cmake_install.cmake Makefile *.o
+rm -rvf CMakeFiles tags *.dSYM

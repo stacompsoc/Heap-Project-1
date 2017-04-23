@@ -12,6 +12,7 @@
 
 class UserInterface {
 protected:
+  friend class UIBuilder;
   Screen
     *screen;
   ShaderProgram

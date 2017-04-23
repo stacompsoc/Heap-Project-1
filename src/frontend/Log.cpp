@@ -1,16 +1,29 @@
 #include <ctime>
 #include <cstdarg>
 #include <cstdio>
-#include <string>
 #include <cstdlib>
+#include <unistd.h>
+
+#include <string>
 
 #include "Log.hpp"
 
-const char *log_file = "frontend.log";
+char *log_file = NULL;
+FILE *log_file_ptr = NULL;
 
-bool restart_gl_log() {
-  FILE* file = fopen(log_file, "w");
-  if(!file) {
+char *strdup(const char *s) {
+  int len = (strlen(s) + 1) * sizeof(char);
+  char *s2 = (char *)malloc(len);
+  memcpy(s2, s, len);
+  return s2;
+}
+
+bool restart_gl_log(const char *filename) {
+  log_file = strdup(filename);
+#ifndef NDEBUG
+  truncate(log_file, 0);
+  log_file_ptr = fopen(log_file, "a");
+  if(log_file_ptr == NULL) {
     fprintf(stderr,
       "ERROR: could not open GL_LOG_FILE log file %s for writing\n",
       log_file);
@@ -18,53 +31,57 @@ bool restart_gl_log() {
   }
   time_t now = time(NULL);
   char* date = ctime(&now);
-  fprintf(file, "GL_LOG_FILE log. local time %s\n", date);
-  fclose(file);
+  fprintf(log_file_ptr, "GL_LOG_FILE log. local time %s\n", date);
+  fflush(log_file_ptr);
+#endif
   return true;
 }
 
-bool gl_log(const char* message, ...) {
-  va_list argptr;
-  FILE* file = fopen(log_file, "a");
-  if(!file) {
-    fprintf(
-      stderr,
-      "ERROR: could not open GL_LOG_FILE %s file for appending\n",
-      log_file
-      );
-    return false;
+void mirror_log(FILE *another) {
+  dup2(fileno(another), fileno(log_file_ptr));
+  if(errno) {
+    perror("error");
+    errno=0;
   }
+}
+
+bool gl_log(const char* message, ...) {
+#ifndef NDEBUG
+  if(log_file_ptr == NULL)
+    fprintf(stderr, "error: cannot log into NULL file"),abort();
+  va_list argptr;
   va_start(argptr, message);
-  vfprintf(file, message, argptr);
+  vfprintf(log_file_ptr, message, argptr);
   va_end(argptr);
-  fclose(file);
+#endif
   return true;
 }
 
 bool gl_log_err(const char* message, ...) {
+#ifndef NDEBUG
   va_list argptr;
-  FILE* file = fopen(log_file, "a");
-  if(!file) {
-    fprintf(stderr,
-            "ERROR: could not open GL_LOG_FILE %s file for appending\n",
-            log_file);
-    return false;
-  }
-  va_start(argptr, message);
-  vfprintf(file, message, argptr);
-  va_end(argptr);
   va_start(argptr, message);
   vfprintf(stderr, message, argptr);
   va_end(argptr);
-  fclose(file);
+#endif
   return true;
 }
 
+void close_gl_log() {
+  fclose(log_file_ptr);
+  log_file_ptr = NULL;
+  free(log_file);
+  log_file = NULL;
+}
+
 void glfw_error_callback(int error, const char* description) {
+#ifndef NDEBUG
   gl_log_err("GLFW ERROR: code %i msg: %s\n", error, description);
+#endif
 }
 
 void log_gl_params() {
+#ifndef NDEBUG
   GLenum params[] = {
     GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
     GL_MAX_CUBE_MAP_TEXTURE_SIZE,
@@ -110,6 +127,7 @@ void log_gl_params() {
   glGetBooleanv(params[11], &s);
   gl_log("%s %u\n", names[11], (unsigned int)s);
   gl_log("-----------------------------\n");
+#endif
 }
 
 const char* GL_type_to_string(GLenum type) {

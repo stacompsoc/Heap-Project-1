@@ -1,6 +1,7 @@
 #include "File.hpp"
 
 #include <cassert>
+#include <unistd.h>
 #include <sys/stat.h>
 
 File::File(const char *filename):
@@ -29,6 +30,10 @@ bool File::is_ext(const std::string &&ext) {
     return false;
   size_t f=filename.length(),e=ext.length();
   return filename.substr(f-e, e) == ext;
+}
+
+bool File::exists() {
+  return access(filename.c_str(), F_OK) != -1;
 }
 
 unsigned char *File::load() {
