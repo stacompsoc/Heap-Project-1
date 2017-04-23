@@ -1,5 +1,6 @@
 #include "Quad.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -37,9 +38,9 @@ void Quad::SetTexcoords(size_t index, GLfloat texcoords[6]) {
     };
     memcpy(texcoords, tmp, 6 * sizeof(GLfloat));
   }
-  gl_log("%.2f,%.2f\n", texcoords[0], texcoords[1]);
-  gl_log("%.2f,%.2f\n", texcoords[2], texcoords[3]);
-  gl_log("%.2f,%.2f\n", texcoords[4], texcoords[5]);
+  Logger::Say("%.2f,%.2f\n", texcoords[0], texcoords[1]);
+  Logger::Say("%.2f,%.2f\n", texcoords[2], texcoords[3]);
+  Logger::Say("%.2f,%.2f\n", texcoords[4], texcoords[5]);
 }
 
 void Quad::AddTriangle(
@@ -55,11 +56,11 @@ void Quad::AddTriangle(
   memcpy(buffer + 6, glm::value_ptr(c), sizeof(GLfloat) * 3);
   triangles.push_back(Triangle());
   if(!is_textured) {
-    gl_log("is textured %d\n", is_textured);
+    Logger::Say("is textured %d\n", is_textured);
     size_t color = 0;
     triangles.back().Init(buffer, color);
   } else {
-    gl_log("is textured %d\n", is_textured);
+    Logger::Say("is textured %d\n", is_textured);
     GLfloat texcoords[6];
     SetTexcoords(index, texcoords);
     triangles.back().Init(buffer, texcoords);

@@ -32,6 +32,7 @@ struct Uniform {
   Uniform(const char *loc);
   ~Uniform();
   void set_id(GLuint program_id);
+  void unset_id();
   GLuint get_id(GLuint program_id = -1u);
   void set_data(const dtype &data);
 };

@@ -1,20 +1,14 @@
 #include "Storage.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 #include "Shape.hpp"
 #include "Sphere.hpp"
 #include "Ring.hpp"
 #include "Quad.hpp"
+#include "ColorBuffer.hpp"
+#include "Font.hpp"
+#include "Texture.hpp"
 
-#include <cstring>
 #include <type_traits>
-#include <glm/glm.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-Storage::colorbuffer::colorbuffer()
-{}
-
-Storage::colorbuffer::~colorbuffer()
-{}
 
 Storage::Storage()
 {}
@@ -26,103 +20,72 @@ Storage *Storage::inst() {
   return instance;
 }
 
-void Storage::init_color(colorbuffer &cb, const GLfloat *buffer) {
-  glGenBuffers(1, &cb.vbo); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, cb.vbo); GLERROR
-  glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), buffer, GL_STATIC_DRAW); GLERROR
-}
-
-
 size_t Storage::AddColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
   GLfloat q[] = {
     r,g,b,a,
     r,g,b,a,
     r,g,b,a,
   };
-  colors_.push_back(colorbuffer());
-  init_color(colors_.back(), q);
-  return colors().size() - 1;
-}
-
-size_t Storage::AddColor(const glm::vec4 &color) {
-  colors_.push_back(colorbuffer());
-  init_color(colors_.back(), glm::value_ptr(color));
-  return colors().size() - 1;
+  ColorBuffer cb;
+  cb.Init(q);
+  return Sprite<ColorBuffer>::Add(cb);
 }
 
 size_t Storage::AddTexture(const char *filename) {
-  textures_.push_back(Texture());
-  textures_.back().Init(filename);
-  return textures().size() - 1;
+  Texture texture;
+  texture.Init(filename);
+  return Sprite<Texture>::Add(texture);
 }
 
 size_t Storage::AddFont(const char *filename) {
-  fonts_.push_back(Font());
-  fonts_.back().Init(filename);
-  return fonts().size() - 1;
+  Font font;
+  font.Init(filename);
+  return Sprite<Font>::Add(font);
 }
 
 template <typename T>
 size_t Storage::AddShape() {
   using S = typename std::enable_if<std::is_base_of<Shape, T>::value, T>::type;
-  shapes_.push_back(new S());
-  shapes_.back()->Init();
-  return shapes().size() - 1;
+  Shape *sh = new S();
+  sh->Init();
+  return Sprite<Shape *>::Add(sh);
 }
 
-const std::vector <Storage::colorbuffer> &Storage::colors() {
-  ASSERT(instance != NULL);
-  return colors_;
-}
-
-std::vector <Texture> &Storage::textures() {
-  ASSERT(instance != NULL);
-  return textures_;
-}
-
-std::vector <Font> &Storage::fonts() {
-  ASSERT(instance != NULL);
-  return fonts_;
-}
-
-const std::vector <Shape *> &Storage::shapes() {
-  ASSERT(instance != NULL);
-  return shapes_;
-}
-
+size_t Storage::SPHERE = 0;
+size_t Storage::RING1 = 0;
+size_t Storage::RING2 = 0;
+size_t Storage::RING3 = 0;
+size_t Storage::RING7 = 0;
+size_t Storage::RING8 = 0;
+size_t Storage::QUAD = 0;
 Storage *Storage::instance = NULL;
 void Storage::Setup() {
   ASSERT(instance == NULL);
   Font::Setup();
   instance = new Storage();
-  instance->AddColor(1., 1., 1.);
-  instance->AddColor(0., 0., 0.);
-  instance->AddColor(1., 0., 0.);
-  instance->AddColor(0., 1., 0.);
-  instance->AddColor(0., 0., 1.);
-  instance->AddColor(0., 1., 1.);
-  instance->AddColor(1., 0., 1.);
-  instance->AddColor(1., 1., 0.);
-  instance->AddShape<Sphere>();
-  instance->AddShape<Ring <1> >();
-  instance->AddShape<Quad>();
+  AddColor(1., 1., 1.);
+  AddColor(0., 0., 0.);
+  AddColor(1., 0., 0.);
+  AddColor(0., 1., 0.);
+  AddColor(0., 0., 1.);
+  AddColor(0., 1., 1.);
+  AddColor(1., 0., 1.);
+  AddColor(1., 1., 0.);
+  SPHERE = instance->AddShape<Sphere>();
+  RING1 = instance->AddShape<Ring <1> >();
+  RING2 = instance->AddShape<Ring <2> >();
+  RING3 = instance->AddShape<Ring <3> >();
+  RING7 = instance->AddShape<Ring <7> >();
+  RING8 = instance->AddShape<Ring <8> >();
+  QUAD = instance->AddShape<Quad>();
 }
 
 void Storage::Clear() {
   ASSERT(instance != NULL);
-  for(auto &cb : instance->colors_) {
-    glDeleteBuffers(1, &cb.vbo); GLERROR
-  }
-  for(auto &tex : instance->textures_) {
-    tex.Clear();
-  }
-  for(auto &f : instance->fonts_) {
-    f.Clear();
-  }
-  for(auto &sh : instance->shapes_) {
-    sh->Clear();
-    delete sh;
-  }
+  Sprite<ColorBuffer>::Cleanup();
+  Sprite<Texture>::Cleanup();
+  Sprite<Font>::Cleanup();
+  Sprite<Shape *>::Cleanup();
   Font::Cleanup();
   delete instance;
   instance = NULL;

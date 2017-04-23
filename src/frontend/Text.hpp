@@ -12,17 +12,20 @@
 
 class Text {
 protected:
+  Uniform <VEC3> u_textcolor;
   GLuint vao = 0;
   GLuint vbo = 0;
-  std::string text;
+  std::string text = "";
   size_t font_id = 0;
-  size_t color_id = 0;
   GLuint tex = 0;
+  size_t width_ = 0, height_ = 0;
 public:
-  Text(std::string text);
+  Text();
   ~Text();
+  size_t width() const;
+  size_t height() const;
   void SetText(std::string &&new_text);
-  void Init(size_t fontid, size_t colorid = 0);
-  void Render(ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &&color);
+  void Init(size_t fontid);
+  void Render(ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &color);
   void Clear();
 };

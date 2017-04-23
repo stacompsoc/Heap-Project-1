@@ -1,5 +1,5 @@
 #include "ShaderUniform.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
 
 #include <glm/gtc/type_ptr.hpp>
 
@@ -23,6 +23,10 @@ void Uniform<U>::set_id(GLuint program_id) {
   id = glGetUniformLocation(program_id, location.c_str()); GLERROR
 }
 
+template <UniformType U>
+void Uniform<U>::unset_id() {
+  prog_id = 0;
+}
 
 template <UniformType U>
 GLuint Uniform<U>::get_id(GLuint program_id) {

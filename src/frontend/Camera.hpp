@@ -5,29 +5,22 @@
 
 #include "ShaderProgram.hpp"
 #include "ShaderUniform.hpp"
+#include "Moveable.hpp"
 
-class Camera {
+class Camera : public Moveable {
   Uniform<MAT4>
     u_camera;
   glm::mat4
-    translate,
-    rotate,
-    scale;
-  glm::mat4
+    projection,
     cameramat;
 public:
-  bool has_changed = true;
+  /* bool has_changed = true; */
   bool need_to_update = true;
-  Camera(float width, float height);
+  Camera();
   ~Camera();
+  void WindowResized(float new_width, float new_height);
   void AttachToShader(ShaderProgram &program);
   void Init();
-  void SetScale(float scaling);
-  void ChangeScale(float diff);
-  void SetRotation(float x, float y, float z, float deg);
-  void Rotate(float x, float y, float z, float deg);
-  void SetPosition(float x, float y, float z);
-  void MovePosition(float x, float y, float z);
   void Update();
   void Clear();
 };

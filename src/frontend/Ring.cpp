@@ -1,11 +1,13 @@
 #include "Ring.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
+#include <omp.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-template <int N> const size_t Ring<N>::DIM = 300;
-template <int N> const size_t Ring<N>::SIZE = DIM * DIM * 2 * 2;
+template <int N> const size_t Ring<N>::DIM = N*100;
+template <int N> const size_t Ring<N>::SIZE = DIM * 2;
 
 template <int N>
 Ring<N>::Ring():
@@ -22,8 +24,8 @@ glm::vec3 point_on_circle(float angle) {
 
 template <int N>
 void Ring<N>::Init() {
-  glGenVertexArrays(1, &vao); GLERROR
-  glBindVertexArray(vao); GLERROR
+  vao.Init();
+  vao.Bind();
 
   txcoords = new GLfloat[SIZE * 6];
   ASSERT(txcoords != NULL);
@@ -32,12 +34,12 @@ void Ring<N>::Init() {
 
   InitBuffers();
 
-  glGenBuffers(1, &vert_vbo); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, vert_vbo); GLERROR
+  vert.Init(GL_ARRAY_BUFFER);
+  vert.Bind();
   glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat) * 9, vertices, GL_STREAM_DRAW); GLERROR
 
-  glGenBuffers(1, &tex_vbo); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, tex_vbo); GLERROR
+  tex.Init(GL_ARRAY_BUFFER);
+  tex.Bind();
   glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat) * 6, txcoords, GL_STREAM_DRAW); GLERROR
 
   ASSERT(vertices != NULL);
@@ -46,11 +48,11 @@ void Ring<N>::Init() {
   delete txcoords;
 
   glEnableVertexAttribArray(0); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, vert_vbo); GLERROR
+  vert.Bind();
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
 
   glEnableVertexAttribArray(1); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, tex_vbo); GLERROR
+  tex.Bind();
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
 
   glVertexAttribDivisor(0, 0); GLERROR
@@ -61,9 +63,10 @@ template <int N>
 void Ring<N>::InitBuffers() {
   const static float ir = float(10-N) / 10;
   const double step = float(M_PI*2) / DIM;
-  size_t index = 0;
-  double angle = 0.;
+  #pragma omp parallel for num_threads(8)
   for(size_t i = 0; i < DIM; ++i) {
+    const double angle = double(i) * step;
+    size_t index = i * 2;
     glm::vec3
       &&a = point_on_circle(angle),
       &&b = point_on_circle(angle + step),
@@ -73,7 +76,6 @@ void Ring<N>::InitBuffers() {
     a = b * ir;
     SetTexcoords(index);
     SetVertices(c, b, a, index), ++index;
-    angle += step;
   }
 }
 
@@ -94,9 +96,9 @@ void Ring<N>::SetTexcoords(int index) {
     buffer[2] = tx0, buffer[3] = 0,
     buffer[4] = tx1, buffer[5] = 1;
   }
-  gl_log("%.2f,%.2f\n", buffer[0], buffer[1]);
-  gl_log("%.2f,%.2f\n", buffer[2], buffer[3]);
-  gl_log("%.2f,%.2f\n", buffer[4], buffer[5]);
+  Logger::Say("%.2f,%.2f\n", buffer[0], buffer[1]);
+  Logger::Say("%.2f,%.2f\n", buffer[2], buffer[3]);
+  Logger::Say("%.2f,%.2f\n", buffer[4], buffer[5]);
 }
 
 template <int N>
@@ -106,25 +108,27 @@ void Ring<N>::SetVertices(const glm::vec3 &a, const glm::vec3 &b, const glm::vec
   memcpy(buffer, glm::value_ptr(a), sizeof(GLfloat) * 3);
   memcpy(buffer + 3, glm::value_ptr(b), sizeof(GLfloat) * 3);
   memcpy(buffer + 6, glm::value_ptr(c), sizeof(GLfloat) * 3);
-  gl_log("adding triangle_strip\n");
-  gl_log("%.2f,%.2f,%.2f\n", a.x,a.y,a.z);
-  gl_log("%.2f,%.2f,%.2f\n", b.x,b.y,b.z);
-  gl_log("%.2f,%.2f,%.2f\n", c.x,c.y,c.z);
+  Logger::Say("adding triangle_strip\n");
+  Logger::Say("%.2f,%.2f,%.2f\n", a.x,a.y,a.z);
+  Logger::Say("%.2f,%.2f,%.2f\n", b.x,b.y,b.z);
+  Logger::Say("%.2f,%.2f,%.2f\n", c.x,c.y,c.z);
 }
 
 template <int N>
 void Ring<N>::Draw() {
-  glBindVertexArray(vao); GLERROR
+  vao.Bind();
   glDrawArrays(GL_TRIANGLES, 0, SIZE * 3); GLERROR
 }
 
 template <int N>
 void Ring<N>::Clear() {
-  glDeleteBuffers(1, &vert_vbo); GLERROR
-  glDeleteBuffers(1, &tex_vbo); GLERROR
-  glDeleteVertexArrays(1, &vao); GLERROR
+  vert.Clear();
+  tex.Clear();
+  vao.Clear();
 }
 
 template class Ring<1>;
 template class Ring<2>;
 template class Ring<3>;
+template class Ring<7>;
+template class Ring<8>;

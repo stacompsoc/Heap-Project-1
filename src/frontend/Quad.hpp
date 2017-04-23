@@ -1,3 +1,6 @@
+#pragma once
+
+#include <glm/glm.hpp>
 #include "Shape.hpp"
 #include "Triangle.hpp"
 

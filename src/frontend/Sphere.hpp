@@ -4,11 +4,13 @@
 #include "incgraphics.h"
 
 #include "Shape.hpp"
+#include "VertexArray.hpp"
+#include "ShaderAttrib.hpp"
 
 class Sphere : public Shape {
-  GLuint vao = 0;
-  GLuint vert_vbo = 0;
-  GLuint tex_vbo = 0;
+  VertexArray vao;
+  ShaderAttrib
+    vert, tex;
   GLfloat
     *vertices = NULL,
     *txcoords = NULL;

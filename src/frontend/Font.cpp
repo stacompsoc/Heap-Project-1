@@ -1,5 +1,6 @@
 #include "Font.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
 
 Font::Font()
 {}
@@ -25,14 +26,13 @@ void Font::Init(const char *filename) {
     chrtex.tex.Init(&face->glyph);
     alphabet[c] = chrtex;
   }
-  gl_log("Initialized font from file %s\n", filename);
+  Logger::Info("Initialized font from file %s\n", filename);
 }
 
 void Font::Clear() {
   FT_Done_Face(face);
-  for(auto it : alphabet) {
+  for(auto &it : alphabet)
     it.second.tex.Clear();
-  }
 }
 
 FT_Library Font::ft;

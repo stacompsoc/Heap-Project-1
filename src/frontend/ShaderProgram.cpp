@@ -1,8 +1,8 @@
+#include "ShaderProgram.hpp"
+#include "Debug.hpp"
+
 #include <iostream>
 #include <vector>
-
-#include "ShaderProgram.hpp"
-#include "Log.hpp"
 
 
 GLuint ShaderProgram::last_used_program = 0;

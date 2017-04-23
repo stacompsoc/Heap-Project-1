@@ -1,5 +1,8 @@
 #include "Triangle.hpp"
-#include "Log.hpp"
+#include "Debug.hpp"
+#include "Logger.hpp"
+#include "ColorBuffer.hpp"
+#include "Sprite.hpp"
 
 #include <cstring>
 #include <stdexcept>
@@ -16,8 +19,7 @@ Triangle::texcoordbuffer::texcoordbuffer()
 Triangle::texcoordbuffer::~texcoordbuffer()
 {}
 
-Triangle::Triangle():
-  vb(), tex()
+Triangle::Triangle()
 {}
 
 Triangle::~Triangle()
@@ -25,7 +27,7 @@ Triangle::~Triangle()
 
 void Triangle::Init(GLfloat *positions, size_t color_id) {
   init_vertices(positions);
-  cb_vbo = Storage::inst()->colors()[color_id].vbo;
+  cb_vbo = Sprite<ColorBuffer>::Access(color_id).vbo;
   init_array_object();
 }
 
@@ -50,9 +52,8 @@ void Triangle::init_texcoords(GLfloat *buffer) {
 }
 
 void Triangle::init_array_object() {
-  glGenVertexArrays(1, &vao); GLERROR
-  // attach position buffer and color buffer to this triangle's vertex array object
-  glBindVertexArray(vao); GLERROR
+  vao.Init();
+  vao.Bind();
 
   glBindBuffer(GL_ARRAY_BUFFER, vb.vbo); GLERROR
   glEnableVertexAttribArray(0); GLERROR // layout(location == 0)
@@ -62,7 +63,7 @@ void Triangle::init_array_object() {
     glBindBuffer(GL_ARRAY_BUFFER, tex.vbo); GLERROR
     glEnableVertexAttribArray(1); GLERROR // layout(location == 2)
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
-    gl_log("triangle: vertex array == %d\n", vao);
+    Logger::Info("triangle: vertex array == %d\n", vao.get_id());
   } else {
     glBindBuffer(GL_ARRAY_BUFFER, cb_vbo); GLERROR
     glEnableVertexAttribArray(1); GLERROR // layout(location == 1)
@@ -80,21 +81,21 @@ void Triangle::disable_vao_attribs() {
 }
 
 void Triangle::ChangePosition() {
-  glBindVertexArray(vao); GLERROR
+  vao.Bind();
   glBindBuffer(GL_ARRAY_BUFFER, vb.vbo); GLERROR
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
 }
 
 void Triangle::ChangeColor(size_t color_id) {
   ASSERT(!tex.is_enabled);
-  cb_vbo = Storage::inst()->colors()[color_id].vbo;
-  glBindVertexArray(vao); GLERROR
+  cb_vbo = Sprite<ColorBuffer>::Access(color_id).vbo;
+  vao.Bind();
   glBindBuffer(GL_ARRAY_BUFFER, cb_vbo); GLERROR
   glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, NULL); GLERROR
 }
 
-void Triangle::Draw() const {
-  glBindVertexArray(vao); GLERROR
+void Triangle::Draw() {
+  vao.Bind();
   glDrawArrays(GL_TRIANGLES, 0, 3); GLERROR
 }
 
@@ -104,5 +105,5 @@ void Triangle::Clear() {
     glDeleteBuffers(1, &tex.vbo); GLERROR
   }
   /* disable_vao_attribs(); */
-  glDeleteVertexArrays(1, &vao); GLERROR
+  vao.Clear();
 }

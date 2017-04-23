@@ -1,8 +1,12 @@
 planetarium
 *.dSYM
 *.o
-*.jpg
-*.png
+*.tga
 *.log
 *.trace
-textures/sam.tga
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
+Makefile
+.ninja*
+*.ninja

@@ -10,7 +10,10 @@ public:
   ~SpaceScreen();
   void Init();
   void Display();
+  void Resize();
   void Keyboard();
+  void KeyPress(int key, int scancode, int mods);
   void Mouse(double x, double y);
+  void MouseScroll(double xoffset, double yoffset);
   void Clear();
 };

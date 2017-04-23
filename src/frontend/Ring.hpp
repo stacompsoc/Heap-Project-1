@@ -1,14 +1,17 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include "Shape.hpp"
 #include "Triangle.hpp"
+#include "VertexArray.hpp"
+#include "ShaderAttrib.hpp"
 
 template <int N>
 class Ring : public Shape {
 protected:
-  GLuint vao = 0;
-  GLuint vert_vbo = 0;
-  GLuint tex_vbo = 0;
+  VertexArray vao;
+  ShaderAttrib
+    vert, tex;
   GLfloat
     *vertices = NULL,
     *txcoords = NULL;
