@@ -12,7 +12,9 @@
 class Mesh  {
 private:
   ShaderProgram program;
-  GLuint vao=0, vbo=0, ebo=0;
+  VertexArray vao;
+  GLuint vbo=0, ebo=0;
+public:
   struct vertex {
     glm::vec3 pos;
     glm::vec3 norm;

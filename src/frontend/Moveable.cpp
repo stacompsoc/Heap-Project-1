@@ -23,9 +23,17 @@ void Moveable::SetScale(float sx, float sy, float sz) {
   has_changed = true;
 }
 
+glm::vec4 Moveable::GetScale() {
+  return glm::vec4(scale[0][0], scale[1][1], scale[2][2], scale[3][3]);
+}
+
 void Moveable::SetPosition(float x, float y, float z) {
   translate = glm::translate(glm::vec3(x, y, z));
   has_changed = true;
+}
+
+glm::vec4 Moveable::GetPosition() {
+  return translate * glm::vec4(1.0f);
 }
 
 void Moveable::MovePosition(float x, float y, float z) {

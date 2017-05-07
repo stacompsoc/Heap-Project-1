@@ -28,7 +28,8 @@ Image *Texture::NewImage(File &file) {
   } else if(file.is_ext(".bmp")) {
     return new BMPImage(file.name().c_str());
   }
-  throw std::runtime_error("invalid image format");
+  Logger::Error("unsupported file format for %s\n", file.name().c_str());
+  throw std::domain_error("invalid image format for " + file.name());
 }
 
 void Texture::Init(std::string filename) {

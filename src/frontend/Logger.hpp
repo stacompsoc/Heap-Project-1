@@ -10,7 +10,7 @@ char *strdup(const char *s);
 
 class Logger {
   std::string filename;
-  FILE *file;
+  FILE *file = NULL;
   Logger(const char *filename);
   ~Logger();
   void Write(const char *fmt, va_list args);

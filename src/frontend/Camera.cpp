@@ -19,7 +19,10 @@ void Init() {
 }
 
 void Camera::WindowResized(float new_width, float new_height) {
-  projection = glm::ortho(-new_width/new_height, new_width/new_height, -1.0f, 1.0f, 1.0f, -1.0f);
+  if(new_width > new_height)
+    projection = glm::ortho(-new_width/new_height, new_width/new_height, -1.0f, 1.0f, 1.0f, -1.0f);
+  else if(new_width <= new_height)
+    projection = glm::ortho(-1.0f, 1.0f, -new_height/new_width, new_height/new_width, 1.0f, -1.0f);
   has_changed = true;
 }
 

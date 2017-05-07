@@ -21,7 +21,8 @@ public:
   ~Model();
   void Init(const char *file);
   void ProcessNode(aiNode *node, const aiScene *scene);
-  void ProcessMesh(aiMesh *mesh, const aiScene *scene);
+  Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
+  void LoadMaterialTexture(aiMaterial *material, aiTextureType type, std::string type_name);
   void Draw();
   void Clear();
 };

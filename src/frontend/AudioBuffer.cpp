@@ -19,8 +19,8 @@ Sound *AudioBuffer::NewSound(File &&snd) {
   } else if(snd.is_ext(".flac")) {
     return new FLACSound(snd.name().c_str());
   }
-  Logger::Error("unsupported file format");
-  return NULL;
+  Logger::Error("unsupported file format for %s\n", snd.name().c_str());
+  throw std::domain_error("unsupported music format for " + snd.name());
 }
 
 void AudioBuffer::Init(const char *file) {

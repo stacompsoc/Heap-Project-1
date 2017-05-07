@@ -5,7 +5,7 @@
 #include <sstream>
 
 Mesh::Mesh(ShaderProgram &program):
-  program(program)
+  program(program), vao()
 {}
 
 Mesh::~Mesh()
@@ -13,11 +13,11 @@ Mesh::~Mesh()
 
 void Mesh::Init(std::vector <vertex> &&verts, std::vector <GLuint> &&inds, std::vector <mesh_texture> &&txrs) {
   vertices = verts, indices = inds, textures = txrs;
-  glGenVertexArrays(1, &vao);
+  vao.Init();
   glGenBuffers(1, &vbo);
   glGenBuffers(1, &ebo);
 
-  glBindVertexArray(vao);
+  vao.Bind();
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
   glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertex),
@@ -61,13 +61,13 @@ void Mesh::Draw() {
   glUniform1f(glGetUniformLocation(program.id(), "material.shininess"), 16.0f);
 
   /* // Draw mesh */
-  glBindVertexArray(vao);
+  vao.Bind();
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-  glBindVertexArray(0);
+  VertexArray::Unbind();
 }
 
 void Mesh::Clear() {
-  glDeleteVertexArrays(1, &vao);
+  vao.Clear();
   glDeleteBuffers(1, &vbo);
   glDeleteBuffers(1, &ebo);
 }

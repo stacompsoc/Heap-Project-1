@@ -88,11 +88,8 @@ void Window::GLVersion() {
   Logger::Info("Supported OpenGL extensions:\n");
   GLint no_exts;
   glGetIntegerv(GL_NUM_EXTENSIONS, &no_exts);
-  for(GLint i = 0; i < no_exts; ++i) {
-    putchar('\t');
-    const char* ext = (const char*)glGetStringi(GL_EXTENSIONS, i);
-    puts(ext);
-  }
+  for(GLint i = 0; i < no_exts; ++i)
+    Logger::Info("\t%s\n", glGetStringi(GL_EXTENSIONS, i));
 }
 
 void Window::Init() {

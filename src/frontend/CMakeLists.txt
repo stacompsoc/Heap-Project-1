@@ -1,5 +1,4 @@
-
-  cmake_minimum_required(VERSION 2.8.2)
+cmake_minimum_required(VERSION 2.8.2)
 project(frontend)
 
 message("C++ Compiler ${CMAKE_CXX_COMPILER}")
@@ -16,8 +15,8 @@ else()
     message(WARNING "You are using unsupported compiler, and will probably have to change the source code.")
 endif()
 
-set(OPTFLAGS "-g3")
-#set(OPTFLAGS "-Ofast -DNDEBUG")
+#set(OPTFLAGS "-g3")
+set(OPTFLAGS "-Ofast -DNDEBUG")
 add_compile_options(-std=c++1y)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPTFLAGS} -Wno-deprecated -Wno-delete-non-virtual-dtor")
 

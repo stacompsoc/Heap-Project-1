@@ -30,11 +30,13 @@ Logger::Logger(const char *filename):
 }
 
 Logger::~Logger() {
-  fclose(file);
+  if(file != NULL)
+    fclose(file);
 }
 
 void Logger::Write(const char *fmt, va_list args) {
 #ifndef NDEBUG
+  if(file == NULL)return;
   ASSERT(file != NULL);
   vfprintf(file, fmt, args);
   fflush(file);
@@ -43,6 +45,7 @@ void Logger::Write(const char *fmt, va_list args) {
 
 void Logger::WriteFmt(const char *prefix, const char *fmt, va_list args) {
 #ifndef NDEBUG
+  if(file == NULL)return;
   ASSERT(file != NULL);
   vfprintf(file, (std::string() + prefix + fmt).c_str(), args);
 #endif
@@ -89,6 +92,8 @@ void Logger::Error(const char *fmt, ...) {
 
 void Logger::MirrorLog(FILE *redir) {
   ASSERT(instance != NULL);
+  if(instance->file == NULL)
+    return;
   dup2(fileno(redir), fileno(instance->file));
   if(errno) {
     perror("error");
@@ -100,6 +105,7 @@ void Logger::Close() {
   Logger::Info("Closing log %s", instance->filename.c_str());
   ASSERT(instance != NULL);
   delete instance;
+  instance = NULL;
 }
 
 void log_gl_params() {
