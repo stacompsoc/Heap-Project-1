@@ -23,7 +23,7 @@ protected:
     uiObjects;
   std::vector <TextObject>
     uiTexts;
-  Uniform<MAT4>u_proj;
+  Uniform<UniformType::MAT4>u_proj;
   glm::mat4 projection_matrix;
 
   UserInterface(Screen *screen);

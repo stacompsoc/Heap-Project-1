@@ -9,7 +9,7 @@
 
 class Object : public Moveable {
 protected:
-  Uniform<MAT4>u_model;
+  Uniform<UniformType::MAT4>u_model;
   Shape &shape;
   ShaderProgram &program;
   size_t texture_id;

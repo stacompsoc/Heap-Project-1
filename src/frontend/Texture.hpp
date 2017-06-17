@@ -12,7 +12,7 @@
 
 struct Texture {
   GLuint tex;
-  Uniform<SAMPLER2D>u_samp;
+  Uniform<UniformType::SAMPLER2D>u_samp;
   Texture();
   ~Texture();
   Image *NewImage(File &file);

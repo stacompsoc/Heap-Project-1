@@ -16,13 +16,13 @@ else()
 endif()
 
 #set(OPTFLAGS "-g3")
-set(OPTFLAGS "-Ofast -DNDEBUG")
 add_compile_options(-std=c++1y)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OPTFLAGS} -Wno-deprecated -Wno-delete-non-virtual-dtor")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-delete-non-virtual-dtor")
 
 set(exec planetarium)
 file(GLOB SRCS ./*.cpp)
 add_executable(${exec} ${SRCS})
+set_property(TARGET ${exec} PROPERTY CXX_STANDARD 14)
 
 find_package(PkgConfig)
 

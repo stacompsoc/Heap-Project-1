@@ -70,7 +70,7 @@ void Window::init_glew() {
   // Initialize GLEW
   glewExperimental = true; // Needed for core profile
   GLuint res = glewInit(); GLERROR
-    ASSERT(res == GLEW_OK);
+  ASSERT(res == GLEW_OK);
 }
 
 void Window::init_controls() {

@@ -8,7 +8,7 @@
 #include "Moveable.hpp"
 
 class Camera : public Moveable {
-  Uniform<MAT4>
+  Uniform<UniformType::MAT4>
     u_camera;
   glm::mat4
     projection,

@@ -4,9 +4,4 @@ planetarium
 *.tga
 *.log
 *.trace
-CMakeCache.txt
-CMakeFiles
-cmake_install.cmake
-Makefile
-.ninja*
-*.ninja
+build/

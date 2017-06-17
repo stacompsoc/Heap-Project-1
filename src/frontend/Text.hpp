@@ -12,7 +12,7 @@
 
 class Text {
 protected:
-  Uniform <VEC3> u_textcolor;
+  Uniform <UniformType::VEC3> u_textcolor;
   GLuint vao = 0;
   GLuint vbo = 0;
   std::string text = "";

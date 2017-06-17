@@ -7,6 +7,7 @@ struct ShaderAttrib {
   std::string location = "";
   GLuint vbo = 0;
   GLenum type;
+
   ShaderAttrib();
   ShaderAttrib(const char *loc);
   ~ShaderAttrib();
