@@ -18,15 +18,6 @@ Sphere::Sphere():
 Sphere::~Sphere()
 {}
 
-glm::vec3 point_on_sphere(double dyx, double dzx) {
-  //sin(dyx) is a radius of unitary zx circle
-  return glm::vec3(
-    sin(dyx)*cos(dzx),
-    cos(dyx),
-    sin(dyx)*sin(dzx)
-  );
-}
-
 using namespace compute;
 void Sphere::Init() {
   vao.Init();

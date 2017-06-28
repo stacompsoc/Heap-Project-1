@@ -15,13 +15,6 @@ class Computation {
   cl_command_queue cq = NULL;
   Program program;
   Computation &self = (*this);
-
-  template <typename T>
-  using kernel_arg_t = std::conditional_t<
-    std::is_fundamental<T>::value,
-      std::remove_reference_t<T>,
-      std::add_lvalue_reference_t<T>
-  >;
 public:
   Computation(std::string &&fname, std::string &&kernel_name);
   ~Computation();
