@@ -4,6 +4,7 @@
 
 #include "incgraphics.h"
 #include "incaudio.h"
+#include "inccompute.h"
 
 #define STR(x) #x
 #define TOSTR(x) STR(x)
@@ -23,13 +24,16 @@
 
 #define GLERROR { GLenum ret = glGetError(); if(ret != GL_NO_ERROR) { explain_glerror(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
 #define ALERROR { GLenum ret = alGetError(); if(ret != GL_NO_ERROR) { explain_alerror(ret); std::cerr << ret << std::endl; ASSERT(ret == GL_NO_ERROR); } };
+#define CLERROR if(ret != CL_SUCCESS) { explain_clerror(ret); std::cerr << ret << std::endl; ASSERT(ret == CL_SUCCESS); };
 
 #else
 
 #define GLERROR
 #define ALERROR
+#define CLERROR
 
 #endif
 
 void explain_glerror(GLenum code);
 void explain_alerror(ALenum code);
+void explain_clerror(cl_int code);

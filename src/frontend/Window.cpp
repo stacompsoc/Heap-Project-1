@@ -37,7 +37,7 @@ void Window::start() {
   init_glew();
   init_controls();
   audio.Init();
-  GLVersion();
+  /* GLVersion(); */
 }
 
 void Window::init_glfw() {

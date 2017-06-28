@@ -1,14 +1,15 @@
 #include "Sphere.hpp"
-#include "Camera.hpp"
 #include "Debug.hpp"
 #include "Logger.hpp"
 
-#include <omp.h>
+#include "Camera.hpp"
+#include "Computation.hpp"
+
 #include <glm/gtc/type_ptr.hpp>
 #include <iostream>
 #include <cmath>
 
-const size_t Sphere::DIM = 30;
+const size_t Sphere::DIM = 300;
 const size_t Sphere::SIZE = DIM*2 * DIM*2;
 Sphere::Sphere():
   Shape()
@@ -20,12 +21,13 @@ Sphere::~Sphere()
 glm::vec3 point_on_sphere(double dyx, double dzx) {
   //sin(dyx) is a radius of unitary zx circle
   return glm::vec3(
-    /*x*/sin(dyx)*cos(dzx),
-    /*y*/cos(dyx),
-    /*z*/sin(dyx)*sin(dzx)
+    sin(dyx)*cos(dzx),
+    cos(dyx),
+    sin(dyx)*sin(dzx)
   );
 }
 
+using namespace compute;
 void Sphere::Init() {
   vao.Init();
   vao.Bind();
@@ -35,7 +37,21 @@ void Sphere::Init() {
   vertices = new GLfloat[SIZE * 9];
   ASSERT(vertices != NULL);
 
-  InitBuffers();
+  {
+    Computation compute("sphere.cl", "sphere");
+    compute.init();
+    {
+      auto tex = compute.make_membuf<cl_float, CL_MEM_READ_ONLY>(txcoords, SIZE * 6);
+      auto vrt = compute.make_membuf<cl_float, CL_MEM_READ_ONLY>(vertices, SIZE * 9);
+      compute.attach(tex);
+      compute.attach(vrt);
+      compute.attach(cl_int(DIM));
+      compute.execute(SIZE);
+      tex.get_data();
+      vrt.get_data();
+    }
+    compute.clear();
+  }
 
   for(size_t i = 0; i < SIZE; ++i) {
     GLfloat *v = &vertices[i*9];
@@ -66,69 +82,6 @@ void Sphere::Init() {
 
   glVertexAttribDivisor(0, 0); GLERROR
   glVertexAttribDivisor(1, 0); GLERROR
-}
-
-void Sphere::InitBuffers() {
-  const double step = M_PI / double(DIM);
-  #pragma omp parallel for num_threads(8)
-  for(size_t i = 0; i < DIM; ++i) {
-    const double dyx = double(i) * step;
-    for(size_t j = 0; j < DIM*2; ++j) {
-      int index = 2 * (i * DIM * 2 + j);
-      const double dzx = double(j) * step;
-      SetTexcoords(index);
-      SetVertices(
-        point_on_sphere(dyx, dzx),
-        point_on_sphere(dyx + step, dzx + step),
-        point_on_sphere(dyx + step, dzx),
-      index);
-      ++index;
-      SetTexcoords(index);
-      SetVertices(
-        point_on_sphere(dyx, dzx),
-        point_on_sphere(dyx, dzx + step),
-        point_on_sphere(dyx + step, dzx + step),
-      index);
-    }
-  }
-}
-
-void Sphere::SetTexcoords(size_t index) {
-  ASSERT(index < SIZE);
-  GLfloat *buffer = &txcoords[index * 6];
-  size_t
-    y = DIM - 1 - (index/2) / (2 * DIM),
-    x = (index/2) % (2 * DIM);
-  float xstep = 0.5f / float(DIM);
-  float tx0 = float(x) / float(2 * DIM);
-  float tx1 = tx0 + xstep;
-  float ystep = 1.0f / float(DIM);
-  float ty0 = float(y) / float(DIM);
-  float ty1 = ty0 + ystep;
-  if(index & 1) {
-    buffer[0] = tx0, buffer[1] = ty1,
-    buffer[2] = tx1, buffer[3] = ty1,
-    buffer[4] = tx1, buffer[5] = ty0;
-  } else {
-    buffer[0] = tx0, buffer[1] = ty1,
-    buffer[2] = tx1, buffer[3] = ty0,
-    buffer[4] = tx0, buffer[5] = ty0;
-  }
-  Logger::Say("%.2f,%.2f\n", buffer[0], buffer[1]);
-  Logger::Say("%.2f,%.2f\n", buffer[2], buffer[3]);
-  Logger::Say("%.2f,%.2f\n", buffer[4], buffer[5]);
-}
-
-void Sphere::SetVertices(const glm::vec3 &&a, const glm::vec3 &&b, const glm::vec3 &&c, size_t index) {
-  ASSERT(index < SIZE);
-  GLfloat *buffer = &vertices[index * 9];
-  memcpy(buffer, glm::value_ptr(a), sizeof(GLfloat) * 3);
-  memcpy(buffer + 3, glm::value_ptr(b), sizeof(GLfloat) * 3);
-  memcpy(buffer + 6, glm::value_ptr(c), sizeof(GLfloat) * 3);
-  Logger::Say("adding triangle_strip\n");
-  Logger::Say("%.2f,%.2f,%.2f\n", buffer[0], buffer[1], buffer[2]);
-  Logger::Say("%.2f,%.2f,%.2f\n", buffer[3], buffer[4], buffer[5]);
-  Logger::Say("%.2f,%.2f,%.2f\n", buffer[6], buffer[7], buffer[8]);
 }
 
 void Sphere::Draw() {

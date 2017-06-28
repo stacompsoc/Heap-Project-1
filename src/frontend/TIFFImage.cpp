@@ -24,13 +24,12 @@ void TIFFImage::Load() {
     TIFFRGBAImageEnd(&img);
     int ret = TIFFRGBAImageGet(&img, (uint32_t *)data, width, height);
     if(ret == 0) {
-      TIFFError(filename.c_str(), error);
+      TIFFError("error: filename '%s', err=%d\n", filename.c_str(), error);
       exit(1);
     }
     Logger::Info("read tiff image %s (%d x %d)\n", filename.c_str(), img.width, img.height);
-  }
-  else {
-    TIFFError(filename.c_str(), error);
+  } else {
+    TIFFError("error: filename '%s', err=%d\n", filename.c_str(), error);
     exit(1);
   }
   TIFFClose(tif);

@@ -15,7 +15,6 @@ else()
     message(WARNING "You are using unsupported compiler, and will probably have to change the source code.")
 endif()
 
-#set(OPTFLAGS "-g3")
 add_compile_options(-std=c++1y)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-delete-non-virtual-dtor")
 
@@ -135,4 +134,14 @@ endif(SNDFILE_FOUND)
 #  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
 #  set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
 #endif(OPENMP_FOUND)
+
+find_packagE(OpenCL REQUIRED)
+if(OpenCL_FOUND)
+  message("using OpenCL")
+  include_directories(${OpenCL_INCLUDE_DIRS})
+  target_link_libraries(${exec} ${OpenCL_LIBRARIES})
+else()
+  message(FATAL ERROR "OPENCL not found")
+endif(OpenCL_FOUND)
+
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
