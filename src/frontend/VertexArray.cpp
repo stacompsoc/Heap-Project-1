@@ -1,33 +1,33 @@
 #include "VertexArray.hpp"
 #include "Debug.hpp"
 
-GLuint VertexArray::last_vao = 0;
-VertexArray::VertexArray()
+GLuint gl::VertexArray::last_vao = 0;
+gl::VertexArray::VertexArray()
 {}
 
-VertexArray::~VertexArray()
+gl::VertexArray::~VertexArray()
 {}
 
-void VertexArray::Init() {
+void gl::VertexArray::Init() {
   glGenVertexArrays(1, &id); GLERROR
 }
 
-GLuint VertexArray::get_id() const {
+GLuint gl::VertexArray::get_id() const {
   return id;
 }
 
-void VertexArray::Bind() {
+void gl::VertexArray::Bind() {
   if(last_vao == id)
     return;
   glBindVertexArray(id); GLERROR
   last_vao = id;
 }
 
-void VertexArray::Unbind() {
+void gl::VertexArray::Unbind() {
   glBindVertexArray(0); GLERROR
   last_vao = 0;
 }
 
-void VertexArray::Clear() {
+void gl::VertexArray::Clear() {
   glDeleteVertexArrays(1, &id); GLERROR
 }

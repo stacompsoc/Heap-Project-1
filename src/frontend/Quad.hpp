@@ -6,7 +6,7 @@
 
 class Quad : public Shape {
 protected:
-  std::vector <Triangle> triangles;
+  std::vector <gl::Triangle> triangles;
   void SetTexcoords(size_t index, GLfloat texcoords[6]);
   void AddTriangle(
     const glm::vec3 &a,

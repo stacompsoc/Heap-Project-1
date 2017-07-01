@@ -1,13 +1,13 @@
 #include "Image.hpp"
 
-Image::Image(const char *filename):
+img::Image::Image(const char *filename):
   filename(filename)
 {}
 
-Image::~Image()
+img::Image::~Image()
 {}
 
-void Image::Clear() {
+void img::Image::Clear() {
   width=0,height=0,depth=1;
   delete [] data;
   data = NULL;

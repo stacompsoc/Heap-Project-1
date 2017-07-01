@@ -18,7 +18,7 @@ void Font::Init(const char *filename) {
     int rc = FT_Load_Char(face, c, FT_LOAD_RENDER);
     ASSERT(!rc);
     Character chrtex = {
-      Texture(),
+      gl::Texture(),
       glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
       glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
       GLuint(face->glyph->advance.x)

@@ -10,7 +10,7 @@ struct Font {
   static FT_Library ft;
   FT_Face face;
   struct Character {
-    Texture tex;
+    gl::Texture tex;
     glm::ivec2 size;
     glm::ivec2 bearing;
     GLuint advance;

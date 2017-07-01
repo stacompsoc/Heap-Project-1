@@ -1,18 +1,18 @@
 #include "ColorBuffer.hpp"
 #include "Debug.hpp"
 
-ColorBuffer::ColorBuffer()
+gl::ColorBuffer::ColorBuffer()
 {}
 
-ColorBuffer::~ColorBuffer()
+gl::ColorBuffer::~ColorBuffer()
 {}
 
-void ColorBuffer::Init(const GLfloat *buffer) {
+void gl::ColorBuffer::Init(const GLfloat *buffer) {
   glGenBuffers(1, &vbo); GLERROR
   glBindBuffer(GL_ARRAY_BUFFER, vbo); GLERROR
   glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(GLfloat), buffer, GL_STATIC_DRAW); GLERROR
 }
 
-void ColorBuffer::Clear() {
+void gl::ColorBuffer::Clear() {
   glDeleteBuffers(1, &vbo); GLERROR
 }

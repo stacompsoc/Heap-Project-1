@@ -3,6 +3,7 @@
 #include <glm/glm.hpp>
 #include "incaudio.h"
 
+namespace al {
 struct AudioSource {
   ALuint source = 0;
   AudioSource();
@@ -13,3 +14,4 @@ struct AudioSource {
   void Stop();
   void Clear();
 };
+}

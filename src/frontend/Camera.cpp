@@ -26,7 +26,7 @@ void Camera::WindowResized(float new_width, float new_height) {
   has_changed = true;
 }
 
-void Camera::AttachToShader(ShaderProgram &program) {
+void Camera::AttachToShader(gl::ShaderProgram &program) {
   ASSERT(program.id() != 0);
   u_camera.set_id(program.id());
 }

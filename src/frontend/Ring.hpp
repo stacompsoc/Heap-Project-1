@@ -9,8 +9,8 @@
 template <int N>
 class Ring : public Shape {
 protected:
-  VertexArray vao;
-  ShaderAttrib
+  gl::VertexArray vao;
+  gl::ShaderAttrib
     vert, tex;
   GLfloat
     *vertices = NULL,

@@ -10,32 +10,32 @@
 
 #include <fstream>
 
-Texture::Texture():
+gl::Texture::Texture():
   u_samp("samp")
 {}
 
-Texture::~Texture()
+gl::Texture::~Texture()
 {}
 
-Image *Texture::NewImage(File &file) {
+img::Image *gl::Texture::NewImage(File &file) {
   ASSERT(file.exists());
   if(file.is_ext(".png")) {
-    return new PNGImage(file.name().c_str());
+    return new img::PNGImage(file.name().c_str());
   } else if(file.is_ext(".jpg") || file.is_ext(".jpeg")) {
-    return new JPEGImage(file.name().c_str());
+    return new img::JPEGImage(file.name().c_str());
   } else if(file.is_ext(".tiff")) {
-    return new TIFFImage(file.name().c_str());
+    return new img::TIFFImage(file.name().c_str());
   } else if(file.is_ext(".bmp")) {
-    return new BMPImage(file.name().c_str());
+    return new img::BMPImage(file.name().c_str());
   }
   Logger::Error("unsupported file format for %s\n", file.name().c_str());
   throw std::domain_error("invalid image format for " + file.name());
 }
 
-void Texture::Init(std::string filename) {
+void gl::Texture::Init(std::string filename) {
   Logger::Info("Loading texture '%s'\n", filename.c_str());
   File file(filename.c_str());
-  Image *image = NewImage(file);
+  img::Image *image = NewImage(file);
   image->Load();
   glGenTextures(1, &tex); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
@@ -51,7 +51,7 @@ void Texture::Init(std::string filename) {
   Logger::Info("Finished loading texture '%s'.\n", filename.c_str());
 }
 
-void Texture::Init(FT_GlyphSlot *glyph) {
+void gl::Texture::Init(FT_GlyphSlot *glyph) {
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1); GLERROR
   glGenTextures(1, &tex); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
@@ -64,21 +64,21 @@ void Texture::Init(FT_GlyphSlot *glyph) {
   Unbind();
 }
 
-void Texture::AttachToShader(ShaderProgram &program) {
+void gl::Texture::AttachToShader(ShaderProgram &program) {
   ASSERT(program.id() != 0);
   u_samp.set_id(program.id());
 }
 
-void Texture::Bind(size_t index) {
+void gl::Texture::Bind(size_t index) {
   glActiveTexture(GL_TEXTURE0 + index); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
   u_samp.set_data(index);
 }
 
-void Texture::Unbind() {
+void gl::Texture::Unbind() {
   glBindTexture(GL_TEXTURE_2D, 0); GLERROR
 }
 
-void Texture::Clear() {
+void gl::Texture::Clear() {
   glDeleteTextures(1, &tex);
 }

@@ -2,4 +2,6 @@
 
 #include "SndFileSound.hpp"
 
+namespace snd {
 typedef SndFileSound FLACSound;
+}

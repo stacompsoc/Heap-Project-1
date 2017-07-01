@@ -7,6 +7,7 @@
 #include "Shader.hpp"
 #include "incgraphics.h"
 
+namespace gl {
 class ShaderProgram {
   static GLuint last_used_program;
   GLuint program = 0;
@@ -26,3 +27,4 @@ public:
   void Init(const std::vector <std::string> &&locations);
   void Clear();
 };
+}

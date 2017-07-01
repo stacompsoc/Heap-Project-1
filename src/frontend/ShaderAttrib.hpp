@@ -3,6 +3,7 @@
 #include <string>
 #include "incgraphics.h"
 
+namespace gl {
 struct ShaderAttrib {
   std::string location = "";
   GLuint vbo = 0;
@@ -17,3 +18,4 @@ struct ShaderAttrib {
   void Bind();
   void Clear();
 };
+}

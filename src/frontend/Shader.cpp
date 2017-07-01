@@ -7,7 +7,7 @@
 #include <cassert>
 #include <sys/stat.h>
 
-Shader::Shader(std::string &filename):
+gl::Shader::Shader(std::string &filename):
   file(filename.c_str())
 {
   if(false) {
@@ -27,10 +27,10 @@ Shader::Shader(std::string &filename):
   // else type == 0
 }
 
-Shader::~Shader()
+gl::Shader::~Shader()
 {}
 
-void Shader::Compile() {
+void gl::Shader::Compile() {
   id = glCreateShader(type); GLERROR
   char *source_code = file.load_text();
   ASSERT(source_code != NULL);

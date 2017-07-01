@@ -5,11 +5,11 @@
 #include "Triangle.hpp"
 
 class TriangleScreen : public Screen {
-  ShaderProgram triangle_program;
-  Triangle tri;
+  gl::ShaderProgram triangle_program;
+  gl::Triangle tri;
   size_t tex_idx = 1e9;
 public:
-  TriangleScreen(Window *win);
+  TriangleScreen(gl::Window *win);
   ~TriangleScreen();
   void Init();
   void Display();

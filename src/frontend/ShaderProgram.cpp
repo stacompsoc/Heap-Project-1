@@ -5,8 +5,8 @@
 #include <vector>
 
 
-GLuint ShaderProgram::last_used_program = 0;
-ShaderProgram::ShaderProgram(std::vector <std::string> &&fnames):
+GLuint gl::ShaderProgram::last_used_program = 0;
+gl::ShaderProgram::ShaderProgram(std::vector <std::string> &&fnames):
   shaders()
 {
   for(size_t i = 0; i < fnames.size(); ++i) {
@@ -14,10 +14,10 @@ ShaderProgram::ShaderProgram(std::vector <std::string> &&fnames):
   }
 }
 
-ShaderProgram::~ShaderProgram()
+gl::ShaderProgram::~ShaderProgram()
 {}
 
-void ShaderProgram::compile_program() {
+void gl::ShaderProgram::compile_program() {
   for(auto &s : shaders) {
     s.Compile();
   }
@@ -34,38 +34,38 @@ void ShaderProgram::compile_program() {
 }
 
 
-GLuint ShaderProgram::id() const {
+GLuint gl::ShaderProgram::id() const {
   return program;
 }
 
-void ShaderProgram::Use() {
+void gl::ShaderProgram::Use() {
   if(last_used_program != id()) {
     glUseProgram(id()); GLERROR
     last_used_program = id();
   }
 }
 
-void ShaderProgram::Unuse() {
+void gl::ShaderProgram::Unuse() {
   glUseProgram(0); GLERROR
   last_used_program = 0;
 }
 
-void ShaderProgram::Init(const std::vector <std::string> &&locations) {
+void gl::ShaderProgram::Init(const std::vector <std::string> &&locations) {
   compile();
   bind(locations);
   ASSERT(is_valid());
 }
 
-void ShaderProgram::compile() {
+void gl::ShaderProgram::compile() {
   compile_program();
 }
 
-void ShaderProgram::bind(const std::vector <std::string> &locations) {
+void gl::ShaderProgram::bind(const std::vector <std::string> &locations) {
   for(size_t i = 0; i < locations.size(); ++i) {
     glBindAttribLocation(program, i, locations[i].c_str()); GLERROR
   }
 }
 
-void ShaderProgram::Clear() {
+void gl::ShaderProgram::Clear() {
   glDeleteProgram(program); GLERROR
 }

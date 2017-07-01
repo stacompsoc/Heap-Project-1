@@ -16,7 +16,7 @@ else()
 endif()
 
 add_compile_options(-std=c++1y)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-delete-non-virtual-dtor")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 set(exec planetarium)
 file(GLOB SRCS ./*.cpp)

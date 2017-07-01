@@ -61,6 +61,6 @@ void Sprite<T>::Cleanup() {
 }
 
 template class Sprite<Font>;
-template class Sprite<Texture>;
-template class Sprite<ColorBuffer>;
+template class Sprite<gl::Texture>;
+template class Sprite<gl::ColorBuffer>;
 template class Sprite<Shape *>;

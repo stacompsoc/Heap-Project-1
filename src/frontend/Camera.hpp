@@ -8,7 +8,7 @@
 #include "Moveable.hpp"
 
 class Camera : public Moveable {
-  Uniform<UniformType::MAT4>
+  gl::Uniform<gl::UniformType::MAT4>
     u_camera;
   glm::mat4
     projection,
@@ -19,7 +19,7 @@ public:
   Camera();
   ~Camera();
   void WindowResized(float new_width, float new_height);
-  void AttachToShader(ShaderProgram &program);
+  void AttachToShader(gl::ShaderProgram &program);
   void Init();
   void Update();
   void Clear();

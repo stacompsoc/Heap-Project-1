@@ -4,14 +4,14 @@
 
 #include <omp.h>
 
-BMPImage::BMPImage(const char *filename):
+img::BMPImage::BMPImage(const char *filename):
   Image(filename)
 {}
 
-BMPImage::~BMPImage()
+img::BMPImage::~BMPImage()
 {}
 
-void BMPImage::Load() {
+void img::BMPImage::Load() {
   unsigned char header[138];
   size_t data_pos, img_size;
 

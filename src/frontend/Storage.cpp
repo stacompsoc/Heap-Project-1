@@ -26,15 +26,15 @@ size_t Storage::AddColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
     r,g,b,a,
     r,g,b,a,
   };
-  ColorBuffer cb;
+  gl::ColorBuffer cb;
   cb.Init(q);
-  return Sprite<ColorBuffer>::Add(cb);
+  return Sprite<gl::ColorBuffer>::Add(cb);
 }
 
 size_t Storage::AddTexture(const char *filename) {
-  Texture texture;
+  gl::Texture texture;
   texture.Init(filename);
-  return Sprite<Texture>::Add(texture);
+  return Sprite<gl::Texture>::Add(texture);
 }
 
 size_t Storage::AddFont(const char *filename) {
@@ -82,8 +82,8 @@ void Storage::Setup() {
 
 void Storage::Clear() {
   ASSERT(instance != NULL);
-  Sprite<ColorBuffer>::Cleanup();
-  Sprite<Texture>::Cleanup();
+  Sprite<gl::ColorBuffer>::Cleanup();
+  Sprite<gl::Texture>::Cleanup();
   Sprite<Font>::Cleanup();
   Sprite<Shape *>::Cleanup();
   Font::Cleanup();

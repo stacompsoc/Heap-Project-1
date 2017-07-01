@@ -6,14 +6,14 @@
 #include <iostream>
 #include <glm/gtc/type_ptr.hpp>
 
-Audio::Audio():
+al::Audio::Audio():
   musicbox()
 {}
 
-Audio::~Audio()
+al::Audio::~Audio()
 {}
 
-void Audio::Init() {
+void al::Audio::Init() {
   ASSERT(device == NULL);
   device = alcOpenDevice(NULL);
   ASSERT(device != NULL);
@@ -26,13 +26,13 @@ void Audio::Init() {
   musicbox.SetBuffer(theme.buffer);
 }
 
-void Audio::ALVersion() {
+void al::Audio::ALVersion() {
   ALboolean enumeration = alcIsExtensionPresent(NULL, "ALC_ENUMERATION_EXT"); ALERROR
   ASSERT(enumeration == AL_TRUE);
   //
 }
 
-void Audio::ALListDevices() {
+void al::Audio::ALListDevices() {
   const ALCchar *devices = alcGetString(NULL, ALC_DEVICE_SPECIFIER); ALERROR
   const ALCchar *device = devices, *next = devices + 1;
   std::cout << "Devices list:" << std::endl;
@@ -46,7 +46,7 @@ void Audio::ALListDevices() {
   std::cout << "-------------" << std::endl;
 }
 
-void Audio::SetListener(glm::vec3 position, glm::vec3 facing) {
+void al::Audio::SetListener(glm::vec3 position, glm::vec3 facing) {
   alListener3f(AL_POSITION, position.x, position.y, position.z); ALERROR
   alListener3f(AL_VELOCITY, 0, 0, 0); ALERROR
   ALfloat buffer[6];
@@ -55,15 +55,15 @@ void Audio::SetListener(glm::vec3 position, glm::vec3 facing) {
   alListenerfv(AL_ORIENTATION, buffer); ALERROR
 }
 
-void Audio::Play() {
+void al::Audio::Play() {
   musicbox.Play();
 }
 
-void Audio::Stop() {
+void al::Audio::Stop() {
   musicbox.Stop();
 }
 
-void Audio::Clear() {
+void al::Audio::Clear() {
   musicbox.Clear();
   theme.Clear();
   alcMakeContextCurrent(NULL);

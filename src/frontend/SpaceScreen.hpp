@@ -6,7 +6,7 @@
 
 class SpaceScreen : public Screen {
 public:
-  SpaceScreen(Window *win);
+  SpaceScreen(gl::Window *win);
   ~SpaceScreen();
   void Init();
   void Display();

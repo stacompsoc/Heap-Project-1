@@ -3,6 +3,7 @@
 #include <vector>
 #include "incgraphics.h"
 
+namespace gl {
 struct VertexArray {
   static GLuint last_vao;
   GLuint id = 0;
@@ -14,3 +15,4 @@ struct VertexArray {
   static void Unbind();
   void Clear();
 };
+}

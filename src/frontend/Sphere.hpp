@@ -8,8 +8,8 @@
 #include "ShaderAttrib.hpp"
 
 class Sphere : public Shape {
-  VertexArray vao;
-  ShaderAttrib
+  gl::VertexArray vao;
+  gl::ShaderAttrib
     vert, tex;
   GLfloat
     *vertices = NULL,

@@ -6,15 +6,15 @@
 #include <jpeglib.h>
 #include <jerror.h>
 
-JPEGImage::JPEGImage(const char *filename):
+img::JPEGImage::JPEGImage(const char *filename):
   Image(filename)
 {}
 
-JPEGImage::~JPEGImage()
+img::JPEGImage::~JPEGImage()
 {}
 
 // TODO: need alpha chanel byte per pixel
-void JPEGImage::Load() {
+void img::JPEGImage::Load() {
   unsigned char *rowptr[1];    // pointer to an array
   struct jpeg_decompress_struct info; //for our jpeg info
   struct jpeg_error_mgr err;          //the error handler

@@ -12,7 +12,7 @@
 
 class Text {
 protected:
-  Uniform <UniformType::VEC3> u_textcolor;
+  gl::Uniform <gl::UniformType::VEC3> u_textcolor;
   GLuint vao = 0;
   GLuint vbo = 0;
   std::string text = "";
@@ -26,6 +26,6 @@ public:
   size_t height() const;
   void SetText(std::string &&new_text);
   void Init(size_t fontid);
-  void Render(ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &color);
+  void Render(gl::ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &color);
   void Clear();
 };

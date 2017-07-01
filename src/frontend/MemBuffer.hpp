@@ -4,7 +4,7 @@
 
 #include <type_traits>
 
-namespace compute {
+namespace cl {
 
 template <typename T, cl_int OPTIONS = CL_MEM_READ_WRITE>
 class MemBuffer {

@@ -9,7 +9,7 @@
 
 #include <glm/glm.hpp>
 
-SpaceScreen::SpaceScreen(Window *win):
+SpaceScreen::SpaceScreen(gl::Window *win):
   Screen(win)
 {}
 

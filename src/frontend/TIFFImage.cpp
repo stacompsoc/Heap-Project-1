@@ -4,14 +4,14 @@
 
 #include <tiffio.h>
 
-TIFFImage::TIFFImage(const char *filename):
+img::TIFFImage::TIFFImage(const char *filename):
   Image(filename)
 {}
 
-TIFFImage::~TIFFImage()
+img::TIFFImage::~TIFFImage()
 {}
 
-void TIFFImage::Load() {
+void img::TIFFImage::Load() {
   TIFFRGBAImage img;
   char error[1024];
   TIFF *tif = TIFFOpen(filename.c_str(), "r");

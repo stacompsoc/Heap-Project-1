@@ -78,7 +78,7 @@ void UserInterface::Draw() {
     obj.Draw();
   for(auto &tobj : uiTexts)
     tobj.Draw();
-  ShaderProgram::Unuse();
+  gl::ShaderProgram::Unuse();
 }
 
 void UserInterface::Clear() {

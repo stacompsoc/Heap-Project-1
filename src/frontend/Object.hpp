@@ -9,9 +9,9 @@
 
 class Object : public Moveable {
 protected:
-  Uniform<UniformType::MAT4>u_model;
+  gl::Uniform<gl::UniformType::MAT4>u_model;
   Shape &shape;
-  ShaderProgram &program;
+  gl::ShaderProgram &program;
   size_t texture_id;
   bool is_visible = true;
 public:
@@ -29,7 +29,7 @@ public:
   Object(
     size_t shape_id,
     size_t texture_id,
-    ShaderProgram &program,
+    gl::ShaderProgram &program,
     glm::vec3 position,
     glm::vec3 size,
     float deg_spin = 0., float deg = 0.0

@@ -6,7 +6,7 @@ class Window;
 
 class MenuScreen : public Screen {
 public:
-  MenuScreen(Window *win);
+  MenuScreen(gl::Window *win);
   ~MenuScreen();
   void Init();
   void Display();

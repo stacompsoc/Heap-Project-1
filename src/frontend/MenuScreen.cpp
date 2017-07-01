@@ -3,7 +3,7 @@
 #include "Window.hpp"
 #include "Debug.hpp"
 
-MenuScreen::MenuScreen(Window *win):
+MenuScreen::MenuScreen(gl::Window *win):
   Screen(win)
 {}
 

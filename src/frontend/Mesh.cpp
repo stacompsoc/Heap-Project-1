@@ -4,7 +4,7 @@
 
 #include <sstream>
 
-Mesh::Mesh(ShaderProgram &program):
+Mesh::Mesh(gl::ShaderProgram &program):
   program(program), vao()
 {}
 
@@ -37,7 +37,7 @@ void Mesh::Init(std::vector <vertex> &&verts, std::vector <GLuint> &&inds, std::
   glEnableVertexAttribArray(2); GLERROR
   glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void *)offsetof(vertex, txcds));
 
-  VertexArray::Unbind();
+  gl::VertexArray::Unbind();
 }
 
 void Mesh::Draw() {
@@ -63,7 +63,7 @@ void Mesh::Draw() {
   /* // Draw mesh */
   vao.Bind();
   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-  VertexArray::Unbind();
+  gl::VertexArray::Unbind();
 }
 
 void Mesh::Clear() {

@@ -13,7 +13,7 @@ size_t Object::NOTEXTURE = UINT_MAX;
 Object::Object(
   size_t shape_id,
   size_t texture_id,
-  ShaderProgram &program,
+  gl::ShaderProgram &program,
   glm::vec3 position,
   glm::vec3 size,
   float deg_spin, float spin
@@ -67,17 +67,17 @@ void Object::Draw() {
   if(!is_visible)
     return;
   if(texture_id != NOTEXTURE && need_to_update) {
-    Sprite<Texture>::Access(texture_id).AttachToShader(program);
-    Sprite<Texture>::Access(texture_id).Bind();
+    Sprite<gl::Texture>::Access(texture_id).AttachToShader(program);
+    Sprite<gl::Texture>::Access(texture_id).Bind();
   }
   AttachToShader();
   Update();
   shape.Draw();
 #ifdef NDEBUG
   if(texture_id != UINT_MAX) {
-    Sprite<Texture>::Access(texture_id).Unbind();
+    Sprite<gl::Texture>::Access(texture_id).Unbind();
   }
-  ShaderProgram::Unuse();
+  gl::ShaderProgram::Unuse();
 #endif
   /* size_t y=clock();printf("objdraw %lu\n", y-x);x=clock(); */
 }

@@ -4,6 +4,7 @@
 #include "Storage.hpp"
 #include "VertexArray.hpp"
 
+namespace gl {
 struct Triangle {
   struct vertexbuffer {
     GLuint vbo = 0;
@@ -16,7 +17,7 @@ struct Triangle {
     texcoordbuffer();
     ~texcoordbuffer();
   };
-  VertexArray vao;
+  gl::VertexArray vao;
   vertexbuffer vb;
   texcoordbuffer tex;
   GLuint cb_vbo;
@@ -33,3 +34,4 @@ struct Triangle {
   void Draw();
   void Clear();
 };
+}

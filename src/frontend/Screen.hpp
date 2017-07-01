@@ -1,18 +1,19 @@
 #pragma once
 
 #include <cstdlib>
-#include <bitset>
 
+namespace gl {
 class Window;
+}
 
 class Screen {
 public:
-  Screen(Window *win);
+  Screen(gl::Window *win);
   ~Screen();
   size_t width() const;
   size_t height() const;
 protected:
-  Window *win_ = NULL;
+  gl::Window *win_ = NULL;
 public:
   bool should_close = false;
   virtual void Init() = 0;

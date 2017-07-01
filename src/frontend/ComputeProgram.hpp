@@ -5,7 +5,7 @@
 #include "File.hpp"
 #include "MemBuffer.hpp"
 
-namespace compute {
+namespace cl {
 
 struct Program {
   cl_program program = NULL;
@@ -22,7 +22,7 @@ struct Program {
 
   template <typename T, cl_int OPTIONS>
   void set_kernel_arg(MemBuffer<T, OPTIONS> &mem) {
-    cl_int ret = clSetKernelArg(kernel, no_kernel_args++, sizeof(cl_mem), (void *)&mem.dev_ptr); CLERROR
+    cl_int ret = clSetKernelArg(kernel, no_kernel_args++, sizeof(cl_mem), &mem.dev_ptr); CLERROR
   }
 
   template <typename T, typename = std::enable_if_t<std::is_fundamental<T>::value>>

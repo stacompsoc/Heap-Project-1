@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <string>
 
-Window::Window():
+gl::Window::Window():
   width_(0), height_(0),
   spacescreen(this),
   trianglescreen(this),
@@ -19,18 +19,18 @@ Window::Window():
   current_screen(NULL)
 {}
 
-Window::~Window()
+gl::Window::~Window()
 {}
 
-size_t Window::width() const {
+size_t gl::Window::width() const {
   return width_;
 }
 
-size_t Window::height() const {
+size_t gl::Window::height() const {
   return height_;
 }
 
-void Window::start() {
+void gl::Window::start() {
   Logger::Setup("frontend.log");
   Logger::MirrorLog(stderr);
   init_glfw();
@@ -40,8 +40,8 @@ void Window::start() {
   /* GLVersion(); */
 }
 
-void Window::init_glfw() {
-  glfwSetErrorCallback(glfw_error_callback);
+void gl::Window::init_glfw() {
+  glfwSetErrorCallback(glfw::error_callback);
   int rc = glfwInit();
   ASSERT(rc == 1);
 
@@ -60,26 +60,26 @@ void Window::init_glfw() {
   ASSERT(window != NULL);
   window_reference[window] = this;
   glfwMakeContextCurrent(window); GLERROR
-  glfwSetKeyCallback(window, glfw_keypress_callback); GLERROR
-  glfwSetWindowSizeCallback(window, glfw_size_callback); GLERROR
-  glfwSetMouseButtonCallback(window, glfw_mouse_button_callback); GLERROR
-  glfwSetScrollCallback(window, glfw_mouse_scroll_callback); GLERROR
+  glfwSetKeyCallback(window, glfw::keypress_callback); GLERROR
+  glfwSetWindowSizeCallback(window, glfw::size_callback); GLERROR
+  glfwSetMouseButtonCallback(window, glfw::mouse_button_callback); GLERROR
+  glfwSetScrollCallback(window, glfw::mouse_scroll_callback); GLERROR
 }
 
-void Window::init_glew() {
+void gl::Window::init_glew() {
   // Initialize GLEW
   glewExperimental = true; // Needed for core profile
   GLuint res = glewInit(); GLERROR
   ASSERT(res == GLEW_OK);
 }
 
-void Window::init_controls() {
+void gl::Window::init_controls() {
   // ensure we can capture the escape key
   glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE); GLERROR
   /* glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); GLERROR */
 }
 
-void Window::GLVersion() {
+void gl::Window::GLVersion() {
   // get version info
   const GLubyte* renderer = glGetString(GL_RENDERER); GLERROR // get renderer string
   const GLubyte* version = glGetString(GL_VERSION); GLERROR // version as a string
@@ -92,7 +92,7 @@ void Window::GLVersion() {
     Logger::Info("\t%s\n", glGetStringi(GL_EXTENSIONS, i));
 }
 
-void Window::Init() {
+void gl::Window::Init() {
   Switch();
   start();
   Storage::Setup();
@@ -101,7 +101,7 @@ void Window::Init() {
   menuscreen.Init();
 }
 
-void Window::Idle() {
+void gl::Window::Idle() {
   double m_x, m_y;
   audio.Play();
   while(!glfwWindowShouldClose(window)) {
@@ -115,7 +115,7 @@ void Window::Idle() {
   audio.Stop();
 }
 
-void Window::Display() {
+void gl::Window::Display() {
   current_screen->Display();
   if(!current_screen->should_close) {
     glfwPollEvents(); GLERROR
@@ -123,12 +123,12 @@ void Window::Display() {
   }
 }
 
-void Window::Resize(float new_width, float new_height) {
+void gl::Window::Resize(float new_width, float new_height) {
   width_ = new_width, height_ = new_height;
   current_screen->Resize();
 }
 
-void Window::Switch() {
+void gl::Window::Switch() {
   if(current_screen == NULL) {
     current_screen = &menuscreen;
   } else if(current_screen == &menuscreen) {
@@ -144,11 +144,11 @@ void Window::Switch() {
   current_screen->Resize();
 }
 
-void Window::Keyboard() {
+void gl::Window::Keyboard() {
   current_screen->Keyboard();
 }
 
-void Window::KeyboardEvent(int key, int scancode, int action, int mods) {
+void gl::Window::KeyboardEvent(int key, int scancode, int action, int mods) {
   if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, true);
   }
@@ -158,18 +158,18 @@ void Window::KeyboardEvent(int key, int scancode, int action, int mods) {
     current_screen->KeyRelease(key, scancode, mods);
 }
 
-void Window::Mouse(double x, double y) {
+void gl::Window::Mouse(double x, double y) {
   current_screen->Mouse(x, y);
 }
 
-void Window::MouseClick(double x, double y, int button, int action, int mods) {
+void gl::Window::MouseClick(double x, double y, int button, int action, int mods) {
 }
 
-void Window::MouseScroll(double xoffset, double yoffset) {
+void gl::Window::MouseScroll(double xoffset, double yoffset) {
   current_screen->MouseScroll(xoffset, yoffset);
 }
 
-void Window::Clear() {
+void gl::Window::Clear() {
   /* trianglescreen.Clear(); */
   menuscreen.Clear();
   spacescreen.Clear();

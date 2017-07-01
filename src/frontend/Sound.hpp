@@ -3,6 +3,7 @@
 #include <string>
 #include "incaudio.h"
 
+namespace snd {
 struct Sound {
   std::string filename;
   short *data = NULL;
@@ -15,3 +16,4 @@ struct Sound {
   virtual void Load() = 0;
   void Clear();
 };
+}

@@ -6,11 +6,11 @@
 #include <sys/stat.h>
 #include <sndfile.h>
 
-SndFileSound::SndFileSound(const char *filename):
+snd::SndFileSound::SndFileSound(const char *filename):
   Sound(strdup(filename))
 {}
 
-void SndFileSound::Load() {
+void snd::SndFileSound::Load() {
   ASSERT(data == NULL);
   SF_INFO sfinfo;
   SNDFILE *sndfile = sf_open(filename.c_str(), SFM_READ, &sfinfo);

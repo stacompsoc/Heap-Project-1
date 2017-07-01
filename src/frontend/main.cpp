@@ -5,7 +5,7 @@
 
 int main(int argc, char *argv[]) {
   srand(time(NULL));
-  Window w;
+  gl::Window w;
   w.Init();
   w.Idle();
   w.Clear();

@@ -9,11 +9,12 @@
 #include "SpaceScreen.hpp"
 #include "TriangleScreen.hpp"
 
+namespace gl {
 class Window {
 protected:
   size_t width_, height_;
 
-  Audio audio;
+  al::Audio audio;
   MenuScreen menuscreen;
   SpaceScreen spacescreen;
   TriangleScreen trianglescreen;
@@ -45,8 +46,12 @@ public:
 };
 
 extern std::map <GLFWwindow *, Window *> window_reference;
-void glfw_error_callback(int error, const char* description);
-void glfw_keypress_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
-void glfw_size_callback(GLFWwindow *window, int new_width, int new_height);
-void glfw_mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
-void glfw_mouse_scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
+}
+
+namespace glfw {
+void error_callback(int error, const char* description);
+void keypress_callback(GLFWwindow *window, int key, int scancode, int action, int mods);
+void size_callback(GLFWwindow *window, int new_width, int new_height);
+void mouse_button_callback(GLFWwindow *window, int button, int action, int mods);
+void mouse_scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
+}

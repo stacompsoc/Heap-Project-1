@@ -1,14 +1,14 @@
 #include "Sound.hpp"
 #include "Debug.hpp"
 
-Sound::Sound(const char *filename):
+snd::Sound::Sound(const char *filename):
   filename(filename)
 {}
 
-Sound::~Sound()
+snd::Sound::~Sound()
 {}
 
-void Sound::Clear() {
+void snd::Sound::Clear() {
   ASSERT(data != NULL);
   delete data;
 }

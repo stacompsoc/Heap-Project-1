@@ -6,6 +6,7 @@
 #include "AudioSource.hpp"
 #include "AudioBuffer.hpp"
 
+namespace al {
 class Audio {
   ALCdevice *device = NULL;
   ALCcontext *context = NULL;
@@ -22,3 +23,4 @@ public:
   void Stop();
   void Clear();
 };
+}

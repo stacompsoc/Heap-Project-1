@@ -1,8 +1,8 @@
 #include "Screen.hpp"
-#include "Window.hpp"
 #include "Debug.hpp"
+#include "Window.hpp"
 
-Screen::Screen(Window *win):
+Screen::Screen(gl::Window *win):
   win_(win)
 {}
 

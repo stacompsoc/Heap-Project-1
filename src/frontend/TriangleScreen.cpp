@@ -6,7 +6,7 @@
 #include "Sprite.hpp"
 #include "Texture.hpp"
 
-TriangleScreen::TriangleScreen(Window *win):
+TriangleScreen::TriangleScreen(gl::Window *win):
   Screen(win),
   triangle_program({"triangle.vert", "triangle.geom", "triangle.frag"}),
   tri()
@@ -30,15 +30,15 @@ void TriangleScreen::Init() {
   tri.Init(position, texcoords);
   triangle_program.Init({"vposition", "vtexcoords"});
   tex_idx = Storage::AddTexture("textures/triangle.tga");
-  Sprite<Texture>::Access(tex_idx).AttachToShader(triangle_program);
+  Sprite<gl::Texture>::Access(tex_idx).AttachToShader(triangle_program);
 }
 
 void TriangleScreen::Display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT); GLERROR
   triangle_program.Use();
-  Sprite<Texture>::Access(tex_idx).Bind();
+  Sprite<gl::Texture>::Access(tex_idx).Bind();
   tri.Draw();
-  Texture::Unbind();
+  gl::Texture::Unbind();
 }
 
 void TriangleScreen::Keyboard() {

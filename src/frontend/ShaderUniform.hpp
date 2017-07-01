@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include "incgraphics.h"
 
+namespace gl {
 enum class UniformType {
   INTEGER, FLOAT,
   VEC2, VEC3, VEC4,
@@ -39,3 +40,4 @@ struct Uniform {
   GLuint get_id(GLuint program_id = -1u);
   void set_data(dtype data);
 };
+}

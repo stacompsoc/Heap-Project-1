@@ -1,35 +1,35 @@
 #include "ShaderAttrib.hpp"
 #include "Debug.hpp"
 
-ShaderAttrib::ShaderAttrib()
+gl::ShaderAttrib::ShaderAttrib()
 {}
 
-ShaderAttrib::ShaderAttrib(const char *loc):
+gl::ShaderAttrib::ShaderAttrib(const char *loc):
   location(loc)
 {}
 
-ShaderAttrib::~ShaderAttrib()
+gl::ShaderAttrib::~ShaderAttrib()
 {}
 
-void ShaderAttrib::Init(GLenum vbotype) {
+void gl::ShaderAttrib::Init(GLenum vbotype) {
   type = vbotype;
   glGenBuffers(1, &vbo); GLERROR
 }
 
-void ShaderAttrib::Bind() {
+void gl::ShaderAttrib::Bind() {
   glBindBuffer(type, vbo); GLERROR
 }
 
-GLuint ShaderAttrib::get_id() {
+GLuint gl::ShaderAttrib::get_id() {
   return vbo;
 }
 
-GLuint ShaderAttrib::get_loc(GLuint program_id) {
+GLuint gl::ShaderAttrib::get_loc(GLuint program_id) {
   ASSERT(location != "");
   GLuint loc = glGetAttribLocation(program_id, location.c_str()); GLERROR
   return loc;
 }
 
-void ShaderAttrib::Clear() {
+void gl::ShaderAttrib::Clear() {
   glDeleteBuffers(1, &vbo); GLERROR
 }

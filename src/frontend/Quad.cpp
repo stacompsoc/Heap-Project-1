@@ -54,7 +54,7 @@ void Quad::AddTriangle(
   memcpy(buffer, glm::value_ptr(a), sizeof(GLfloat) * 3);
   memcpy(buffer + 3, glm::value_ptr(b), sizeof(GLfloat) * 3);
   memcpy(buffer + 6, glm::value_ptr(c), sizeof(GLfloat) * 3);
-  triangles.push_back(Triangle());
+  triangles.push_back(gl::Triangle());
   if(!is_textured) {
     Logger::Say("is textured %d\n", is_textured);
     size_t color = 0;

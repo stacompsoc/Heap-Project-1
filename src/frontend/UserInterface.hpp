@@ -15,7 +15,7 @@ protected:
   friend class UIBuilder;
   Screen
     *screen;
-  ShaderProgram
+  gl::ShaderProgram
     quadProgram,
     textProgram;
   size_t BCKGR, BTN, BTNSEL;
@@ -23,7 +23,7 @@ protected:
     uiObjects;
   std::vector <TextObject>
     uiTexts;
-  Uniform<UniformType::MAT4>u_proj;
+  gl::Uniform<gl::UniformType::MAT4>u_proj;
   glm::mat4 projection_matrix;
 
   UserInterface(Screen *screen);

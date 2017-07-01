@@ -5,6 +5,7 @@
 
 #include "File.hpp"
 
+namespace gl {
 struct Shader {
   File file;
   GLenum type = 0;
@@ -15,3 +16,4 @@ struct Shader {
   char *load_text_file();
   void Compile();
 };
+}

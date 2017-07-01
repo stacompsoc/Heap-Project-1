@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cmath>
 
-const size_t Sphere::DIM = 300;
+const size_t Sphere::DIM = 2000;
 const size_t Sphere::SIZE = DIM*2 * DIM*2;
 Sphere::Sphere():
   Shape()
@@ -18,18 +18,16 @@ Sphere::Sphere():
 Sphere::~Sphere()
 {}
 
-using namespace compute;
 void Sphere::Init() {
   vao.Init();
   vao.Bind();
 
   txcoords = new GLfloat[SIZE * 6];
-  ASSERT(txcoords != NULL);
   vertices = new GLfloat[SIZE * 9];
-  ASSERT(vertices != NULL);
+  ASSERT(txcoords != NULL && vertices != NULL);
 
   {
-    Computation compute("sphere.cl", "sphere");
+    cl::Computation compute("sphere.cl", "sphere");
     compute.init();
     {
       auto tex = compute.make_membuf<cl_float, CL_MEM_READ_ONLY>(txcoords, SIZE * 6);

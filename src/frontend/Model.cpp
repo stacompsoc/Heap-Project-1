@@ -4,7 +4,7 @@
 
 #include <libgen.h>
 
-Model::Model(ShaderProgram &program):
+Model::Model(gl::ShaderProgram &program):
   program(program)
 {}
 

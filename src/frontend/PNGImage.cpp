@@ -6,14 +6,14 @@
 #include <setjmp.h>
 #include <png.h>
 
-PNGImage::PNGImage(const char *filename):
+img::PNGImage::PNGImage(const char *filename):
   Image(filename)
 {}
 
-PNGImage::~PNGImage()
+img::PNGImage::~PNGImage()
 {}
 
-void PNGImage::Load() {
+void img::PNGImage::Load() {
   unsigned char header[8];    // 8 is the maximum size that can be checked
   format = GL_RGBA;
 

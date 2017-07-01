@@ -1,13 +1,13 @@
 #include "AudioSource.hpp"
 #include "Debug.hpp"
 
-AudioSource::AudioSource()
+al::AudioSource::AudioSource()
 {}
 
-AudioSource::~AudioSource()
+al::AudioSource::~AudioSource()
 {}
 
-void AudioSource::Init(glm::vec3 position, ALboolean looping) {
+void al::AudioSource::Init(glm::vec3 position, ALboolean looping) {
   alGenSources(1, &source); ALERROR
   alSourcef(source, AL_PITCH, 1); ALERROR
   alSourcef(source, AL_GAIN, 1); ALERROR
@@ -16,11 +16,11 @@ void AudioSource::Init(glm::vec3 position, ALboolean looping) {
   alSourcei(source, AL_LOOPING, looping); ALERROR
 }
 
-void AudioSource::SetBuffer(ALuint buffer) {
+void al::AudioSource::SetBuffer(ALuint buffer) {
   alSourcei(source, AL_BUFFER, buffer); ALERROR
 }
 
-void AudioSource::Play() {
+void al::AudioSource::Play() {
   alSourcePlay(source); ALERROR
   ALint source_state = 0;
   alGetSourcei(source, AL_SOURCE_STATE, &source_state); ALERROR
@@ -29,10 +29,10 @@ void AudioSource::Play() {
   }
 }
 
-void AudioSource::Stop() {
+void al::AudioSource::Stop() {
   alSourceStop(source); ALERROR
 }
 
-void AudioSource::Clear() {
+void al::AudioSource::Clear() {
   alDeleteSources(1, &source); ALERROR
 }

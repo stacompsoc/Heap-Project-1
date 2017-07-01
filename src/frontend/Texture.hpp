@@ -10,12 +10,13 @@
 #include "Image.hpp"
 #include "File.hpp"
 
+namespace gl {
 struct Texture {
   GLuint tex;
   Uniform<UniformType::SAMPLER2D>u_samp;
   Texture();
   ~Texture();
-  Image *NewImage(File &file);
+  img::Image *NewImage(File &file);
   void Init(std::string filename);
   void Init(FT_GlyphSlot *glyph);
   void AttachToShader(ShaderProgram &program);
@@ -23,3 +24,4 @@ struct Texture {
   static void Unbind();
   void Clear();
 };
+}
