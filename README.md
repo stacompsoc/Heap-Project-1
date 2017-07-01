@@ -22,8 +22,8 @@ The project consists of two parts: a basic physics engine, simulating 3d pseudop
 * opengl4, glsl
 * glew, glfw3, glm, openal-soft
 * libpng, libjpeg, libtiff, libsndfile, freetype
-* openmp
-* Make, pkg-config
+* opencl, openmp
+* cmake, make, pkg-config
 
 ## Usage
 
