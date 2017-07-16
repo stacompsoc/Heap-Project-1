@@ -3,3 +3,4 @@
 make clean
 rm -vf *.ninja .ninja* *.o CMakeCache.txt cmake_install.cmake Makefile *.o
 rm -rvf CMakeFiles tags *.dSYM
+rm -rvf html latex
