@@ -58,22 +58,23 @@ void img::PNGImage::Load() {
   int number_of_passes = png_set_interlace_handling(png_ptr);
   png_read_update_info(png_ptr, info_ptr);
 
-
   /* read file */
   if(setjmp(png_jmpbuf(png_ptr))) {
     Logger::Error("[read_png_file] read_image failed");
     return;
   }
 
+  size_t bpp = png_get_channels(png_ptr, info_ptr);
+
+  data = new unsigned char[height * width * bpp];
   png_bytep *row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * height);
-  for (size_t y = 0; y < height; ++y)
-    row_pointers[y] = (png_byte *)malloc(png_get_rowbytes(png_ptr,info_ptr));
+  for(size_t y = 0; y < height; ++y) {
+    row_pointers[y] = &data[y * width * bpp];
+  }
 
   png_read_image(png_ptr, row_pointers);
 
   fclose(fp);
-
-  size_t bpp = png_get_channels(png_ptr, info_ptr);
 
   if(bpp == 3)
     format = GL_RGB;
@@ -82,22 +83,6 @@ void img::PNGImage::Load() {
   else
     Logger::Error("unknown image format %d for file %s\n", bpp, filename.c_str()),abort();
 
-  data = new unsigned char[height * width * bpp];
-  for (size_t y = 0; y < height; ++y) {
-    png_byte *row = row_pointers[y];
-    for (size_t x = 0; x < width; ++x) {
-      png_byte *ptr = &(row[x*4]);
-      /* printf("Pixel at position [ %lu - %lu ] has RGBA values: %d - %d - %d - %d\n", */
-      /*        x, y, ptr[0], ptr[1], ptr[2], ptr[3]); */
-      /* set red value to 0 and green value to the blue one */
-      unsigned char *dataptr = &data[bpp * ((height - 1 - y) * width + x)];
-      for(size_t i = 0; i < bpp; ++i)
-        dataptr[i] = ptr[i];
-    }
-  }
-
   png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-  for(size_t y = 0; y < height; ++y)
-    free(row_pointers[y]);
   free(row_pointers);
 }

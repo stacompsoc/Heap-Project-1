@@ -75,9 +75,9 @@ void Scenerao::Init() {
   /* space->constructor.SpawnClouds(EARTH_CLOUDS, space->planetProgram); */
 
   space->constructor.SetSize(0.5f);
-  space->constructor.Spawn(Storage::SPHERE, SATURN, space->planetProgram);
+  space->constructor.Spawn(Storage::SPHERE, SATURN, space->skeletonProgram);
   space->constructor.SetSize(1.0f);
-  space->constructor.Spawn(Storage::RING3, SATURN_RING, space->planetProgram);
+  space->constructor.Spawn(Storage::RING3, SATURN_RING, space->skeletonProgram);
 }
 
 void Scenerao::Next() {

@@ -20,7 +20,13 @@ struct Texture {
   void Init(std::string filename);
   void Init(FT_GlyphSlot *glyph);
   void AttachToShader(ShaderProgram &program);
-  void Bind(size_t index = 0);
+  enum {
+    BIND_DEFAULT_OPTIONS=0,
+    BIND_INDEX_DEFAULT=0,
+    BIND_NO_ACTIVATION=1,
+    BIND_NO_SET_DATA=2
+  };
+  void Bind(size_t index = BIND_INDEX_DEFAULT, int options = BIND_DEFAULT_OPTIONS);
   static void Unbind();
   void Clear();
 };

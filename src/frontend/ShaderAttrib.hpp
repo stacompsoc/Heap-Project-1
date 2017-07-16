@@ -4,18 +4,20 @@
 #include "incgraphics.h"
 
 namespace gl {
-struct ShaderAttrib {
+struct Attrib {
   std::string location = "";
   GLuint vbo = 0;
   GLenum type;
 
-  ShaderAttrib();
-  ShaderAttrib(const char *loc);
-  ~ShaderAttrib();
+  Attrib();
+  Attrib(const char *loc);
+  ~Attrib();
   void Init(GLenum vbotype);
   GLuint get_id();
   GLuint get_loc(GLuint program_id);
   void Bind();
+  template <GLint TYPE>
+  static void Unbind();
   void Clear();
 };
 }

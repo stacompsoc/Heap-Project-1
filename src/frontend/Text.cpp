@@ -12,15 +12,15 @@ Text::~Text()
 
 void Text::Init(size_t fontid) {
   font_id = fontid;
-  glGenVertexArrays(1, &vao); GLERROR
-  glGenBuffers(1, &vbo); GLERROR
-  glBindVertexArray(vao); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, vbo); GLERROR
+  vao.Init();
+  vao.Bind();
+  vbo.Init(GL_ARRAY_BUFFER);
+  vbo.Bind();
   glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW); GLERROR
-  glEnableVertexAttribArray(0); GLERROR
+  vao.Enable(vbo);
   glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0); GLERROR
-  glBindBuffer(GL_ARRAY_BUFFER, 0); GLERROR
-  glBindVertexArray(0); GLERROR
+  gl::Attrib::Unbind<GL_ARRAY_BUFFER>();
+  gl::VertexArray::Unbind();
 }
 
 size_t Text::width() const {
@@ -47,7 +47,7 @@ void Text::Render(gl::ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scal
   u_textcolor.set_id(program.id());
   u_textcolor.set_data(color);
   glActiveTexture(GL_TEXTURE0); GLERROR
-  glBindVertexArray(vao); GLERROR
+  vao.Bind();
   Font &font = Sprite<Font>::Access(font_id);
   for(const GLchar *c = text.c_str(); *c != '\0'; ++c) {
     Font::Character &ch = font.alphabet[*c];
@@ -66,15 +66,15 @@ void Text::Render(gl::ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scal
       { posx + w, posy,       1.0, 1.0 },
       { posx + w, posy + h,   1.0, 0.0 },
     };
-    glBindTexture(GL_TEXTURE_2D, ch.tex.tex); GLERROR
-    glBindBuffer(GL_ARRAY_BUFFER, vbo); GLERROR
+    ch.tex.Bind(gl::Texture::BIND_INDEX_DEFAULT, gl::Texture::BIND_NO_ACTIVATION | gl::Texture::BIND_NO_SET_DATA);
+    vbo.Bind();
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); GLERROR
-    glBindBuffer(GL_ARRAY_BUFFER, 0); GLERROR
+    gl::Attrib::Unbind<GL_ARRAY_BUFFER>();
     glDrawArrays(GL_TRIANGLES, 0, 6); GLERROR
     x += (ch.advance >> 6) * scale;
   }
-  glBindVertexArray(0); GLERROR
-  glBindTexture(GL_TEXTURE_2D, 0); GLERROR
+  gl::VertexArray::Unbind();
+  gl::Texture::Unbind();
 }
 
 void Text::Clear() {

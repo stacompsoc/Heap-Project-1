@@ -23,6 +23,11 @@ void gl::VertexArray::Bind() {
   last_vao = id;
 }
 
+void gl::VertexArray::Enable(gl::Attrib &attrib) {
+  glEnableVertexAttribArray(attribs.size()); GLERROR
+  attribs.push_back(attrib);
+}
+
 void gl::VertexArray::Unbind() {
   glBindVertexArray(0); GLERROR
   last_vao = 0;

@@ -60,8 +60,11 @@ size_t Storage::RING8 = 0;
 size_t Storage::QUAD = 0;
 Storage *Storage::instance = NULL;
 void Storage::Setup() {
+  long c = clock();
   ASSERT(instance == NULL);
   Font::Setup();
+  std::cout << "font init: " << clock()-c << std::endl;
+  c=clock();
   instance = new Storage();
   AddColor(1., 1., 1.);
   AddColor(0., 0., 0.);
@@ -72,12 +75,22 @@ void Storage::Setup() {
   AddColor(1., 0., 1.);
   AddColor(1., 1., 0.);
   SPHERE = instance->AddShape<Sphere>();
+  std::cout << "sphere init: " << clock()-c << std::endl;
+  c=clock();
   RING1 = instance->AddShape<Ring <1> >();
+  std::cout << "ring1 init: " << clock()-c << std::endl;
+  c=clock();
   RING2 = instance->AddShape<Ring <2> >();
+  std::cout << "ring2 init: " << clock()-c << std::endl;
+  c=clock();
   RING3 = instance->AddShape<Ring <3> >();
-  RING7 = instance->AddShape<Ring <7> >();
-  RING8 = instance->AddShape<Ring <8> >();
+  std::cout << "ring3 init: " << clock()-c << std::endl;
+  c=clock();
+  /* RING7 = instance->AddShape<Ring <7> >(); */
+  /* RING8 = instance->AddShape<Ring <8> >(); */
   QUAD = instance->AddShape<Quad>();
+  std::cout << "quad init: " << clock()-c << std::endl;
+  c=clock();
 }
 
 void Storage::Clear() {

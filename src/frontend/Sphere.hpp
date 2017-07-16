@@ -9,8 +9,7 @@
 
 class Sphere : public Shape {
   gl::VertexArray vao;
-  gl::ShaderAttrib
-    vert, tex;
+  gl::Attrib vert, tex;
   GLfloat
     *vertices = NULL,
     *txcoords = NULL;

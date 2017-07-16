@@ -8,8 +8,6 @@
 #include "TIFFImage.hpp"
 #include "BMPImage.hpp"
 
-#include <fstream>
-
 gl::Texture::Texture():
   u_samp("samp")
 {}
@@ -33,10 +31,15 @@ img::Image *gl::Texture::NewImage(File &file) {
 }
 
 void gl::Texture::Init(std::string filename) {
+  long c=clock();
   Logger::Info("Loading texture '%s'\n", filename.c_str());
   File file(filename.c_str());
+  c=clock();
   img::Image *image = NewImage(file);
   image->Load();
+  Logger::Info("load image '%s': %ld\n", filename.c_str(), clock()-c);
+  std::cout << "load image '" << filename << "': " << clock()-c << std::endl;
+  c=clock();
   glGenTextures(1, &tex); GLERROR
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
   glTexImage2D(GL_TEXTURE_2D, 0, image->format, image->width, image->height, 0, image->format, GL_UNSIGNED_BYTE, image->data); GLERROR
@@ -46,6 +49,8 @@ void gl::Texture::Init(std::string filename) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); GLERROR
   glGenerateMipmap(GL_TEXTURE_2D); GLERROR
   Unbind();
+  Logger::Info("create texture '%s': %ld\n", filename.c_str(), clock()-c);
+  std::cout << "create texture '" << filename << "': " << clock()-c << std::endl;
   image->Clear();
   delete image;
   Logger::Info("Finished loading texture '%s'.\n", filename.c_str());
@@ -69,10 +74,14 @@ void gl::Texture::AttachToShader(ShaderProgram &program) {
   u_samp.set_id(program.id());
 }
 
-void gl::Texture::Bind(size_t index) {
-  glActiveTexture(GL_TEXTURE0 + index); GLERROR
+void gl::Texture::Bind(size_t index, int options) {
+  if(!(options & BIND_NO_ACTIVATION)) {
+    glActiveTexture(GL_TEXTURE0 + index); GLERROR
+  }
   glBindTexture(GL_TEXTURE_2D, tex); GLERROR
-  u_samp.set_data(index);
+  if(!(options & BIND_NO_SET_DATA)) {
+    u_samp.set_data(index);
+  }
 }
 
 void gl::Texture::Unbind() {

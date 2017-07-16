@@ -1,23 +1,25 @@
 #pragma once
 
 #include <string>
+#include <glm/glm.hpp>
 
 #include "incgraphics.h"
 #include "freetype_config.h"
+
 #include "Storage.hpp"
 #include "Font.hpp"
 #include "ShaderProgram.hpp"
-
-#include <glm/glm.hpp>
+#include "VertexArray.hpp"
+#include "ShaderAttrib.hpp"
 
 class Text {
 protected:
-  gl::Uniform <gl::UniformType::VEC3> u_textcolor;
-  GLuint vao = 0;
-  GLuint vbo = 0;
+  gl::Uniform<gl::UniformType::VEC3> u_textcolor;
+  gl::VertexArray vao;
+  gl::Attrib vbo;
   std::string text = "";
   size_t font_id = 0;
-  GLuint tex = 0;
+  gl::Attrib tex;
   size_t width_ = 0, height_ = 0;
 public:
   Text();
