@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-template <int N> const size_t Ring<N>::DIM = N*100;
+template <int N> const size_t Ring<N>::DIM = N*2000;
 template <int N> const size_t Ring<N>::SIZE = DIM * 2;
 
 template <int N>

@@ -56,9 +56,6 @@ void Sprite<T>::Pop(){
 
 template <typename T>
 void Sprite<T>::Cleanup() {
-  if(std::is_same<T, Texture>::value) {
-    omp_destroy_lock(&gl::Texture::init_lock);
-  }
   while(!storage.empty())
     Pop();
 }
