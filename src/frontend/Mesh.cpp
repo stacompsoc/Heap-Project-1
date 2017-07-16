@@ -4,7 +4,7 @@
 
 #include <sstream>
 
-Mesh::Mesh(gl::ShaderProgram &program):
+Mesh::Mesh(gl::Program &program):
   program(program), vao()
 {}
 

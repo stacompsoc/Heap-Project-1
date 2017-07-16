@@ -69,7 +69,7 @@ void gl::Texture::Init(FT_GlyphSlot *glyph) {
   Unbind();
 }
 
-void gl::Texture::AttachToShader(ShaderProgram &program) {
+void gl::Texture::AttachToShader(gl::Program &program) {
   ASSERT(program.id() != 0);
   u_samp.set_id(program.id());
 }

@@ -15,5 +15,7 @@ struct Shader {
   ~Shader();
   char *load_text_file();
   void Compile();
+  void Dispatch(size_t x, size_t y, size_t z);
+  void Clear();
 };
 }

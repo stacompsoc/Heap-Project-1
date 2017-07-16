@@ -4,7 +4,7 @@
 TextObject::TextObject(
     const char *text,
     size_t font_id,
-    gl::ShaderProgram &program,
+    gl::Program &program,
     glm::vec2 position,
     glm::vec3 color,
     float size

@@ -5,7 +5,7 @@
 #include "Triangle.hpp"
 
 class TriangleScreen : public Screen {
-  gl::ShaderProgram triangle_program;
+  gl::Program triangle_program;
   gl::Triangle tri;
   size_t tex_idx = 1e9;
 public:

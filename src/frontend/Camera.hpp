@@ -19,7 +19,7 @@ public:
   Camera();
   ~Camera();
   void WindowResized(float new_width, float new_height);
-  void AttachToShader(gl::ShaderProgram &program);
+  void AttachToShader(gl::Program &program);
   void Init();
   void Update();
   void Clear();

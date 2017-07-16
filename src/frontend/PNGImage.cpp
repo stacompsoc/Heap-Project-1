@@ -67,10 +67,9 @@ void img::PNGImage::Load() {
   size_t bpp = png_get_channels(png_ptr, info_ptr);
 
   data = new unsigned char[height * width * bpp];
-  png_bytep *row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * height);
-  for(size_t y = 0; y < height; ++y) {
+  png_bytep row_pointers[height];
+  for(size_t y = 0; y < height; ++y)
     row_pointers[y] = &data[y * width * bpp];
-  }
 
   png_read_image(png_ptr, row_pointers);
 
@@ -84,5 +83,4 @@ void img::PNGImage::Load() {
     Logger::Error("unknown image format %d for file %s\n", bpp, filename.c_str()),abort();
 
   png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-  free(row_pointers);
 }

@@ -41,7 +41,7 @@ void Text::SetText(std::string &&new_text) {
   }
 }
 
-void Text::Render(gl::ShaderProgram &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &color) {
+void Text::Render(gl::Program &program, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 &color) {
   program.Use();
   u_textcolor.unset_id();
   u_textcolor.set_id(program.id());

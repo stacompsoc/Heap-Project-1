@@ -4,7 +4,7 @@
 #include "Debug.hpp"
 #include "Logger.hpp"
 
-void gl::ShaderProgram::print_info_log() {
+void gl::Program::print_info_log() {
   int max_length = 2048;
   int actual_length = 0;
   char program_log[2048];
@@ -32,7 +32,7 @@ static const char* GL_type_to_string(GLenum type) {
   return "other";
 }
 
-void gl::ShaderProgram::print_all() {
+void gl::Program::print_all() {
   Logger::Info("--------------------\nshader program %d info:\n", program);
   int params = -1;
   glGetProgramiv(program, GL_LINK_STATUS, &params);
@@ -106,7 +106,7 @@ void gl::ShaderProgram::print_all() {
   }
 }
 
-bool gl::ShaderProgram::is_valid() {
+bool gl::Program::is_valid() {
   glValidateProgram(program);
   int params = -1;
   glGetProgramiv(program, GL_VALIDATE_STATUS, &params);

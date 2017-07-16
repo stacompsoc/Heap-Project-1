@@ -19,7 +19,7 @@ struct Texture {
   img::Image *NewImage(File &file);
   void Init(std::string filename);
   void Init(FT_GlyphSlot *glyph);
-  void AttachToShader(ShaderProgram &program);
+  void AttachToShader(gl::Program &program);
   enum {
     BIND_DEFAULT_OPTIONS=0,
     BIND_INDEX_DEFAULT=0,

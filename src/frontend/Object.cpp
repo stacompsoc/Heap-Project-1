@@ -13,7 +13,7 @@ size_t Object::NOTEXTURE = UINT_MAX;
 Object::Object(
   size_t shape_id,
   size_t texture_id,
-  gl::ShaderProgram &program,
+  gl::Program &program,
   glm::vec3 position,
   glm::vec3 size,
   float deg_spin, float spin
@@ -77,7 +77,7 @@ void Object::Draw() {
   if(texture_id != UINT_MAX) {
     Sprite<gl::Texture>::Access(texture_id).Unbind();
   }
-  gl::ShaderProgram::Unuse();
+  gl::Program::Unuse();
 #endif
   /* size_t y=clock();printf("objdraw %lu\n", y-x);x=clock(); */
 }

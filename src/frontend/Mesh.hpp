@@ -11,7 +11,7 @@
 
 class Mesh  {
 private:
-  gl::ShaderProgram program;
+  gl::Program program;
   gl::VertexArray vao;
   GLuint vbo=0, ebo=0;
 public:
@@ -25,7 +25,7 @@ public:
   std::vector <vertex> vertices;
   std::vector <GLuint> indices;
   std::vector <mesh_texture> textures;
-  Mesh(gl::ShaderProgram &program);
+  Mesh(gl::Program &program);
   ~Mesh();
   void Init(std::vector <vertex> &&vertices, std::vector <GLuint> &&indices, std::vector <mesh_texture> &&textures);
   void Draw();

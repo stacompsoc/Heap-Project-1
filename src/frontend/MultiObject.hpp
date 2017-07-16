@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 
 class MultiObject {
-  std::vector <Object> objects;
+  std::vector<Object> objects;
 public:
   MultiObject();
   ~MultiObject();

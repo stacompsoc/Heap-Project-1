@@ -13,11 +13,11 @@
 class Model {
 protected:
   Assimp::Importer importer;
-  gl::ShaderProgram &program;
+  gl::Program &program;
   char directory[255];
   std::vector <Mesh> meshes;
 public:
-  Model(gl::ShaderProgram &program);
+  Model(gl::Program &program);
   ~Model();
   void Init(const char *file);
   void ProcessNode(aiNode *node, const aiScene *scene);

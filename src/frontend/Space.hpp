@@ -11,7 +11,7 @@
 class Space {
 protected:
   friend class Scenerao;
-  gl::ShaderProgram
+  gl::Program
     planetProgram,
     skeletonProgram;
   Scenerao

@@ -32,8 +32,8 @@ void UserInterface::AddQuad(size_t texture_id, glm::vec2 &&pos, glm::vec2 &&scal
   AddObject(
     Object(
       Storage::QUAD, texture_id, quadProgram,
-      glm::vec3(pos.x, pos.y, -0.5),
-      glm::vec3(scale.x, scale.y, 0),
+      glm::vec3(pos, -0.5),
+      glm::vec3(scale, 0),
       0, 0
     )
   );
@@ -78,7 +78,7 @@ void UserInterface::Draw() {
     obj.Draw();
   for(auto &tobj : uiTexts)
     tobj.Draw();
-  gl::ShaderProgram::Unuse();
+  gl::Program::Unuse();
 }
 
 void UserInterface::Clear() {

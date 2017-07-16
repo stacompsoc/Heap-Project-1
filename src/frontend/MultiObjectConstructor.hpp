@@ -20,8 +20,8 @@ public:
   void SetSize(float x, float y, float z);
   void SetRotation(float r);
   void SetSpin(float s);
-  void Spawn(size_t shape_id, size_t texture_id, gl::ShaderProgram &program);
-  void SpawnPlanet(size_t texture_id, gl::ShaderProgram &program);
-  void SpawnClouds(size_t texture_id, gl::ShaderProgram &program);
+  void Spawn(size_t shape_id, size_t texture_id, gl::Program &program);
+  void SpawnPlanet(size_t texture_id, gl::Program &program);
+  void SpawnClouds(size_t texture_id, gl::Program &program);
   void StartObject();
 };

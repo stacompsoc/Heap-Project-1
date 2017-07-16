@@ -42,12 +42,6 @@ void Sphere::Init() {
     compute.clear();
   }
 
-  for(size_t i = 0; i < SIZE; ++i) {
-    GLfloat *v = &vertices[i*9];
-    Logger::Say("%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f\n",
-           v[0],v[1],v[2],v[3],v[4],v[5],v[6],v[7],v[8]);
-  }
-
   vert.Init(GL_ARRAY_BUFFER);
   vert.Bind();
   glBufferData(GL_ARRAY_BUFFER, SIZE * sizeof(GLfloat) * 9, vertices, GL_STREAM_DRAW); GLERROR
