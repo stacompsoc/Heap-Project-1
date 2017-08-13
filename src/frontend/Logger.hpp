@@ -6,8 +6,6 @@
 #include "incaudio.h"
 #include "incgraphics.h"
 
-char *strdup(const char *s);
-
 class Logger {
   std::string filename;
   FILE *file = NULL;

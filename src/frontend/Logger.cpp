@@ -12,13 +12,6 @@
 char *log_file = NULL;
 FILE *log_file_ptr = NULL;
 
-char *strdup(const char *s) {
-  int len = (strlen(s) + 1) * sizeof(char);
-  char *s2 = (char *)malloc(len);
-  memcpy(s2, s, len);
-  return s2;
-}
-
 Logger::Logger(const char *filename):
   filename(filename)
 {
