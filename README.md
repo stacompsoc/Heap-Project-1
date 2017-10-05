@@ -35,8 +35,12 @@ The project consists of two parts: a basic physics engine, simulating 3d pseudop
 ## frontend
 
     cd src/frontend
+    mkdir build/
+    cd build/
+    cmake .. -DCMAKE_BUILD_TYPE=Release
     make
-    ./planetarium
+    cd ..
+    ./build/planetarium
 
 ## Contributing
 
